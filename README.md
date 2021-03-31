@@ -1,12 +1,37 @@
-# Welcome to your new ignited app!
+# Compassion
 
-[![CircleCI](https://circleci.com/gh/infinitered/ignite.svg?style=svg)](https://circleci.com/gh/infinitered/ignite)
+## Setup
 
-## The latest and greatest boilerplate for Infinite Red opinions
+Follow the instructions for Android and iOS simulators:
 
-This is the boilerplate that [Infinite Red](https://infinite.red) uses as a way to test bleeding-edge changes to our React Native stack.
+- Android: Install [Android Studio](https://docs.expo.io/workflow/android-studio-emulator)
+- iOS: Install [xcode CLi tools](https://docs.expo.io/workflow/ios-simulator/)
 
-Currently includes:
+```
+# Install deps
+yarn
+
+# Install expo-cli
+npm install -g expo-cli
+
+# Install reactotron
+brew install reactotron
+
+```
+
+## Development
+
+```
+# Opens metro
+yarn start
+
+# Click Run on iOS Simulator
+# Wait for Expo to be installed on your simulator and for Expo to build the bundle
+
+# Open Reactotron
+```
+
+## Boilerplate Features
 
 - React Native
 - React Navigation
@@ -137,9 +162,3 @@ For Visual Studio Code users, there is a handy extension that makes it easy to l
 ## Running e2e tests
 
 Read [e2e setup instructions](./e2e/README.md).
-
-## Previous Boilerplates
-
-- [2018 aka Bowser](https://github.com/infinitered/ignite-bowser)
-- [2017 aka Andross](https://github.com/infinitered/ignite-andross)
-- [2016 aka Ignite 1.0](https://github.com/infinitered/ignite-ir-boilerplate-2016)
