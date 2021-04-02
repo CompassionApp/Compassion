@@ -1,6 +1,86 @@
-image: alpine:latest
+image: node:8
 
-unit-tests:
-  stage: test
+stages:
+  - pre
+  - test
+
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - node_modules/
+
+variables:
+  DOCKER_DRIVER: overlay2
+
+before_script:
+  - yarn generate-dotenv
+  - yarn
+
+create:merge-request:
+  image: registry.gitlab.com/gitlab-automation-toolkit/gitlab-auto-mr
+  stage: pre
+  before_script: []
+  except:
+    - production
+    - master
+    - tags
   script:
-    - echo "This job tests something"
+    - gitlab_auto_mr -t master -c WIP -d .gitlab/merge_request_templates/merge_request.md -r -s --use-issue-name
+
+lint:
+  stage: test
+  only:
+    - merge_requests
+  except:
+    variables:
+      - $CI_COMMIT_REF_NAME =~ /^master/
+  script:
+    - yarn lint
+
+lint:format:
+  stage: test
+  only:
+    - merge_requests
+  except:
+    variables:
+      - $CI_COMMIT_REF_NAME =~ /^master/
+  script:
+    - yarn format
+
+compile:
+  stage: test
+  only:
+    - merge_requests
+  except:
+    variables:
+      - $CI_COMMIT_REF_NAME =~ /^master/
+  script:
+    - yarn compile
+
+tests:unit:
+  stage: test
+  only:
+    - merge_requests
+  except:
+    variables:
+      - $CI_COMMIT_REF_NAME =~ /^master/
+  script:
+    - yarn test
+
+tests:storybook:
+  stage: test
+  only:
+    - merge_requests
+  except:
+    variables:
+      - $CI_COMMIT_REF_NAME =~ /^master/
+  script:
+    - yarn storybook -ci
+
+# tests:coverage:
+#   stage: test
+#   only:
+#     - master
+#   script:
+#     - yarn coverage --silent
+#   coverage: /All\sfiles.*?\s+(\d+.\d+)/
