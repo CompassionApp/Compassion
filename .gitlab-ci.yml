@@ -1,0 +1,6 @@
+image: alpine:latest
+
+unit-tests:
+  stage: test
+  script:
+    - echo "This job tests something"
