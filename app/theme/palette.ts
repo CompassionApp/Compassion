@@ -7,4 +7,10 @@ export const palette = {
   lightGrey: "#939AA4",
   lighterGrey: "#CDD4DA",
   angry: "#dd3333",
+  // Compassion colors,
+  red: "#B30104",
+  grey: "##E5E5E5",
+  green: "#A3C323",
+  blue: "#1B70A4",
+  darkBlue: "#093B58",
 }

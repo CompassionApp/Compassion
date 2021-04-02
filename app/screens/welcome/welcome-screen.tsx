@@ -1,18 +1,18 @@
 import React from "react"
-import { View, Image, ViewStyle, TextStyle, ImageStyle, SafeAreaView } from "react-native"
+import { View, ViewStyle, TextStyle, SafeAreaView, Image, ImageStyle } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 import { observer } from "mobx-react-lite"
-import { Button, Header, Screen, Text, Wallpaper } from "../../components"
+import { Button, Header, Screen, Text, TextField } from "../../components"
 import { color, spacing, typography } from "../../theme"
-const bowserLogo = require("./bowser.png")
+export const logo = require("./logo.png")
 
 const FULL: ViewStyle = { flex: 1 }
 const CONTAINER: ViewStyle = {
-  backgroundColor: color.transparent,
+  backgroundColor: color.palette.grey,
   paddingHorizontal: spacing[4],
 }
 const TEXT: TextStyle = {
-  color: color.palette.white,
+  color: color.palette.black,
   fontFamily: typography.primary,
 }
 const BOLD: TextStyle = { fontWeight: "bold" }
@@ -40,36 +40,39 @@ const TITLE: TextStyle = {
   lineHeight: 38,
   textAlign: "center",
 }
-const ALMOST: TextStyle = {
-  ...TEXT,
-  ...BOLD,
-  fontSize: 26,
-  fontStyle: "italic",
-}
-const BOWSER: ImageStyle = {
+
+const LOGO_IMAGE: ImageStyle = {
+  marginBottom: spacing[3],
   alignSelf: "center",
-  marginVertical: spacing[5],
-  maxWidth: "100%",
+  width: 200,
+  height: 200,
 }
+
 const CONTENT: TextStyle = {
   ...TEXT,
-  color: "#BAB6C8",
+  color: "#222",
   fontSize: 15,
   lineHeight: 22,
+  marginTop: spacing[3],
   marginBottom: spacing[5],
 }
-const CONTINUE: ViewStyle = {
+const BUTTON_STYLE: ViewStyle = {
   paddingVertical: spacing[4],
   paddingHorizontal: spacing[4],
-  backgroundColor: "#5D2555",
+  marginVertical: spacing[2],
+  backgroundColor: color.palette.darkBlue,
 }
-const CONTINUE_TEXT: TextStyle = {
+const BUTTON_TEXT: TextStyle = {
   ...TEXT,
   ...BOLD,
   fontSize: 13,
   letterSpacing: 2,
+  color: color.palette.white,
 }
-const FOOTER: ViewStyle = { backgroundColor: "#20162D", marginBottom: 64 }
+const FOOTER: ViewStyle = {
+  // backgroundColor: color.palette.lighterGrey,
+  marginBottom: 64,
+}
 const FOOTER_CONTENT: ViewStyle = {
   paddingVertical: spacing[4],
   paddingHorizontal: spacing[4],
@@ -77,37 +80,42 @@ const FOOTER_CONTENT: ViewStyle = {
 
 export const WelcomeScreen = observer(function WelcomeScreen() {
   const navigation = useNavigation()
-  const nextScreen = () => navigation.navigate("demo")
+  const navigateSignUp = () => navigation.navigate("signup")
+  const navigateChaperone = () => navigation.navigate("chaperone")
 
   return (
     <View testID="WelcomeScreen" style={FULL}>
-      <Wallpaper />
+      {/* <Wallpaper /> */}
       <Screen style={CONTAINER} preset="scroll" backgroundColor={color.transparent}>
-        <Header headerTx="welcomeScreen.poweredBy" style={HEADER} titleStyle={HEADER_TITLE} />
+        <Header style={HEADER} titleStyle={HEADER_TITLE} />
+        <Image source={logo} resizeMethod="auto" style={LOGO_IMAGE} />
         <Text style={TITLE_WRAPPER}>
-          <Text style={TITLE} text="Your new app, " />
-          <Text style={ALMOST} text="almost" />
-          <Text style={TITLE} text="!" />
-        </Text>
-        <Text style={TITLE} preset="header" tx="welcomeScreen.readyForLaunch" />
-        <Image source={bowserLogo} style={BOWSER} />
-        <Text style={CONTENT}>
-          This probably isn't what your app is going to look like. Unless your designer handed you
-          this screen and, in that case, congrats! You're ready to ship.
+          <Text style={TITLE} text="Compassion In Oakland" />
         </Text>
         <Text style={CONTENT}>
-          For everyone else, this is where you'll see a live preview of your fully functioning app
-          using Ignite.
+          We strive to provide the Oakland Chinatown Community with a resource for promoting safety
+          and community. We aim to embrace the often forgotten, underserved, and vulnerable. We
+          promote compassion not indifference, unity as opposed to divisiveness. Fostering a more
+          caring and safer Oakland for all.
         </Text>
       </Screen>
       <SafeAreaView style={FOOTER}>
         <View style={FOOTER_CONTENT}>
+          <TextField preset="header" labelTx="welcomeScreen.loginEmail" />
+          <TextField preset="header" labelTx="welcomeScreen.loginPassword" />
           <Button
             testID="next-screen-button"
-            style={CONTINUE}
-            textStyle={CONTINUE_TEXT}
-            tx="welcomeScreen.continue"
-            onPress={nextScreen}
+            style={BUTTON_STYLE}
+            textStyle={BUTTON_TEXT}
+            tx="welcomeScreen.login"
+            onPress={navigateChaperone}
+          />
+          <Button
+            testID="next-screen-button"
+            style={BUTTON_STYLE}
+            textStyle={BUTTON_TEXT}
+            tx="welcomeScreen.signUpVolunteer"
+            onPress={navigateSignUp}
           />
         </View>
       </SafeAreaView>

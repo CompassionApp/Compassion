@@ -2,7 +2,10 @@
   "common": {
     "ok": "OK!",
     "cancel": "Cancel",
-    "back": "Back"
+    "back": "BACK"
+  },
+  "header": {
+    "text": "COMPASSION IN OAKLAND"
   },
   "errors": {
     "invalidEmail": "Invalid email address."
@@ -10,7 +13,22 @@
   "welcomeScreen": {
     "poweredBy": "POWERED BY IGNITE",
     "readyForLaunch": "Ready for launch.",
-    "continue": "CONTINUE"
+    "continue": "CONTINUE",
+    "signUpVolunteer": "SIGN UP TO VOLUNTEER",
+    "login": "LOG IN",
+    "loginEmail": "Email",
+    "loginPassword": "Password"
+  },
+  "signUpScreen": {
+    "title": "Sign up",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "phone": "Phone",
+    "dateOfBirth": "Date of Birth (must be 18+)",
+    "emergencyContact": "Emergency Contact (Name, Phone number, and Relationship)",
+    "email": "Email",
+    "emailPlaceholder": "your@email.com",
+    "submit": "SUBMIT"
   },
   "demoScreen": {
     "howTo": "HOW TO",
