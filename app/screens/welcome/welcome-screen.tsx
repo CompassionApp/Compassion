@@ -3,41 +3,18 @@ import { View, ViewStyle, TextStyle, SafeAreaView, Image, ImageStyle } from "rea
 import { useNavigation } from "@react-navigation/native"
 import { observer } from "mobx-react-lite"
 import { Button, Header, Screen, Text, TextField } from "../../components"
-import { color, spacing, typography } from "../../theme"
+import { color, globalStyles, spacing, typography } from "../../theme"
 export const logo = require("./logo.png")
 
-const FULL: ViewStyle = { flex: 1 }
-const CONTAINER: ViewStyle = {
-  backgroundColor: color.palette.grey,
+const ROOT: ViewStyle = {
   paddingHorizontal: spacing[4],
 }
 const TEXT: TextStyle = {
   color: color.palette.black,
   fontFamily: typography.primary,
 }
-const BOLD: TextStyle = { fontWeight: "bold" }
-const HEADER: TextStyle = {
-  paddingTop: spacing[3],
-  paddingBottom: spacing[4] + spacing[1],
-  paddingHorizontal: 0,
-}
-const HEADER_TITLE: TextStyle = {
-  ...TEXT,
-  ...BOLD,
-  fontSize: 12,
-  lineHeight: 15,
-  textAlign: "center",
-  letterSpacing: 1.5,
-}
 const TITLE_WRAPPER: TextStyle = {
   ...TEXT,
-  textAlign: "center",
-}
-const TITLE: TextStyle = {
-  ...TEXT,
-  ...BOLD,
-  fontSize: 28,
-  lineHeight: 38,
   textAlign: "center",
 }
 
@@ -56,21 +33,7 @@ const CONTENT: TextStyle = {
   marginTop: spacing[3],
   marginBottom: spacing[5],
 }
-const BUTTON_STYLE: ViewStyle = {
-  paddingVertical: spacing[4],
-  paddingHorizontal: spacing[4],
-  marginVertical: spacing[2],
-  backgroundColor: color.palette.darkBlue,
-}
-const BUTTON_TEXT: TextStyle = {
-  ...TEXT,
-  ...BOLD,
-  fontSize: 13,
-  letterSpacing: 2,
-  color: color.palette.white,
-}
 const FOOTER: ViewStyle = {
-  // backgroundColor: color.palette.lighterGrey,
   marginBottom: 64,
 }
 const FOOTER_CONTENT: ViewStyle = {
@@ -81,23 +44,18 @@ const FOOTER_CONTENT: ViewStyle = {
 export const WelcomeScreen = observer(function WelcomeScreen() {
   const navigation = useNavigation()
   const navigateSignUp = () => navigation.navigate("signup")
-  const navigateChaperone = () => navigation.navigate("chaperone")
+  const navigateRoleSelect = () => navigation.navigate("roleSelect")
 
   return (
-    <View testID="WelcomeScreen" style={FULL}>
+    <View testID="WelcomeScreen" style={globalStyles.full}>
       {/* <Wallpaper /> */}
-      <Screen style={CONTAINER} preset="scroll" backgroundColor={color.transparent}>
-        <Header style={HEADER} titleStyle={HEADER_TITLE} />
+      <Screen style={{ ...globalStyles.root, ...ROOT }} preset="scroll">
+        <Header style={globalStyles.header} titleStyle={globalStyles.headerTitle} />
         <Image source={logo} resizeMethod="auto" style={LOGO_IMAGE} />
         <Text style={TITLE_WRAPPER}>
-          <Text style={TITLE} text="Compassion In Oakland" />
+          <Text style={globalStyles.title} text="Compassion In Oakland" />
         </Text>
-        <Text style={CONTENT}>
-          We strive to provide the Oakland Chinatown Community with a resource for promoting safety
-          and community. We aim to embrace the often forgotten, underserved, and vulnerable. We
-          promote compassion not indifference, unity as opposed to divisiveness. Fostering a more
-          caring and safer Oakland for all.
-        </Text>
+        <Text style={CONTENT} tx="welcomeScreen.missionStatement"></Text>
       </Screen>
       <SafeAreaView style={FOOTER}>
         <View style={FOOTER_CONTENT}>
@@ -105,15 +63,15 @@ export const WelcomeScreen = observer(function WelcomeScreen() {
           <TextField preset="header" labelTx="welcomeScreen.loginPassword" />
           <Button
             testID="next-screen-button"
-            style={BUTTON_STYLE}
-            textStyle={BUTTON_TEXT}
+            style={globalStyles.button}
+            textStyle={globalStyles.buttonText}
             tx="welcomeScreen.login"
-            onPress={navigateChaperone}
+            onPress={navigateRoleSelect}
           />
           <Button
             testID="next-screen-button"
-            style={BUTTON_STYLE}
-            textStyle={BUTTON_TEXT}
+            style={globalStyles.button}
+            textStyle={globalStyles.buttonText}
             tx="welcomeScreen.signUpVolunteer"
             onPress={navigateSignUp}
           />

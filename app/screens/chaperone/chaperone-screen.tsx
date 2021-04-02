@@ -1,14 +1,13 @@
 import React from "react"
 import { observer } from "mobx-react-lite"
-import { ViewStyle } from "react-native"
+import { View, ViewStyle } from "react-native"
 import { Button, Screen, Text } from "../../components"
-// import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "../../models"
-import { BUTTON_STYLE, BUTTON_TEXT, color } from "../../theme"
+import { color, globalStyles } from "../../theme"
 import { useNavigation } from "@react-navigation/core"
 
 const ROOT: ViewStyle = {
-  backgroundColor: color.palette.black,
+  backgroundColor: color.background,
   flex: 1,
 }
 
@@ -18,18 +17,20 @@ export const ChaperoneScreen = observer(function ChaperoneScreen() {
 
   // Pull in navigation via hook
   const navigation = useNavigation()
-  const navigateBack = () => navigation.navigate("welcome")
+  const navigateBack = () => navigation.goBack()
 
   return (
-    <Screen style={ROOT} preset="scroll">
-      <Text preset="header" text="" />
-      <Button
-        testID="next-screen-button"
-        style={BUTTON_STYLE}
-        textStyle={BUTTON_TEXT}
-        tx="common.back"
-        onPress={navigateBack}
-      />
-    </Screen>
+    <View testID="ChaperoneScreen" style={globalStyles.full}>
+      <Screen style={{ ...globalStyles.root, ...ROOT }} preset="scroll">
+        <Text preset="header" text="Chaperone" />
+        <Button
+          testID="back-button"
+          style={globalStyles.buttonSecondary}
+          textStyle={globalStyles.buttonSecondaryText}
+          tx="common.back"
+          onPress={navigateBack}
+        />
+      </Screen>
+    </View>
   )
 })

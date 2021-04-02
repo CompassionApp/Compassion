@@ -1,53 +1,18 @@
 import React from "react"
 import { observer } from "mobx-react-lite"
-import { SafeAreaView, TextStyle, View, ViewStyle } from "react-native"
+import { SafeAreaView, View, ViewStyle } from "react-native"
 import { Button, Header, Screen, Text, TextField } from "../../components"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "../../models"
-import { color, spacing, typography } from "../../theme"
+import { globalStyles, spacing } from "../../theme"
 import { useNavigation } from "@react-navigation/core"
 
-const ROOT: ViewStyle = {
-  backgroundColor: color.palette.grey,
-  paddingHorizontal: spacing[4],
-}
+const ROOT: ViewStyle = {}
 
-const FULL: ViewStyle = { flex: 1 }
-const TEXT: TextStyle = {
-  color: color.palette.black,
-  fontFamily: typography.primary,
-}
-const BOLD: TextStyle = { fontWeight: "bold" }
-const HEADER: TextStyle = {
-  paddingTop: spacing[3],
-  paddingBottom: spacing[4] + spacing[1],
-  paddingHorizontal: 0,
-}
-const HEADER_TITLE: TextStyle = {
-  ...TEXT,
-  ...BOLD,
-  fontSize: 12,
-  lineHeight: 15,
-  textAlign: "center",
-  letterSpacing: 1.5,
-}
 const FOOTER: ViewStyle = { marginBottom: 64 }
 const FOOTER_CONTENT: ViewStyle = {
   paddingVertical: spacing[4],
   paddingHorizontal: spacing[4],
-}
-const BUTTON_STYLE: ViewStyle = {
-  paddingVertical: spacing[4],
-  paddingHorizontal: spacing[4],
-  marginVertical: spacing[2],
-  backgroundColor: color.palette.darkBlue,
-}
-const BUTTON_TEXT: TextStyle = {
-  ...TEXT,
-  ...BOLD,
-  fontSize: 13,
-  letterSpacing: 2,
-  color: color.palette.white,
 }
 
 export const SignUpScreen = observer(function SignUpScreen() {
@@ -55,12 +20,16 @@ export const SignUpScreen = observer(function SignUpScreen() {
   // const { someStore, anotherStore } = useStores()
 
   const navigation = useNavigation()
-  const navigateBack = () => navigation.navigate("welcome")
+  const navigateBack = () => navigation.goBack()
 
   return (
-    <View testID="SignUpScreen" style={FULL}>
-      <Screen style={ROOT} preset="scroll" backgroundColor={color.transparent}>
-        <Header headerTx="header.text" style={HEADER} titleStyle={HEADER_TITLE} />
+    <View testID="SignUpScreen" style={globalStyles.full}>
+      <Screen style={{ ...globalStyles.root, ...ROOT }} preset="scroll">
+        <Header
+          headerTx="header.text"
+          style={globalStyles.header}
+          titleStyle={globalStyles.headerTitle}
+        />
         <Text preset="header" tx="signUpScreen.title" />
         <TextField preset="header" labelTx="signUpScreen.firstName" placeholder="John" />
         <TextField preset="header" labelTx="signUpScreen.lastName" placeholder="Doe" />
@@ -71,16 +40,16 @@ export const SignUpScreen = observer(function SignUpScreen() {
       <SafeAreaView style={FOOTER}>
         <View style={FOOTER_CONTENT}>
           <Button
-            testID="next-screen-button"
-            style={BUTTON_STYLE}
-            textStyle={BUTTON_TEXT}
+            testID="submit-button"
+            style={globalStyles.button}
+            textStyle={globalStyles.buttonText}
             tx="signUpScreen.submit"
             onPress={navigateBack}
           />
           <Button
-            testID="next-screen-button"
-            style={BUTTON_STYLE}
-            textStyle={BUTTON_TEXT}
+            testID="back-button"
+            style={globalStyles.buttonSecondary}
+            textStyle={globalStyles.buttonSecondaryText}
             tx="common.back"
             onPress={navigateBack}
           />

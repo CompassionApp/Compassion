@@ -17,7 +17,8 @@
     "signUpVolunteer": "SIGN UP TO VOLUNTEER",
     "login": "LOG IN",
     "loginEmail": "Email",
-    "loginPassword": "Password"
+    "loginPassword": "Password",
+    "missionStatement": "We strive to provide the Oakland Chinatown Community with a resource for promoting safety and community. We aim to embrace the often forgotten, underserved, and vulnerable. We promote compassion not indifference, unity as opposed to divisiveness. Fostering a more caring and safer Oakland for all."
   },
   "signUpScreen": {
     "title": "Sign up",
@@ -29,6 +30,12 @@
     "email": "Email",
     "emailPlaceholder": "your@email.com",
     "submit": "SUBMIT"
+  },
+  "roleSelectScreen": {
+    "chaperone": "CHAPERONE",
+    "chaperoneDescription": "I would like to request a chaperone.",
+    "requester": "REQUESTER",
+    "requesterDescription": "I would like to be a chaperone"
   },
   "demoScreen": {
     "howTo": "HOW TO",

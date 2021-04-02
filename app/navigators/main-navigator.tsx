@@ -12,6 +12,8 @@ import {
   DemoListScreen,
   SignUpScreen,
   ChaperoneScreen,
+  RoleSelectScreen,
+  RequesterScreen,
 } from "../screens"
 
 /**
@@ -32,6 +34,8 @@ export type PrimaryParamList = {
   demoList: undefined
   signup: undefined
   chaperone: undefined
+  roleSelect: undefined
+  requester: undefined
 }
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
@@ -49,6 +53,8 @@ export function MainNavigator() {
       <Stack.Screen name="demoList" component={DemoListScreen} />
       <Stack.Screen name="signup" component={SignUpScreen} />
       <Stack.Screen name="chaperone" component={ChaperoneScreen} />
+      <Stack.Screen name="roleSelect" component={RoleSelectScreen} />
+      <Stack.Screen name="requester" component={RequesterScreen} />
     </Stack.Navigator>
   )
 }
