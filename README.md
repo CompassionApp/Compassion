@@ -1,6 +1,6 @@
 # Compassion App
 
-![Compassion](app/screens/welcome/logo.png)
+![Compassion](assets/logo.png)
 
 ## Setup
 
