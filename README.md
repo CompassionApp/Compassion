@@ -2,28 +2,52 @@
 
 ## Setup
 
-Follow the instructions for Android and iOS simulators:
+1. Install [nvm](https://github.com/nvm-sh/nvm) to manage Node versions. We'll use Node `v14.16.0` for this project.
 
-- Android: Install [Android Studio](https://docs.expo.io/workflow/android-studio-emulator)
-- iOS: Install [xcode CLi tools](https://docs.expo.io/workflow/ios-simulator/)
+   ```bash
+   # After install:
+   $ nvm install 14 && nvm alias default 14
+   ```
 
-```bash
-# Install deps
-$ yarn
+1. Install simulators
+   Follow the instructions for Android and iOS simulators:
 
-# Install expo-cli
-$ npm install -g expo-cli
+   - For Android, install [Android Studio](https://docs.expo.io/workflow/android-studio-emulator) and through its interface download the SDK and simulator
+   - iOS: Install [xcode CLI tools](https://docs.expo.io/workflow/ios-simulator/)
 
-# Install reactotron
-$ brew install reactotronp
-```
+1. Install `yarn`
+
+   ```bash
+   $ npm install -g yarn
+   ```
+
+1. Install project dependencies
+
+   ```bash
+   $ yarn
+   ```
+
+1. Install [Expo CLI](https://docs.expo.io/workflow/expo-cli/) and [Reactotron](https://github.com/infinitered/reactotron)
+
+   ```bash
+   # Install expo-cli
+   $ npm install -g expo-cli
+
+   # Install reactotron
+   $ brew install reactotronp
+   ```
+
+...aaand you're set!
 
 ## Development
 
+The development process is usually: open Metro --> launch the simulator of your choice --> start development.
+
 ```bash
-# Opens Metro, which will create a command-line interface for you to attach an iOS or Android simulator
+# Opens the Metro bundler
 $ yarn start
-# After opening a simulator, wait for Expo to be installed on your simulator image and then for Expo to build and publish the bundle to the virtual device
+# Either on the command line or on the web interface, select a simulator (iOS or Android) to connect to.
+# Wait for Expo to be installed on your simulator image and then for Expo to build and publish the bundle to the virtual device
 
 # (Optionally) Open Reactotron to inspect the app, similar to Redux Dev Tools
 ```
@@ -38,7 +62,11 @@ $ yarn test
 $ yarn storybook
 ```
 
-> The below is from Ignite's original README
+---
+
+**Everything below this line is from Ignite's original README**
+
+---
 
 ## Boilerplate Features
 
