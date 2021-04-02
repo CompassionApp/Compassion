@@ -1,6 +1,10 @@
+<div style="text-align:center">
+  ![Compassion](assets/logo.png)
+</div>
+
 # Compassion App
 
-![Compassion](assets/logo.png)
+Compassion App is a [React Native](https://reactnative.dev/) application built with the [Ignite](https://github.com/infinitered/ignite) boilerplate. Please take a look at the documentation for Ignite to get familiar with its library choices, architecture, and--most importantly--[generators](https://github.com/infinitered/ignite/blob/master/docs/Generators.md).
 
 ## Setup
 
