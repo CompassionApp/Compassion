@@ -7,29 +7,38 @@ Follow the instructions for Android and iOS simulators:
 - Android: Install [Android Studio](https://docs.expo.io/workflow/android-studio-emulator)
 - iOS: Install [xcode CLi tools](https://docs.expo.io/workflow/ios-simulator/)
 
-```
+```bash
 # Install deps
-yarn
+$ yarn
 
 # Install expo-cli
-npm install -g expo-cli
+$ npm install -g expo-cli
 
 # Install reactotron
-brew install reactotron
-
+$ brew install reactotronp
 ```
 
 ## Development
 
-```
-# Opens metro
-yarn start
+```bash
+# Opens Metro, which will create a command-line interface for you to attach an iOS or Android simulator
+$ yarn start
+# After opening a simulator, wait for Expo to be installed on your simulator image and then for Expo to build and publish the bundle to the virtual device
 
-# Click Run on iOS Simulator
-# Wait for Expo to be installed on your simulator and for Expo to build the bundle
-
-# Open Reactotron
+# (Optionally) Open Reactotron to inspect the app, similar to Redux Dev Tools
 ```
+
+## Testing
+
+```bash
+# Run unit tests
+$ yarn test
+
+# Open Storybook
+$ yarn storybook
+```
+
+> The below is from Ignite's original README
 
 ## Boilerplate Features
 
