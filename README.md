@@ -1,4 +1,6 @@
-# Compassion
+# Compassion App
+
+![Compassion](app/screens/welcome/logo.png)
 
 ## Setup
 
