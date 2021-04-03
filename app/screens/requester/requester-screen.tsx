@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
 import { Dimensions, SafeAreaView, View, ViewStyle } from "react-native"
 import MapView, { LatLng, Marker } from "react-native-maps"
-import { Button, Header, Screen, Text } from "../../components"
+import { Button, Header, Screen, Text, TextField } from "../../components"
 // import { useStores } from "../../models"
 import { color, globalStyles, spacing } from "../../theme"
 import { useNavigation } from "@react-navigation/core"
@@ -18,15 +18,14 @@ const MAP: ViewStyle = {
 }
 
 const FOOTER: ViewStyle = {
-  backgroundColor: color.palette.grey,
-  paddingHorizontal: spacing[4],
+  marginHorizontal: spacing[4],
 }
 
 const START_COORDINATE = {
   latitude: 37.804363,
   longitude: -122.271111,
-  latitudeDelta: 0.0922,
-  longitudeDelta: 0.0421,
+  latitudeDelta: 0.0002,
+  longitudeDelta: 0.0321,
 }
 
 export const RequesterScreen = observer(function RequesterScreen() {
@@ -42,7 +41,7 @@ export const RequesterScreen = observer(function RequesterScreen() {
   const navigateBack = () => navigation.goBack()
 
   return (
-    <View testID="RequesterScreen">
+    <View testID="RequesterScreen" style={globalStyles.full}>
       <Screen style={{ ...ROOT }}>
         <Header
           headerTx="requesterScreen.title"
@@ -50,6 +49,18 @@ export const RequesterScreen = observer(function RequesterScreen() {
           onLeftPress={navigateBack}
           style={globalStyles.header}
         />
+        <SafeAreaView style={FOOTER}>
+          {/* Need geocoding service to translate a string address to lat/lon */}
+          <TextField placeholderTx="chaperoneScreen.pickupPlaceholder" />
+          <TextField placeholderTx="chaperoneScreen.dropoffPlaceholder" />
+          <Button
+            testID="request-chaperone-button"
+            tx="requesterScreen.requestChaperone"
+            onPress={navigateBack}
+          />
+        </SafeAreaView>
+      </Screen>
+      <SafeAreaView>
         <MapView initialRegion={START_COORDINATE} style={MAP}>
           <Marker
             draggable
@@ -60,13 +71,6 @@ export const RequesterScreen = observer(function RequesterScreen() {
             }}
           />
         </MapView>
-      </Screen>
-      <SafeAreaView style={FOOTER}>
-        <Button
-          testID="request-chaperone-button"
-          tx="requesterScreen.requestChaperone"
-          onPress={navigateBack}
-        />
       </SafeAreaView>
     </View>
   )

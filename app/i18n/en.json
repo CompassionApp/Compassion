@@ -41,11 +41,13 @@
   },
   "chaperoneScreen": {
     "title": "Chaperone",
-    "scheduleShift": "Schedule a shift"
+    "scheduleShift": "Schedule a shift",
+    "pickupPlaceholder": "Where to?",
+    "dropoffPlaceholder": "Dropoff location"
   },
   "requesterScreen": {
-    "title": "Requester",
-    "requestChaperone": "Request a chaperone"
+    "title": "Request a Chaperone",
+    "requestChaperone": "Request"
   },
   "demoScreen": {
     "howTo": "HOW TO",
