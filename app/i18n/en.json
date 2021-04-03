@@ -22,6 +22,7 @@
   },
   "signUpScreen": {
     "title": "Sign up",
+    "description": "Welcome and THANK YOU for your interest in helping to keep our community safer! These are unprecedented times and we are so grateful for your time and efforts. Please fill in this form in its entirety. You will also find our policies at the bottom of the form - please read them, understand them, and reach out if you have any questions. Please note: Due to the overwhelming amount of submissions, there may be a delay in the the response time as we schedule upcoming onboarding sessions. For the safety of our volunteers and the community we are serving, we are asking that ALL volunteers doing in-person work to get tested for COVID-19 and to submit a screenshot/photo of your results at the time of your shift, and complete a 1 hour onboarding session.",
     "firstName": "First Name",
     "lastName": "Last Name",
     "phone": "Phone",
@@ -32,10 +33,19 @@
     "submit": "SUBMIT"
   },
   "roleSelectScreen": {
+    "title": "Role Select",
     "chaperone": "CHAPERONE",
-    "chaperoneDescription": "I would like to request a chaperone.",
+    "chaperoneDescription": "I would like to be a chaperone",
     "requester": "REQUESTER",
-    "requesterDescription": "I would like to be a chaperone"
+    "requesterDescription": "I would like to request a chaperone."
+  },
+  "chaperoneScreen": {
+    "title": "Chaperone",
+    "scheduleShift": "Schedule a shift"
+  },
+  "requesterScreen": {
+    "title": "Requester",
+    "requestChaperone": "Request a chaperone"
   },
   "demoScreen": {
     "howTo": "HOW TO",

@@ -2,7 +2,7 @@ import React from "react"
 import { View, ViewStyle, TextStyle, SafeAreaView, Image, ImageStyle } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 import { observer } from "mobx-react-lite"
-import { Button, Header, Screen, Text, TextField } from "../../components"
+import { Button, FormRow, Header, Screen, Text, TextField } from "../../components"
 import { color, globalStyles, spacing, typography } from "../../theme"
 export const logo = require("./logo.png")
 
@@ -37,7 +37,7 @@ const FOOTER: ViewStyle = {
   marginBottom: 64,
 }
 const FOOTER_CONTENT: ViewStyle = {
-  paddingVertical: spacing[4],
+  paddingVertical: spacing[2],
   paddingHorizontal: spacing[4],
 }
 
@@ -45,10 +45,10 @@ export const WelcomeScreen = observer(function WelcomeScreen() {
   const navigation = useNavigation()
   const navigateSignUp = () => navigation.navigate("signup")
   const navigateRoleSelect = () => navigation.navigate("roleSelect")
+  const navigateDemo = () => navigation.navigate("demoList")
 
   return (
     <View testID="WelcomeScreen" style={globalStyles.full}>
-      {/* <Wallpaper /> */}
       <Screen style={{ ...globalStyles.root, ...ROOT }} preset="scroll">
         <Header style={globalStyles.header} titleStyle={globalStyles.headerTitle} />
         <Image source={logo} resizeMethod="auto" style={LOGO_IMAGE} />
@@ -59,21 +59,31 @@ export const WelcomeScreen = observer(function WelcomeScreen() {
       </Screen>
       <SafeAreaView style={FOOTER}>
         <View style={FOOTER_CONTENT}>
-          <TextField preset="header" labelTx="welcomeScreen.loginEmail" />
-          <TextField preset="header" labelTx="welcomeScreen.loginPassword" />
+          <FormRow preset="bottom">
+            <TextField preset="header" labelTx="welcomeScreen.loginEmail" />
+            <TextField preset="header" labelTx="welcomeScreen.loginPassword" />
+          </FormRow>
+
           <Button
             testID="next-screen-button"
-            style={globalStyles.button}
-            textStyle={globalStyles.buttonText}
             tx="welcomeScreen.login"
             onPress={navigateRoleSelect}
           />
           <Button
             testID="next-screen-button"
-            style={globalStyles.button}
-            textStyle={globalStyles.buttonText}
             tx="welcomeScreen.signUpVolunteer"
             onPress={navigateSignUp}
+          />
+          <Button
+            preset="link"
+            testID="next-screen-button"
+            // style={{ ...globalStyles.buttonSecondary, borderWidth: 0 }}
+            // textStyle={{
+            //   color: color.palette.darkBlue,
+            //   fontSize: 13,
+            // }}
+            text="See demo page"
+            onPress={navigateDemo}
           />
         </View>
       </SafeAreaView>

@@ -1,7 +1,7 @@
 import React from "react"
 import { observer } from "mobx-react-lite"
 import { TextStyle, View, ViewStyle } from "react-native"
-import { Button, Screen, Text } from "../../components"
+import { Button, Header, Screen, Text } from "../../components"
 // import { useStores } from "../../models"
 import { color, globalStyles } from "../../theme"
 import { useNavigation } from "@react-navigation/native"
@@ -10,7 +10,7 @@ const ROOT: ViewStyle = {
   flex: 1,
 }
 
-const LARGE_BUTTON: ViewStyle = {
+const HUGE_BUTTON: ViewStyle = {
   height: 200,
 }
 
@@ -34,33 +34,23 @@ export const RoleSelectScreen = observer(function RoleSelectScreen() {
 
   return (
     <View testID="ChaperoneScreen" style={globalStyles.full}>
-      <Screen style={{ ...globalStyles.root, ...ROOT }} preset="scroll">
-        <Text preset="header" text="Role Select" />
-        <Button
-          testID="back-button"
-          style={{ ...globalStyles.button, ...LARGE_BUTTON }}
-          textStyle={globalStyles.buttonText}
-          onPress={navigateRequester}
-        >
+      <Screen style={{ ...globalStyles.root, ...ROOT }} preset="fixed">
+        <Header
+          headerTx="roleSelectScreen.title"
+          leftIcon="back"
+          onLeftPress={navigateBack}
+          style={globalStyles.header}
+          titleStyle={globalStyles.headerTitle}
+        />
+        {/* <Text preset="header" text="Role Select" /> */}
+        <Button testID="back-button" style={{ ...HUGE_BUTTON }} onPress={navigateRequester}>
           <Text style={BUTTON_TITLE} tx="roleSelectScreen.requester"></Text>
           <Text style={BUTTON_DESCRIPTION} tx="roleSelectScreen.requesterDescription"></Text>
         </Button>
-        <Button
-          testID="back-button"
-          style={{ ...globalStyles.button, ...LARGE_BUTTON }}
-          textStyle={globalStyles.buttonText}
-          onPress={navigateChaperone}
-        >
+        <Button testID="back-button" style={{ ...HUGE_BUTTON }} onPress={navigateChaperone}>
           <Text style={BUTTON_TITLE} tx="roleSelectScreen.chaperone"></Text>
           <Text style={BUTTON_DESCRIPTION} tx="roleSelectScreen.chaperoneDescription"></Text>
         </Button>
-        <Button
-          testID="back-button"
-          style={globalStyles.buttonSecondary}
-          textStyle={globalStyles.buttonSecondaryText}
-          tx="common.back"
-          onPress={navigateBack}
-        />
       </Screen>
     </View>
   )

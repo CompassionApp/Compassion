@@ -1,7 +1,7 @@
 import React from "react"
 import { observer } from "mobx-react-lite"
 import { SafeAreaView, View, ViewStyle } from "react-native"
-import { Button, Header, Screen, Text, TextField } from "../../components"
+import { Button, FormRow, Header, Screen, Text, TextField } from "../../components"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "../../models"
 import { globalStyles, spacing } from "../../theme"
@@ -26,33 +26,28 @@ export const SignUpScreen = observer(function SignUpScreen() {
     <View testID="SignUpScreen" style={globalStyles.full}>
       <Screen style={{ ...globalStyles.root, ...ROOT }} preset="scroll">
         <Header
-          headerTx="header.text"
+          headerTx="signUpScreen.title"
+          leftIcon="back"
+          onLeftPress={navigateBack}
           style={globalStyles.header}
           titleStyle={globalStyles.headerTitle}
         />
-        <Text preset="header" tx="signUpScreen.title" />
-        <TextField preset="header" labelTx="signUpScreen.firstName" placeholder="John" />
-        <TextField preset="header" labelTx="signUpScreen.lastName" placeholder="Doe" />
-        <TextField preset="header" labelTx="signUpScreen.phone" placeholder="111 222 3333" />
-        <TextField preset="header" labelTx="signUpScreen.dateOfBirth" placeholder="1/1/2021" />
-        <TextField preset="header" labelTx="signUpScreen.email" placeholder="john.doe@gmail.com" />
+        <Text preset="default" tx="signUpScreen.description" />
+        <FormRow preset="bottom">
+          <TextField preset="header" labelTx="signUpScreen.firstName" placeholder="John" />
+          <TextField preset="header" labelTx="signUpScreen.lastName" placeholder="Doe" />
+          <TextField preset="header" labelTx="signUpScreen.phone" placeholder="111 222 3333" />
+          <TextField preset="header" labelTx="signUpScreen.dateOfBirth" placeholder="1/1/2021" />
+          <TextField
+            preset="header"
+            labelTx="signUpScreen.email"
+            placeholder="john.doe@gmail.com"
+          />
+        </FormRow>
       </Screen>
       <SafeAreaView style={FOOTER}>
         <View style={FOOTER_CONTENT}>
-          <Button
-            testID="submit-button"
-            style={globalStyles.button}
-            textStyle={globalStyles.buttonText}
-            tx="signUpScreen.submit"
-            onPress={navigateBack}
-          />
-          <Button
-            testID="back-button"
-            style={globalStyles.buttonSecondary}
-            textStyle={globalStyles.buttonSecondaryText}
-            tx="common.back"
-            onPress={navigateBack}
-          />
+          <Button testID="submit-button" tx="signUpScreen.submit" onPress={navigateBack} />
         </View>
       </SafeAreaView>
     </View>

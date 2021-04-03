@@ -1,7 +1,7 @@
 import React from "react"
 import { observer } from "mobx-react-lite"
 import { View, ViewStyle } from "react-native"
-import { Button, Screen, Text } from "../../components"
+import { Button, Header, Screen, Text } from "../../components"
 // import { useStores } from "../../models"
 import { color, globalStyles } from "../../theme"
 import { useNavigation } from "@react-navigation/core"
@@ -22,12 +22,18 @@ export const RequesterScreen = observer(function RequesterScreen() {
   return (
     <View testID="RequesterScreen" style={globalStyles.full}>
       <Screen style={{ ...globalStyles.root, ...ROOT }} preset="scroll">
-        <Text preset="header" text="Requester" />
+        <Header
+          headerTx="requesterScreen.title"
+          leftIcon="back"
+          onLeftPress={navigateBack}
+          style={globalStyles.header}
+          titleStyle={globalStyles.headerTitle}
+        />
+        <Text text="Requester" />
         <Button
           testID="back-button"
-          style={globalStyles.buttonSecondary}
-          textStyle={globalStyles.buttonSecondaryText}
-          tx="common.back"
+          preset="ghost"
+          tx="requesterScreen.requestChaperone"
           onPress={navigateBack}
         />
       </Screen>

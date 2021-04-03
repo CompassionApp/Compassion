@@ -1,18 +1,23 @@
 import { ViewStyle, TextStyle } from "react-native"
-import { color, spacing } from "../../theme"
+import { color, spacing, typography } from "../../theme"
 
 /**
  * All text will start off looking like this.
  */
 const BASE_VIEW: ViewStyle = {
-  paddingVertical: spacing[2],
-  paddingHorizontal: spacing[2],
+  marginVertical: spacing[2],
+  paddingHorizontal: spacing[4],
+  paddingVertical: spacing[4],
   borderRadius: 4,
   justifyContent: "center",
   alignItems: "center",
 }
 
 const BASE_TEXT: TextStyle = {
+  fontSize: 13,
+  fontFamily: typography.primary,
+  fontWeight: "bold",
+  letterSpacing: 2,
   paddingHorizontal: spacing[3],
 }
 
@@ -25,7 +30,17 @@ export const viewPresets = {
   /**
    * A smaller piece of secondard information.
    */
-  primary: { ...BASE_VIEW, backgroundColor: color.palette.orange } as ViewStyle,
+  primary: { ...BASE_VIEW, backgroundColor: color.palette.darkBlue } as ViewStyle,
+
+  /**
+   * A button with an outline and no background color
+   */
+  ghost: {
+    ...BASE_VIEW,
+    backgroundColor: color.transparent,
+    borderWidth: 1,
+    borderColor: color.palette.darkBlue,
+  } as ViewStyle,
 
   /**
    * A button without extras.
@@ -39,7 +54,17 @@ export const viewPresets = {
 }
 
 export const textPresets = {
-  primary: { ...BASE_TEXT, fontSize: 9, color: color.palette.white } as TextStyle,
+  primary: {
+    ...BASE_TEXT,
+    color: color.palette.white,
+    textTransform: "uppercase",
+  } as TextStyle,
+  ghost: {
+    ...BASE_TEXT,
+    color: color.palette.darkBlue,
+    letterSpacing: 2,
+    textTransform: "uppercase",
+  },
   link: {
     ...BASE_TEXT,
     color: color.text,
