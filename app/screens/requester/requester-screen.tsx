@@ -1,9 +1,10 @@
-import React from "react"
+import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
-import { View, ViewStyle } from "react-native"
+import { Dimensions, SafeAreaView, View, ViewStyle } from "react-native"
+import MapView, { LatLng, Marker } from "react-native-maps"
 import { Button, Header, Screen, Text } from "../../components"
 // import { useStores } from "../../models"
-import { color, globalStyles } from "../../theme"
+import { color, globalStyles, spacing } from "../../theme"
 import { useNavigation } from "@react-navigation/core"
 
 const ROOT: ViewStyle = {
@@ -11,9 +12,30 @@ const ROOT: ViewStyle = {
   flex: 1,
 }
 
+const MAP: ViewStyle = {
+  width: Dimensions.get("window").width,
+  height: 500,
+}
+
+const FOOTER: ViewStyle = {
+  backgroundColor: color.palette.grey,
+  paddingHorizontal: spacing[4],
+}
+
+const START_COORDINATE = {
+  latitude: 37.804363,
+  longitude: -122.271111,
+  latitudeDelta: 0.0922,
+  longitudeDelta: 0.0421,
+}
+
 export const RequesterScreen = observer(function RequesterScreen() {
   // Pull in one of our MST stores
   // const { someStore, anotherStore } = useStores()
+  const [location, setLocation] = useState<LatLng>({
+    latitude: START_COORDINATE.latitude,
+    longitude: START_COORDINATE.longitude,
+  })
 
   // Pull in navigation via hook
   const navigation = useNavigation()
@@ -21,21 +43,31 @@ export const RequesterScreen = observer(function RequesterScreen() {
 
   return (
     <View testID="RequesterScreen">
-      <Screen style={{ ...globalStyles.root, ...ROOT }} preset="scroll">
+      <Screen style={{ ...ROOT }}>
         <Header
           headerTx="requesterScreen.title"
           leftIcon="back"
           onLeftPress={navigateBack}
           style={globalStyles.header}
         />
-        <Text text="Requester" />
+        <MapView initialRegion={START_COORDINATE} style={MAP}>
+          <Marker
+            draggable
+            coordinate={START_COORDINATE}
+            onDragEnd={(e) => {
+              console.tron.log("Map pin changed", e.nativeEvent.coordinate)
+              setLocation(e.nativeEvent.coordinate)
+            }}
+          />
+        </MapView>
+      </Screen>
+      <SafeAreaView style={FOOTER}>
         <Button
-          testID="back-button"
-          preset="ghost"
+          testID="request-chaperone-button"
           tx="requesterScreen.requestChaperone"
           onPress={navigateBack}
         />
-      </Screen>
+      </SafeAreaView>
     </View>
   )
 })
