@@ -20,14 +20,13 @@ export const RequesterScreen = observer(function RequesterScreen() {
   const navigateBack = () => navigation.goBack()
 
   return (
-    <View testID="RequesterScreen" style={globalStyles.full}>
+    <View testID="RequesterScreen">
       <Screen style={{ ...globalStyles.root, ...ROOT }} preset="scroll">
         <Header
           headerTx="requesterScreen.title"
           leftIcon="back"
           onLeftPress={navigateBack}
           style={globalStyles.header}
-          titleStyle={globalStyles.headerTitle}
         />
         <Text text="Requester" />
         <Button

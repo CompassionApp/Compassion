@@ -4,12 +4,14 @@ import { SafeAreaView, View, ViewStyle } from "react-native"
 import { Button, FormRow, Header, Screen, Text, TextField } from "../../components"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "../../models"
-import { globalStyles, spacing } from "../../theme"
+import { color, globalStyles, spacing } from "../../theme"
 import { useNavigation } from "@react-navigation/core"
 
-const ROOT: ViewStyle = {}
+const ROOT: ViewStyle = {
+  flex: 1,
+}
 
-const FOOTER: ViewStyle = { marginBottom: 64 }
+const FOOTER: ViewStyle = { backgroundColor: color.palette.grey }
 const FOOTER_CONTENT: ViewStyle = {
   paddingVertical: spacing[4],
   paddingHorizontal: spacing[4],
@@ -30,7 +32,6 @@ export const SignUpScreen = observer(function SignUpScreen() {
           leftIcon="back"
           onLeftPress={navigateBack}
           style={globalStyles.header}
-          titleStyle={globalStyles.headerTitle}
         />
         <Text preset="default" tx="signUpScreen.description" />
         <FormRow preset="bottom">

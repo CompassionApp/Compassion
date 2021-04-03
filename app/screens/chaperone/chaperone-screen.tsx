@@ -20,7 +20,7 @@ export const ChaperoneScreen = observer(function ChaperoneScreen() {
   const navigateBack = () => navigation.goBack()
 
   return (
-    <View testID="ChaperoneScreen" style={globalStyles.full}>
+    <View testID="ChaperoneScreen">
       <Screen style={{ ...globalStyles.root, ...ROOT }} preset="scroll">
         <Header
           headerTx="chaperoneScreen.title"

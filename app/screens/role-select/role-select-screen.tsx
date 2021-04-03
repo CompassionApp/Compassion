@@ -33,14 +33,13 @@ export const RoleSelectScreen = observer(function RoleSelectScreen() {
   const navigateRequester = () => navigation.navigate("requester")
 
   return (
-    <View testID="ChaperoneScreen" style={globalStyles.full}>
+    <View testID="ChaperoneScreen">
       <Screen style={{ ...globalStyles.root, ...ROOT }} preset="fixed">
         <Header
           headerTx="roleSelectScreen.title"
           leftIcon="back"
           onLeftPress={navigateBack}
           style={globalStyles.header}
-          titleStyle={globalStyles.headerTitle}
         />
         {/* <Text preset="header" text="Role Select" /> */}
         <Button testID="back-button" style={{ ...HUGE_BUTTON }} onPress={navigateRequester}>
