@@ -133,7 +133,6 @@ exports[`Storyshots Button Style Presets 1`] = `
                     "fontSize": 13,
                     "fontWeight": "bold",
                     "letterSpacing": 2,
-                    "paddingHorizontal": 12,
                     "textTransform": "uppercase",
                   }
                 }
@@ -252,7 +251,6 @@ exports[`Storyshots Button Style Presets 1`] = `
                     "fontSize": 13,
                     "fontWeight": "bold",
                     "letterSpacing": 2,
-                    "paddingHorizontal": 12,
                     "textTransform": "uppercase",
                   }
                 }
@@ -371,7 +369,6 @@ exports[`Storyshots Button Style Presets 1`] = `
                     "fontSize": 20,
                     "fontWeight": "bold",
                     "letterSpacing": 2,
-                    "paddingHorizontal": 12,
                     "textTransform": "uppercase",
                   }
                 }
