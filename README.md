@@ -17,8 +17,10 @@ Compassion App is a [React Native](https://reactnative.dev/) application built w
 
 1. Install simulators. Follow the instructions below for Android and iOS simulators:
 
-   - For Android, install [Android Studio](https://docs.expo.io/workflow/android-studio-emulator) and through its interface download the SDK and simulator
-   - iOS: Install [xcode CLI tools](https://docs.expo.io/workflow/ios-simulator/)
+   - **Android** Install [Android Studio](https://docs.expo.io/workflow/android-studio-emulator) and through its interface download the SDK and simulator
+     - ...
+   - **iOS** Install [xcode CLI tools](https://docs.expo.io/workflow/ios-simulator/)
+     - Enable location mocking in the simulator by going to `Features > Location > City Run`
 
 1. Install `yarn`
 
