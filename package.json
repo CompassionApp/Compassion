@@ -34,6 +34,7 @@
     "apisauce": "2.0.0",
     "expo": "40.0.1",
     "expo-localization": "9.1.0",
+    "expo-permissions": "~10.0.0",
     "expo-status-bar": "1.0.3",
     "i18n-js": "3.8.0",
     "mobx": "6.0.4",

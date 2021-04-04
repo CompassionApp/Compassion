@@ -14,6 +14,7 @@ import "./utils/ignore-warnings"
 import React, { useState, useEffect, useRef } from "react"
 import { NavigationContainerRef } from "@react-navigation/native"
 import { SafeAreaProvider, initialWindowMetrics } from "react-native-safe-area-context"
+// import * as Permissions from "expo-permissions"
 import { initFonts } from "./theme/fonts" // expo
 import * as storage from "./utils/storage"
 import {
@@ -30,6 +31,7 @@ import { ToggleStorybook } from "../storybook/toggle-storybook"
 // stack navigation, use `createNativeStackNavigator` in place of `createStackNavigator`:
 // https://github.com/kmagiera/react-native-screens#using-native-stack-navigator
 import { enableScreens } from "react-native-screens"
+import { AppState } from "react-native"
 enableScreens()
 
 export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
@@ -47,6 +49,23 @@ function App() {
     storage,
     NAVIGATION_PERSISTENCE_KEY,
   )
+
+  const handleCheckPermissions = () => {
+    console.tron.log("AppState change detected; checking permissions...")
+    // TODO: This causes a hook error; not sure why.
+    // const [permission] = Permissions.usePermissions(Permissions.LOCATION)
+    // if (!permission || permission.status !== "granted") {
+    //   console.tron.log("Lost permissions!")
+    // }
+  }
+
+  // Check for changes in the app state and revisit permissions if necessary
+  useEffect(() => {
+    AppState.addEventListener("change", handleCheckPermissions)
+    return () => {
+      AppState.removeEventListener("change", handleCheckPermissions)
+    }
+  }, [])
 
   // Kick off initial async loading actions, like loading fonts and RootStore
   useEffect(() => {

@@ -20,10 +20,10 @@ const TITLE_WRAPPER: TextStyle = {
 }
 
 const LOGO_IMAGE: ImageStyle = {
-  marginBottom: spacing[3],
+  marginBottom: spacing[1],
   alignSelf: "center",
-  width: 200,
-  height: 200,
+  width: 175,
+  height: 175,
 }
 const TITLE: TextStyle = {
   fontWeight: "bold",
@@ -36,7 +36,8 @@ const CONTENT: TextStyle = {
   color: "#222",
   fontSize: 15,
   lineHeight: 22,
-  marginTop: spacing[3],
+  textAlign: "center",
+  marginTop: spacing[4],
   marginBottom: spacing[5],
 }
 const FOOTER: ViewStyle = {
@@ -47,11 +48,17 @@ const FOOTER_CONTENT: ViewStyle = {
   paddingHorizontal: spacing[4],
 }
 
+const ROW: ViewStyle = {
+  flexDirection: "row",
+  justifyContent: "space-between",
+}
+
 export const WelcomeScreen = observer(function WelcomeScreen() {
   const navigation = useNavigation()
   const navigateSignUp = () => navigation.navigate("signup")
   const navigateRoleSelect = () => navigation.navigate("roleSelect")
   const navigateDemo = () => navigation.navigate("demoList")
+  const navigatePermissions = () => navigation.navigate("permissions")
 
   return (
     <View testID="WelcomeScreen" style={globalStyles.full}>
@@ -80,17 +87,20 @@ export const WelcomeScreen = observer(function WelcomeScreen() {
             tx="welcomeScreen.signUpVolunteer"
             onPress={navigateSignUp}
           />
-          <Button
-            preset="link"
-            testID="next-screen-button"
-            // style={{ ...globalStyles.buttonSecondary, borderWidth: 0 }}
-            // textStyle={{
-            //   color: color.palette.darkBlue,
-            //   fontSize: 13,
-            // }}
-            text="See demo page"
-            onPress={navigateDemo}
-          />
+          <View style={ROW}>
+            <Button
+              preset="link"
+              testID="next-screen-button"
+              text="Permissions"
+              onPress={navigatePermissions}
+            />
+            <Button
+              preset="link"
+              testID="next-screen-button"
+              text="Demo Page"
+              onPress={navigateDemo}
+            />
+          </View>
         </View>
       </SafeAreaView>
     </View>

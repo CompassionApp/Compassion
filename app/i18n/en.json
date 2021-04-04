@@ -10,6 +10,11 @@
   "errors": {
     "invalidEmail": "Invalid email address."
   },
+  "permissionsScreen": {
+    "title": "Permissions",
+    "heading": "Allow Access",
+    "permissionsBody": "This app will send you notifications and use your location to provide the best experience. Please press the button below and grant access."
+  },
   "welcomeScreen": {
     "poweredBy": "POWERED BY IGNITE",
     "readyForLaunch": "Ready for launch.",
