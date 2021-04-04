@@ -16,6 +16,10 @@ export function ToggleStorybook(props) {
   const [showStorybook, setShowStorybook] = useState(false)
   const [StorybookUIRoot, setStorybookUIRoot] = useState(null)
 
+  // NOTE: Uncomment this line to render Storybook stories
+  // saveString("devStorybook", "on")
+  // saveString("devStorybook", "off")
+
   useEffect(() => {
     if (__DEV__) {
       // Load the setting from storage if it's there

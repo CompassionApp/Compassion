@@ -15,8 +15,7 @@ Compassion App is a [React Native](https://reactnative.dev/) application built w
    $ nvm install 14 && nvm alias default 14
    ```
 
-1. Install simulators
-   Follow the instructions for Android and iOS simulators:
+1. Install simulators. Follow the instructions below for Android and iOS simulators:
 
    - For Android, install [Android Studio](https://docs.expo.io/workflow/android-studio-emulator) and through its interface download the SDK and simulator
    - iOS: Install [xcode CLI tools](https://docs.expo.io/workflow/ios-simulator/)
@@ -58,19 +57,43 @@ $ yarn start
 # (Optionally) Open Reactotron to inspect the app, similar to Redux Dev Tools
 ```
 
+Occasionally, you'll have to open [the Expo developer menu](https://docs.expo.io/workflow/development-mode/#showing-the-developer-menu) to reload the app or to debug issues. To activate the menu, use the following:
+
+- For iOS simulators, press <kbd>Ctrl</kbd>+<kbd>Cmd</kbd>+<kbd>z</kbd>
+- For Android simulators, press <kbd>Cmd</kbd>+<kbd>m</kbd>
+
 ## Testing
+
+### Unit Tests
 
 ```bash
 # Run unit tests
 $ yarn test
+```
 
-# Open Storybook
+### Storybook
+
+Storybook in React Native works a little bit differently than with a web-based React app.
+
+First, you'll need to start Storybook, which will build the project and launch the Storybook viewer on https://localhost:9001:
+
+```bash
 $ yarn storybook
 ```
 
----
+Then add this line in `./storybook/toggle-storybook.tsx`:
+
+```ts
+saveString("devStorybook", "on")
+```
+
+When you reload your app, your simulator will render the story and will respond to changes as you select different stories on the browser.
+
+## Ignite
 
 **Everything below this line is from Ignite's original README**
+
+---
 
 ---
 
