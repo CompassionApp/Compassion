@@ -36,16 +36,6 @@ lint:
   script:
     - yarn lint
 
-lint:format:
-  stage: test
-  only:
-    - merge_requests
-  except:
-    variables:
-      - $CI_COMMIT_REF_NAME =~ /^master/
-  script:
-    - yarn format
-
 compile:
   stage: test
   only:
