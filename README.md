@@ -69,6 +69,9 @@ Occasionally, you'll have to open [the Expo developer menu](https://docs.expo.io
 ```bash
 # Run unit tests
 $ yarn test
+
+# Update Jest Snapshots
+$ yarn test -u
 ```
 
 ### Storybook
