@@ -33,7 +33,7 @@ export const RoleSelectScreen = observer(function RoleSelectScreen() {
   const navigateRequester = () => navigation.navigate("requester")
 
   return (
-    <View testID="ChaperoneScreen">
+    <View testID="RoleSelectScreen" style={globalStyles.full}>
       <Screen style={{ ...globalStyles.root, ...ROOT }} preset="fixed">
         <Header
           headerTx="roleSelectScreen.title"
