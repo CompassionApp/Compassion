@@ -13,7 +13,6 @@ variables:
   DOCKER_DRIVER: overlay2
 
 before_script:
-  # - yarn generate-dotenv
   - yarn
 
 create:merge-request:
@@ -66,16 +65,6 @@ tests:unit:
       - $CI_COMMIT_REF_NAME =~ /^master/
   script:
     - yarn test
-
-tests:storybook:
-  stage: test
-  only:
-    - merge_requests
-  except:
-    variables:
-      - $CI_COMMIT_REF_NAME =~ /^master/
-  script:
-    - yarn storybook -ci
 # tests:coverage:
 #   stage: test
 #   only:
