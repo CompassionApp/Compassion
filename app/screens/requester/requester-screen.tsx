@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
 import { Dimensions, SafeAreaView, View, ViewStyle } from "react-native"
 import MapView, { LatLng, Marker } from "react-native-maps"
-import { Button, Header, Screen, Text, TextField } from "../../components"
+import { Button, Header, Screen, TextField } from "../../components"
 // import { useStores } from "../../models"
 import { color, globalStyles, spacing } from "../../theme"
 import { useNavigation } from "@react-navigation/core"
@@ -31,7 +31,7 @@ const START_COORDINATE = {
 export const RequesterScreen = observer(function RequesterScreen() {
   // Pull in one of our MST stores
   // const { someStore, anotherStore } = useStores()
-  const [location, setLocation] = useState<LatLng>({
+  const [, setLocation] = useState<LatLng>({
     latitude: START_COORDINATE.latitude,
     longitude: START_COORDINATE.longitude,
   })
