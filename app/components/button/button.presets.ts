@@ -18,7 +18,6 @@ const BASE_TEXT: TextStyle = {
   fontFamily: typography.primary,
   fontWeight: "bold",
   letterSpacing: 2,
-  paddingHorizontal: spacing[3],
 }
 
 /**
@@ -26,7 +25,7 @@ const BASE_TEXT: TextStyle = {
  *
  * You want to customize these to whatever you need in your app.
  */
-export const viewPresets = {
+export const viewPresets: Record<string, TextStyle> = {
   /**
    * A smaller piece of secondard information.
    */
@@ -53,7 +52,7 @@ export const viewPresets = {
   } as ViewStyle,
 }
 
-export const textPresets = {
+export const textPresets: Record<ButtonPresetNames, TextStyle> = {
   primary: {
     ...BASE_TEXT,
     color: color.palette.white,
@@ -64,7 +63,7 @@ export const textPresets = {
     color: color.palette.darkBlue,
     letterSpacing: 2,
     textTransform: "uppercase",
-  },
+  } as TextStyle,
   link: {
     ...BASE_TEXT,
     color: color.text,
