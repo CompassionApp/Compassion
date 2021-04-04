@@ -7,13 +7,14 @@
 import React from "react"
 import { createStackNavigator } from "@react-navigation/stack"
 import {
-  WelcomeScreen,
   DemoScreen,
   DemoListScreen,
   SignUpScreen,
   ChaperoneScreen,
   RoleSelectScreen,
   RequesterScreen,
+  PermissionsScreen,
+  WelcomeScreen,
 } from "../screens"
 
 /**
@@ -29,13 +30,14 @@ import {
  *   https://reactnavigation.org/docs/typescript#type-checking-the-navigator
  */
 export type PrimaryParamList = {
-  welcome: undefined
   demo: undefined
   demoList: undefined
   signup: undefined
   chaperone: undefined
   roleSelect: undefined
   requester: undefined
+  permissions: undefined
+  welcome: undefined
 }
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
@@ -44,10 +46,12 @@ const Stack = createStackNavigator<PrimaryParamList>()
 export function MainNavigator() {
   return (
     <Stack.Navigator
+      initialRouteName="permissions"
       screenOptions={{
         headerShown: false,
       }}
     >
+      <Stack.Screen name="permissions" component={PermissionsScreen} />
       <Stack.Screen name="welcome" component={WelcomeScreen} />
       <Stack.Screen name="demo" component={DemoScreen} />
       <Stack.Screen name="demoList" component={DemoListScreen} />
