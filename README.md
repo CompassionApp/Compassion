@@ -41,7 +41,7 @@ Compassion App is a [React Native](https://reactnative.dev/) application built w
    $ npm install -g expo-cli
 
    # Install reactotron
-   $ brew install reactotronp
+   $ brew install reactotron
    ```
 
 ...aaand you're set!
@@ -93,6 +93,10 @@ saveString("devStorybook", "on")
 ```
 
 When you reload your app, your simulator will render the story and will respond to changes as you select different stories on the browser.
+
+### End-to-end Testing with Detox
+
+[Detox](https://github.com/wix/Detox) is a test automation library for writing and driving E2E tests against the app. This library comes with the Ignite boilerplate and doesn't appear to have many tests initially, but it'll be useful later when we need to program specific behaviors and user flows for verification in CI.
 
 ## Ignite
 
