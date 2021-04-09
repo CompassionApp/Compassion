@@ -14,6 +14,7 @@ export function Button(props: ButtonProps) {
   // grab the props
   const {
     preset = "primary",
+    disabled = false,
     tx,
     text,
     style: styleOverride,
@@ -22,15 +23,25 @@ export function Button(props: ButtonProps) {
     ...rest
   } = props
 
-  const viewStyle = mergeAll(flatten([viewPresets[preset] || viewPresets.primary, styleOverride]))
+  const viewStyle = mergeAll(
+    flatten([
+      viewPresets[preset] || viewPresets.primary,
+      disabled ? viewPresets.disabled : {},
+      styleOverride,
+    ]),
+  )
   const textStyle = mergeAll(
-    flatten([textPresets[preset] || textPresets.primary, textStyleOverride]),
+    flatten([
+      textPresets[preset] || textPresets.primary,
+      disabled ? textPresets.disabled : {},
+      textStyleOverride,
+    ]),
   )
 
   const content = children || <Text tx={tx} text={text} style={textStyle} />
 
   return (
-    <TouchableOpacity style={viewStyle} {...rest}>
+    <TouchableOpacity style={viewStyle} disabled={disabled} {...rest}>
       {content}
     </TouchableOpacity>
   )

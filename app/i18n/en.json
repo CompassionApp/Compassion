@@ -52,7 +52,8 @@
   },
   "requesterScreen": {
     "title": "Request a Chaperone",
-    "requestChaperone": "Request"
+    "requestChaperone": "Request",
+    "confirmLocation": "Confirm Location"
   },
   "demoScreen": {
     "howTo": "HOW TO",

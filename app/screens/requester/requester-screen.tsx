@@ -1,11 +1,13 @@
-import React, { useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { Dimensions, SafeAreaView, View, ViewStyle } from "react-native"
 import MapView, { LatLng, Marker } from "react-native-maps"
+import { useNavigation } from "@react-navigation/core"
+import * as Location from "expo-location"
 import { Button, Header, Screen, TextField } from "../../components"
 // import { useStores } from "../../models"
 import { color, globalStyles, spacing } from "../../theme"
-import { useNavigation } from "@react-navigation/core"
+import { EDGE_PADDING, START_REGION } from "./map.constants"
 
 const ROOT: ViewStyle = {
   backgroundColor: color.background,
@@ -14,31 +16,91 @@ const ROOT: ViewStyle = {
 
 const MAP: ViewStyle = {
   width: Dimensions.get("window").width,
-  height: 500,
+  height: 450,
 }
 
 const FOOTER: ViewStyle = {
   marginHorizontal: spacing[4],
 }
 
-const START_COORDINATE = {
-  latitude: 37.804363,
-  longitude: -122.271111,
-  latitudeDelta: 0.0002,
-  longitudeDelta: 0.0321,
-}
+/**
+ * Returns a random coordinate around a seed coordinate
+ */
+const getRandomNearbyCoordinate = (coord: LatLng, delta = 0.04) => ({
+  latitude: coord.latitude - delta * Math.random(),
+  longitude: coord.longitude - delta * Math.random(),
+})
 
 export const RequesterScreen = observer(function RequesterScreen() {
   // Pull in one of our MST stores
   // const { someStore, anotherStore } = useStores()
-  const [, setLocation] = useState<LatLng>({
-    latitude: START_COORDINATE.latitude,
-    longitude: START_COORDINATE.longitude,
-  })
+  const mapViewRef = useRef<MapView>(null)
+  const [confirmedRoute, setConfirmedRoute] = useState<boolean>(false)
+  const [currentLocation, setCurrentLocation] = useState<LatLng>(null)
+  const [pickupLocation, setPickupLocation] = useState<LatLng>(null)
+  const [dropoffLocation, setDropoffLocation] = useState<LatLng>(null)
 
   // Pull in navigation via hook
   const navigation = useNavigation()
   const navigateBack = () => navigation.goBack()
+
+  const handlePickupFocus = () => {
+    if (pickupLocation) mapViewRef.current.setCamera({ center: pickupLocation })
+  }
+  const handlePickupInput = (text: string) => {
+    if (!text) {
+      setPickupLocation(null)
+      setConfirmedRoute(false)
+      return
+    }
+    const pickupLocation = getRandomNearbyCoordinate(currentLocation)
+    setPickupLocation(pickupLocation)
+    mapViewRef.current.setCamera({ center: pickupLocation })
+  }
+
+  const handleDropoffFocus = () => {
+    if (dropoffLocation) mapViewRef.current.setCamera({ center: dropoffLocation })
+  }
+  const handleDropoffInput = (text: string) => {
+    if (!text) {
+      setDropoffLocation(null)
+      setConfirmedRoute(false)
+      return
+    }
+    const dropoffLocation = getRandomNearbyCoordinate(currentLocation)
+    setDropoffLocation(dropoffLocation)
+    mapViewRef.current.setCamera({ center: dropoffLocation })
+  }
+
+  const handleConfirmLocation = () => {
+    mapViewRef.current.fitToCoordinates([dropoffLocation, pickupLocation], {
+      edgePadding: EDGE_PADDING,
+    })
+    setConfirmedRoute(true)
+    // TODO: At this point, we should send a route request to the Google Maps API and display the
+    // route
+  }
+
+  const handleRequestChaperone = () => {
+    // Send the route details to our service
+
+    navigateBack()
+  }
+
+  useEffect(() => {
+    ;(async () => {
+      const { status } = await Location.requestPermissionsAsync()
+      if (status !== "granted") {
+        console.tron.log("Permission to access location was denied")
+        return
+      }
+
+      const location = await Location.getCurrentPositionAsync({})
+      console.tron.log("Location: ", location)
+      setCurrentLocation(location.coords)
+      setPickupLocation(location.coords)
+    })()
+  }, [])
 
   return (
     <View testID="RequesterScreen" style={globalStyles.full}>
@@ -51,24 +113,41 @@ export const RequesterScreen = observer(function RequesterScreen() {
         />
         <SafeAreaView style={FOOTER}>
           {/* Need geocoding service to translate a string address to lat/lon */}
-          <TextField placeholderTx="chaperoneScreen.pickupPlaceholder" />
-          <TextField placeholderTx="chaperoneScreen.dropoffPlaceholder" />
+          <TextField
+            placeholderTx="chaperoneScreen.pickupPlaceholder"
+            onChangeText={handlePickupInput}
+            onFocus={handlePickupFocus}
+          />
+          <TextField
+            placeholderTx="chaperoneScreen.dropoffPlaceholder"
+            onChangeText={handleDropoffInput}
+            onFocus={handleDropoffFocus}
+          />
           <Button
+            disabled={!dropoffLocation || confirmedRoute}
+            testID="confirm-location-button"
+            tx="requesterScreen.confirmLocation"
+            onPress={handleConfirmLocation}
+          />
+          <Button
+            disabled={!confirmedRoute}
             testID="request-chaperone-button"
             tx="requesterScreen.requestChaperone"
-            onPress={navigateBack}
+            onPress={handleRequestChaperone}
           />
         </SafeAreaView>
       </Screen>
       <SafeAreaView>
-        <MapView initialRegion={START_COORDINATE} style={MAP}>
+        <MapView initialRegion={START_REGION} ref={mapViewRef} style={MAP}>
           <Marker
-            draggable
-            coordinate={START_COORDINATE}
-            onDragEnd={(e) => {
-              console.tron.log("Map pin changed", e.nativeEvent.coordinate)
-              setLocation(e.nativeEvent.coordinate)
-            }}
+            coordinate={pickupLocation}
+            title="Pickup"
+            description="Meet my chaperone from here"
+          />
+          <Marker
+            title="Dropoff"
+            coordinate={dropoffLocation}
+            description="Part ways with my chaperone here"
           />
         </MapView>
       </SafeAreaView>
