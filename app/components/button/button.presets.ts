@@ -50,6 +50,13 @@ export const viewPresets: Record<string, TextStyle> = {
     paddingVertical: 0,
     alignItems: "flex-start",
   } as ViewStyle,
+
+  /**
+   * Disabled butted style
+   */
+  disabled: {
+    opacity: 0.4,
+  } as ViewStyle,
 }
 
 export const textPresets: Record<ButtonPresetNames, TextStyle> = {
@@ -69,6 +76,9 @@ export const textPresets: Record<ButtonPresetNames, TextStyle> = {
     color: color.text,
     paddingHorizontal: 0,
     paddingVertical: 0,
+  } as TextStyle,
+  disabled: {
+    opacity: 0.4,
   } as TextStyle,
 }
 
