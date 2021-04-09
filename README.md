@@ -57,6 +57,12 @@ $ yarn start
 # Wait for Expo to be installed on your simulator image and then for Expo to build and publish the bundle to the virtual device
 
 # (Optionally) Open Reactotron to inspect the app, similar to Redux Dev Tools
+
+# In another terminal instance, run the following to get live feedback about Typescript errors
+$ yarn compile --watch
+
+# Similarly, you can keep a watch process for unit tests
+$ yarn test --watch
 ```
 
 Occasionally, you'll have to open [the Expo developer menu](https://docs.expo.io/workflow/development-mode/#showing-the-developer-menu) to reload the app or to debug issues. To activate the menu, use the following:
