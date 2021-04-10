@@ -35,6 +35,8 @@ export const RequesterScreen = observer(function RequesterScreen() {
   // Pull in one of our MST stores
   // const { someStore, anotherStore } = useStores()
   const mapViewRef = useRef<MapView>(null)
+  const pickupMarkerRef = useRef<Marker>(null)
+  const dropoffMarkerRef = useRef<Marker>(null)
   const [confirmedRoute, setConfirmedRoute] = useState<boolean>(false)
   const [currentLocation, setCurrentLocation] = useState<LatLng>(null)
   const [pickupLocation, setPickupLocation] = useState<LatLng>(null)
@@ -45,7 +47,9 @@ export const RequesterScreen = observer(function RequesterScreen() {
   const navigateBack = () => navigation.goBack()
 
   const handlePickupFocus = () => {
-    if (pickupLocation) mapViewRef.current.setCamera({ center: pickupLocation })
+    if (pickupLocation) {
+      mapViewRef.current.setCamera({ center: pickupLocation })
+    }
   }
   const handlePickupInput = (text: string) => {
     if (!text) {
@@ -53,13 +57,21 @@ export const RequesterScreen = observer(function RequesterScreen() {
       setConfirmedRoute(false)
       return
     }
+    if (confirmedRoute) {
+      // Require user to re-confirm since the original input was changed
+      setConfirmedRoute(false)
+    }
     const pickupLocation = getRandomNearbyCoordinate(currentLocation)
     setPickupLocation(pickupLocation)
     mapViewRef.current.setCamera({ center: pickupLocation })
+    pickupMarkerRef.current?.showCallout()
   }
 
   const handleDropoffFocus = () => {
-    if (dropoffLocation) mapViewRef.current.setCamera({ center: dropoffLocation })
+    if (dropoffLocation) {
+      mapViewRef.current.setCamera({ center: dropoffLocation })
+      // dropoffMarkerRef.current?.showCallout()
+    }
   }
   const handleDropoffInput = (text: string) => {
     if (!text) {
@@ -67,9 +79,14 @@ export const RequesterScreen = observer(function RequesterScreen() {
       setConfirmedRoute(false)
       return
     }
+    if (confirmedRoute) {
+      // Require user to re-confirm since the original input was changed
+      setConfirmedRoute(false)
+    }
     const dropoffLocation = getRandomNearbyCoordinate(currentLocation)
     setDropoffLocation(dropoffLocation)
     mapViewRef.current.setCamera({ center: dropoffLocation })
+    dropoffMarkerRef.current?.showCallout()
   }
 
   const handleConfirmLocation = () => {
@@ -139,16 +156,22 @@ export const RequesterScreen = observer(function RequesterScreen() {
       </Screen>
       <SafeAreaView>
         <MapView initialRegion={START_REGION} ref={mapViewRef} style={MAP}>
-          <Marker
-            coordinate={pickupLocation}
-            title="Pickup"
-            description="Meet my chaperone from here"
-          />
-          <Marker
-            title="Dropoff"
-            coordinate={dropoffLocation}
-            description="Part ways with my chaperone here"
-          />
+          {pickupLocation && (
+            <Marker
+              ref={pickupMarkerRef}
+              coordinate={pickupLocation}
+              title="Pickup"
+              description="Meet my chaperone from here"
+            />
+          )}
+          {dropoffLocation && (
+            <Marker
+              ref={dropoffMarkerRef}
+              title="Dropoff"
+              coordinate={dropoffLocation}
+              description="Part ways with my chaperone here"
+            />
+          )}
         </MapView>
       </SafeAreaView>
     </View>
