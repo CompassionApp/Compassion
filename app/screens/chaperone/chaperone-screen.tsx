@@ -1,8 +1,8 @@
-import React from "react"
+import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
 import { View, ViewStyle } from "react-native"
-import { Button, Header, Screen, Text } from "../../components"
-// import { useStores } from "../../models"
+import { Header, Screen, Text } from "../../components"
+import { Calendar } from 'react-native-calendars'
 import { color, globalStyles } from "../../theme"
 import { useNavigation } from "@react-navigation/core"
 
@@ -19,6 +19,24 @@ export const ChaperoneScreen = observer(function ChaperoneScreen() {
   const navigation = useNavigation()
   const navigateBack = () => navigation.goBack()
 
+  const [selectedDates, setSelectedDates] = useState({})
+
+  const SelectionStyles = {
+    selected: true,
+    selectedColor: 'blue',
+    selectedTextColor: 'white',
+  }
+
+  const onDayPress = day => {
+    if (selectedDates[day.dateString]) {
+      const selectedDatesData = selectedDates
+      delete selectedDatesData[day.dateString]
+      setSelectedDates({ ...selectedDatesData })
+    } else {
+      setSelectedDates({ ...selectedDates, [day.dateString]: SelectionStyles })
+    }
+  }
+
   return (
     <View testID="ChaperoneScreen" style={globalStyles.full}>
       <Screen style={{ ...globalStyles.root, ...ROOT }} preset="scroll">
@@ -29,8 +47,12 @@ export const ChaperoneScreen = observer(function ChaperoneScreen() {
           style={globalStyles.header}
           titleStyle={{}}
         />
-        <Text text="Requester" />
-        <Button testID="back-button" tx="chaperoneScreen.scheduleShift" onPress={navigateBack} />
+        <Calendar
+          onDayPress={onDayPress}
+          markedDates={selectedDates}
+          disableArrowLeft={true}
+        />
+      <Text >BLUE SHOWS AVAILABLE DAYS GREY SHOWS UNAVAILABLE DAYS</Text>
       </Screen>
     </View>
   )
