@@ -96,7 +96,7 @@ export function TextField(props: TextFieldProps) {
       <Text preset="fieldLabel" tx={labelTx} text={label} />
       <TextInput
         placeholder={actualPlaceholder}
-        placeholderTextColor={color.palette.lightGrey}
+        placeholderTextColor={color.palette.grey3}
         underlineColorAndroid={color.transparent}
         {...rest}
         style={inputStyle}
