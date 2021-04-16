@@ -1,9 +1,10 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { View, ViewStyle, TextStyle, SafeAreaView, Image, ImageStyle } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 import { observer } from "mobx-react-lite"
 import { Button, FormRow, Header, Screen, Text, TextField } from "../../components"
 import { color, globalStyles, spacing, typography } from "../../theme"
+import db from '../../../firebase'
 export const logo = require("./logo.png")
 
 const ROOT: ViewStyle = {
@@ -56,9 +57,45 @@ const ROW: ViewStyle = {
 export const WelcomeScreen = observer(function WelcomeScreen() {
   const navigation = useNavigation()
   const navigateSignUp = () => navigation.navigate("signup")
-  const navigateRoleSelect = () => navigation.navigate("roleSelect")
+  // const navigateRoleSelect = () => navigation.navigate("roleSelect")
   const navigateDemo = () => navigation.navigate("demoList")
   const navigatePermissions = () => navigation.navigate("permissions")
+
+  const userID = 'test-user-id'
+
+  const [userEmail, setUserEmail] = useState('')
+  const [userPassword, setUserPassword] = useState('')
+  const [dataToDisplay, setDataToDisplay] = useState('')
+
+  // Example: Save data to db
+  const handleLogin = () => {
+    db.collection('users').doc(userID).set({
+      email: userEmail,
+      password: userPassword
+    })
+  }
+
+  // Example: fetch data on first screen render
+  useEffect(() => {
+    (() => {
+      db.collection('users').doc(userID).get().then(
+        (doc) => {
+          const data = doc.data()
+
+          setUserEmail(data.email)
+          setUserEmail(data.password)
+        }).catch((error) => {
+        console.log(error)
+      })
+    })()
+  }, [])
+
+  // Example: Listen to realtime changes in the db
+  db.collection('users').doc(userID)
+    .onSnapshot((doc) => {
+      setDataToDisplay(doc.data().email)
+      console.log("Current data: ", doc.data())
+    })
 
   return (
     <View testID="WelcomeScreen" style={globalStyles.full}>
@@ -69,18 +106,18 @@ export const WelcomeScreen = observer(function WelcomeScreen() {
           <Text style={TITLE} text="Compassion In Oakland" />
         </Text>
         <Text style={CONTENT} tx="welcomeScreen.missionStatement"></Text>
+        <Text style={CONTENT} >{dataToDisplay}</Text>
       </Screen>
       <SafeAreaView style={FOOTER}>
         <View style={FOOTER_CONTENT}>
           <FormRow preset="bottom">
-            <TextField preset="header" labelTx="welcomeScreen.loginEmail" />
-            <TextField preset="header" labelTx="welcomeScreen.loginPassword" />
+            <TextField preset="header" onChangeText={(data) => setUserEmail(data) } labelTx="welcomeScreen.loginEmail" />
+            <TextField preset="header" onChangeText={(data) => setUserPassword(data)} labelTx="welcomeScreen.loginPassword" />
           </FormRow>
-
           <Button
             testID="next-screen-button"
             tx="welcomeScreen.login"
-            onPress={navigateRoleSelect}
+            onPress={handleLogin}
           />
           <Button
             testID="next-screen-button"
