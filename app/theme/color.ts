@@ -23,19 +23,19 @@ export const color = {
   /**
    * The screen background.
    */
-  background: palette.grey,
+  background: palette.offWhite,
   /**
    * The main tinting color.
    */
-  primary: palette.darkBlue,
+  primary: palette.blue,
   /**
    * The main tinting color, but darker.
    */
-  primaryDarker: palette.orangeDarker,
+  primaryDarker: palette.darkBlue,
   /**
    * A subtle color used for borders and lines.
    */
-  line: palette.offWhite,
+  line: palette.grey,
   /**
    * The default color of text in many components.
    */
@@ -43,11 +43,11 @@ export const color = {
   /**
    * Secondary information.
    */
-  dim: palette.lightGrey,
+  dim: palette.grey,
   /**
    * Error messages and icons.
    */
-  error: palette.angry,
+  error: palette.darkRed,
 
   /**
    * Storybook background for Text stories, or any stories where
