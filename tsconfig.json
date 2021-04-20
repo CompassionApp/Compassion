@@ -12,20 +12,13 @@
     "noUnusedLocals": true,
     "sourceMap": true,
     "target": "esnext",
-    "lib": [
-      "esnext"
-    ],
+    "lib": ["esnext"],
     "skipLibCheck": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "paths": {
+      "@": ["./app"]
+    }
   },
-  "exclude": [
-    "node_modules"
-  ],
-  "include": [
-    "App.js",
-    "app",
-    "test",
-    "storybook",
-    "firebase.ts"
-  ]
+  "exclude": ["node_modules"],
+  "include": ["App.js", "app", "test", "storybook", "firebase.ts"]
 }

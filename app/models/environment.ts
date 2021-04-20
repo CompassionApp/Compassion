@@ -1,4 +1,5 @@
 import { Api } from "../services/api"
+import { FirebaseApi } from "../services/firebase-api"
 
 let ReactotronDev
 if (__DEV__) {
@@ -18,6 +19,7 @@ export class Environment {
       this.reactotron = new ReactotronDev()
     }
     this.api = new Api()
+    this.firebaseApi = new FirebaseApi()
   }
 
   async setup() {
@@ -26,6 +28,7 @@ export class Environment {
       await this.reactotron.setup()
     }
     await this.api.setup()
+    await this.firebaseApi.setup()
   }
 
   /**
@@ -37,4 +40,9 @@ export class Environment {
    * Our api.
    */
   api: Api
+
+  /**
+   * Firebase API adapter
+   */
+  firebaseApi: FirebaseApi
 }
