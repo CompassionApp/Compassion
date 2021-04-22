@@ -17,8 +17,17 @@ const INPUT: TextStyle = {
   minHeight: 44,
   fontSize: 18,
   backgroundColor: color.transparent,
-  borderBottomColor: color.primary,
-  borderBottomWidth: 1,
+  borderColor: color.palette.black,
+  borderWidth: 1,
+  borderRadius: 8,
+  paddingHorizontal: 18,
+  paddingVertical: 15,
+}
+
+const OFFSET_LABEL: ViewStyle = {
+  position: "absolute",
+  bottom: 56,
+  left: 15,
 }
 
 // currently we have no presets, but that changes quickly when you build your app.
@@ -93,7 +102,6 @@ export function TextField(props: TextFieldProps) {
 
   return (
     <View style={containerStyle}>
-      <Text preset="fieldLabel" tx={labelTx} text={label} />
       <TextInput
         placeholder={actualPlaceholder}
         placeholderTextColor={color.palette.grey3}
@@ -102,6 +110,9 @@ export function TextField(props: TextFieldProps) {
         style={inputStyle}
         ref={forwardedRef}
       />
+      <View style={OFFSET_LABEL}>
+        <Text preset="fieldLabel" tx={labelTx} text={label} />
+      </View>
     </View>
   )
 }
