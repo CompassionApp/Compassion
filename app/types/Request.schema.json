@@ -1,0 +1,80 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Primary key"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "requestedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "meetAddress": {
+      "type": "string",
+      "description": "This should be a validated address string from the geocoder service and not freeform input"
+    },
+    "destinationAddress": {
+      "type": "string",
+      "description": "This should be a validated address string from the geocoder service and not freeform input"
+    },
+    "otherComments": {
+      "type": "string",
+      "description": "Other comments text field"
+    },
+    "requestStatusReason": {
+      "type": "string",
+      "description": "Reason why the request is in the current status; mainly for rejections"
+    },
+    "chaperones": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "description": "Chaperones who are assigned to this request"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "REQUESTED",
+        "SCHEDULED",
+        "REJECTED",
+        "CANCELED_BY_REQUESTER",
+        "CANCELED_BY_CHAPERONE",
+        "RESCHEDULED"
+      ],
+      "description": "Status of the request"
+    },
+    "rescheduledRequestId": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Pointer to the rescheduled request ID"
+    }
+  },
+  "required": [
+    "id",
+    "createdAt",
+    "requestedAt",
+    "updatedAt",
+    "meetAddress",
+    "destinationAddress",
+    "otherComments",
+    "requestStatusReason",
+    "chaperones",
+    "status",
+    "rescheduledRequestId"
+  ],
+  "additionalProperties": false,
+  "description": "A Request represents an individual request by requesters to be fulfilled by chaperones. Created when a request is made by the Requester and updated as the status changes up until it’s fulfilled by a Session.",
+  "definitions": {}
+}

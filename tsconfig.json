@@ -20,5 +20,5 @@
     }
   },
   "exclude": ["node_modules"],
-  "include": ["App.js", "app", "test", "storybook", "firebase.ts"]
+  "include": ["App.js", "app", "test", "storybook", "firebase.ts", "typedefs"]
 }

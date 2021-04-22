@@ -1,0 +1,46 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Primary key"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "submittedBy": {
+      "type": "string",
+      "format": "uuid",
+      "description": "User who submitted the feedback"
+    },
+    "sessionID": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Optional field for the request tied to the feedback."
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "GENERAL_FEEDBACK",
+        "SESSION_FEEDBACK"
+      ],
+      "description": "Feedback type"
+    },
+    "comments": {
+      "type": "string",
+      "description": "(Optional) Freeform comments"
+    }
+  },
+  "required": [
+    "id",
+    "createdAt",
+    "submittedBy",
+    "type"
+  ],
+  "additionalProperties": false,
+  "description": "Feedback submitted by either chaperones or requesters at the end of a session",
+  "definitions": {}
+}
