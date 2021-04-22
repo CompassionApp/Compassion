@@ -34,7 +34,15 @@ export const presets = {
   /**
    * Field labels that appear on forms above the inputs.
    */
-  fieldLabel: { ...BASE, fontSize: 13, color: color.dim } as TextStyle,
+  fieldLabel: {
+    ...BASE,
+    fontFamily: typography.secondary,
+    fontSize: 14,
+    color: color.palette.black,
+    backgroundColor: color.background,
+    paddingHorizontal: 4,
+    textTransform: "uppercase",
+  } as TextStyle,
 
   /**
    * A smaller piece of secondard information.
