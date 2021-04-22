@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "definitions": {
+  },
+  "description": "Geographical coordinate",
+  "properties": {
+    "lat": {
+      "maximum": 90,
+      "minimum": -90,
+      "type": "number"
+    },
+    "lng": {
+      "maximum": 180,
+      "minimum": -180,
+      "type": "number"
+    }
+  },
+  "required": [
+    "lat",
+    "lng"
+  ],
+  "type": "object"
+}

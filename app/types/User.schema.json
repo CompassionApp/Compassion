@@ -1,0 +1,94 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Primary key"
+    },
+    "firebaseUserId": {
+      "type": "string",
+      "description": "Firebase auth user ID"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "role": {
+      "type": "string",
+      "enum": [
+        "ADMIN",
+        "CHAPERONE",
+        "REQUESTER"
+      ],
+      "description": "Active role for user"
+    },
+    "email": {
+      "type": "string",
+      "minLength": 5,
+      "maxLength": 60,
+      "format": "email"
+    },
+    "password": {
+      "type": "string",
+      "minLength": 7,
+      "maxLength": 20
+    },
+    "firstName": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 65
+    },
+    "lastName": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 65
+    },
+    "phoneNumber": {
+      "type": "number",
+      "minimum": 1000000000,
+      "maximum": 9999999999
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ACTIVE",
+        "INACTIVE",
+        "DISALLOW"
+      ],
+      "description": "User status"
+    },
+    "latestCovidTestVerifiedAt": {
+      "type": "string",
+      "description": "Last known verified COVID test",
+      "format": "date-time"
+    },
+    "signedCodeOfConductAt": {
+      "type": "string",
+      "description": "Date of signed code of conduct",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "id",
+    "firebaseUserId",
+    "createdAt",
+    "updatedAt",
+    "role",
+    "email",
+    "password",
+    "firstName",
+    "lastName",
+    "phoneNumber",
+    "status",
+    "latestCovidTestVerifiedAt",
+    "signedCodeOfConductAt"
+  ],
+  "additionalProperties": false,
+  "definitions": {}
+}

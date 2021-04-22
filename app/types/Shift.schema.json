@@ -1,0 +1,88 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Primary key"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "chaperoneId": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Chaperone that this shift belongs to"
+    },
+    "startTime": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "endTime": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "dayOfWeek": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 6
+    },
+    "year": {
+      "type": "number",
+      "minimum": 2021,
+      "maximum": 2050
+    },
+    "weekNumber": {
+      "type": "number",
+      "minimum": 1,
+      "maximum": 52
+    },
+    "geoLimitLatLng": {
+      "type": "object",
+      "properties": {
+        "lat": {
+          "type": "number",
+          "minimum": -90,
+          "maximum": 90
+        },
+        "lng": {
+          "type": "number",
+          "minimum": -180,
+          "maximum": 180
+        }
+      },
+      "required": [
+        "lat",
+        "lng"
+      ],
+      "additionalProperties": false,
+      "description": "Chaperone-specified geolocation limit center"
+    },
+    "geoLimitRadius": {
+      "type": "number",
+      "description": "Chaperone-specified geolocation limit radius"
+    }
+  },
+  "required": [
+    "id",
+    "createdAt",
+    "updatedAt",
+    "chaperoneId",
+    "startTime",
+    "endTime",
+    "dayOfWeek",
+    "year",
+    "weekNumber",
+    "geoLimitLatLng",
+    "geoLimitRadius"
+  ],
+  "additionalProperties": false,
+  "description": "Schedule represents a single contiguous availability interval for a chaperone",
+  "definitions": {}
+}
