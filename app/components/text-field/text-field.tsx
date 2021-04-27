@@ -110,9 +110,11 @@ export function TextField(props: TextFieldProps) {
         style={inputStyle}
         ref={forwardedRef}
       />
-      <View style={OFFSET_LABEL}>
-        <Text preset="fieldLabel" tx={labelTx} text={label} />
-      </View>
+      {(labelTx || label) && (
+        <View style={OFFSET_LABEL}>
+          <Text preset="fieldLabel" tx={labelTx} text={label} />
+        </View>
+      )}
     </View>
   )
 }
