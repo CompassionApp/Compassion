@@ -8,11 +8,11 @@ Compassion App is a [React Native](https://reactnative.dev/) application built w
 
 ## Setup
 
-1. Install [nvm](https://github.com/nvm-sh/nvm) to manage Node versions. We'll use Node `v14.16.0` for this project.
+1. Install [nvm](https://github.com/nvm-sh/nvm) to manage Node versions. We'll use Node `v16.0.0` for this project.
 
    ```bash
    # After install:
-   $ nvm install 14 && nvm alias default 14
+   $ nvm install 16.0.0 && nvm alias default 16.0.0
    ```
 
 1. Install simulators. Follow the instructions below for Android and iOS simulators:
