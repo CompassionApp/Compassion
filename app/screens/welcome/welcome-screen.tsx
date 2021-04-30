@@ -70,6 +70,7 @@ export const WelcomeScreen = observer(function WelcomeScreen() {
 
   // Example: Save data to db
   const handleLogin = () => {
+    exampleStore.signIn({userEmail, userPassword})
     exampleStore.saveUser(userID, {
       userEmail,
       userPassword,

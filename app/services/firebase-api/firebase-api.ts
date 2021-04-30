@@ -18,6 +18,11 @@ export class FirebaseApi {
   config: FirebaseConfig
 
   /**
+   * Firebase authentication.
+   */
+  authentication: firebase.auth.Auth
+
+  /**
    * Creates the Firestore
    *
    * @param config The configuration to use.
@@ -36,5 +41,6 @@ export class FirebaseApi {
   setup() {
     firebase.initializeApp(this.config)
     this.firestore = firebase.firestore()
+    this.authentication = firebase.auth()
   }
 }
