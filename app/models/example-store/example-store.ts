@@ -23,6 +23,12 @@ export const ExampleStoreModel = types
         password: payload.userPassword,
       })
     },
+    createUser: async (payload: { userEmail: string; userPassword: string }) => {
+      return self.environment.firebaseApi.authentication.createUserWithEmailAndPassword(payload.userEmail, payload.userPassword)
+    },
+    signIn: async (payload: { userEmail: string; userPassword: string }) => {
+      return self.environment.firebaseApi.authentication.signInWithEmailAndPassword(payload.userEmail, payload.userPassword)
+    },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
 
 /**
