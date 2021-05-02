@@ -50,6 +50,10 @@
     "pickupPlaceholder": "Where to?",
     "dropoffPlaceholder": "Dropoff location"
   },
+  "homeScreen": {
+    "title": "Home",
+    "welcome": "Welcome"
+  },
   "requesterScreen": {
     "title": "Request a Chaperone",
     "requestChaperone": "Request",

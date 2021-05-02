@@ -48,7 +48,7 @@ export const RequesterScreen = observer(function RequesterScreen() {
 
   const handlePickupFocus = () => {
     if (pickupLocation) {
-      mapViewRef.current.setCamera({ center: pickupLocation })
+      mapViewRef.current?.setCamera({ center: pickupLocation })
     }
   }
   const handlePickupInput = (text: string) => {
@@ -63,13 +63,13 @@ export const RequesterScreen = observer(function RequesterScreen() {
     }
     const pickupLocation = getRandomNearbyCoordinate(currentLocation)
     setPickupLocation(pickupLocation)
-    mapViewRef.current.setCamera({ center: pickupLocation })
+    mapViewRef.current?.setCamera({ center: pickupLocation })
     pickupMarkerRef.current?.showCallout()
   }
 
   const handleDropoffFocus = () => {
     if (dropoffLocation) {
-      mapViewRef.current.setCamera({ center: dropoffLocation })
+      mapViewRef.current?.setCamera({ center: dropoffLocation })
       // dropoffMarkerRef.current?.showCallout()
     }
   }

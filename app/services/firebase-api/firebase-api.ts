@@ -39,7 +39,10 @@ export class FirebaseApi {
    * Be as quick as possible in here.
    */
   setup() {
-    firebase.initializeApp(this.config)
+    // Check if already initialized before re-initializing. This will prevent an error from occurring during a hot reload.
+    if (firebase.apps.length === 0) {
+      firebase.initializeApp(this.config)
+    }
     this.firestore = firebase.firestore()
     this.authentication = firebase.auth()
   }
