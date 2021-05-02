@@ -15,6 +15,7 @@ import {
   RequesterScreen,
   PermissionsScreen,
   WelcomeScreen,
+  HomeScreen,
 } from "../screens"
 
 /**
@@ -32,6 +33,7 @@ import {
 export type PrimaryParamList = {
   demo: undefined
   demoList: undefined
+  home: undefined
   signup: undefined
   chaperone: undefined
   roleSelect: undefined
@@ -59,6 +61,7 @@ export function MainNavigator() {
       <Stack.Screen name="chaperone" component={ChaperoneScreen} />
       <Stack.Screen name="roleSelect" component={RoleSelectScreen} />
       <Stack.Screen name="requester" component={RequesterScreen} />
+      <Stack.Screen name="home" component={HomeScreen} />
     </Stack.Navigator>
   )
 }

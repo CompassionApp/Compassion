@@ -19,6 +19,7 @@
       "@": ["./app"]
     }
   },
+  "types": ["jest", "styled-components-react-native"],
   "exclude": ["node_modules"],
   "include": ["App.js", "app", "test", "storybook", "firebase.ts", "typedefs"]
 }
