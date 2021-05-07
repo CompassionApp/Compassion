@@ -7,6 +7,7 @@ import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "../../models"
 import { color, globalStyles, typography } from "../../theme"
 import { Card } from "./card"
+import { Footer } from "../../components/footer/footer"
 
 const ROOT: ViewStyle = {
   backgroundColor: color.background,
@@ -57,6 +58,7 @@ export const HomeScreen = observer(function HomeScreen() {
           <Card />
         </Screen>
       </Screen>
+      <Footer />
     </View>
   )
 })

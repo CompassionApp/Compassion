@@ -1,7 +1,10 @@
 import * as React from "react"
-import { View, Image, ImageStyle } from "react-native"
+import { Image, ImageStyle } from "react-native"
+import styled from "styled-components/native"
 import { IconProps } from "./icon.props"
 import { icons } from "./icons"
+
+const Container = styled.View``
 
 const ROOT: ImageStyle = {
   resizeMode: "contain",
@@ -12,8 +15,8 @@ export function Icon(props: IconProps) {
   const style: ImageStyle = { ...ROOT, ...styleOverride }
 
   return (
-    <View style={containerStyle}>
+    <Container style={containerStyle}>
       <Image style={style} source={icons[icon]} />
-    </View>
+    </Container>
   )
 }
