@@ -6,6 +6,7 @@ import { Button, FormRow, Header, Screen, Text, TextField } from "../../componen
 // import { useStores } from "../../models"
 import { color, globalStyles, spacing } from "../../theme"
 import { useNavigation } from "@react-navigation/core"
+import ProgressIndicator from "../../components/progress-indicator/progressIndicator"
 
 const ROOT: ViewStyle = {
   flex: 1,
