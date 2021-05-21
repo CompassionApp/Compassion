@@ -59,6 +59,16 @@
       "type": "string",
       "format": "uuid",
       "description": "Pointer to the rescheduled request ID"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "UNKNOWN",
+        "GROCERY",
+        "DOCTOR",
+        "WALK"
+      ],
+      "description": "Type of request"
     }
   },
   "required": [
@@ -72,7 +82,8 @@
     "requestStatusReason",
     "chaperones",
     "status",
-    "rescheduledRequestId"
+    "rescheduledRequestId",
+    "type"
   ],
   "additionalProperties": false,
   "description": "A Request represents an individual request by requesters to be fulfilled by chaperones. Created when a request is made by the Requester and updated as the status changes up until it’s fulfilled by a Session.",

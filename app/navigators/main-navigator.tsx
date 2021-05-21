@@ -16,7 +16,9 @@ import {
   PermissionsScreen,
   WelcomeScreen,
   HomeScreen,
+  RequestDetailScreen,
 } from "../screens"
+import { NewRequestScreen } from "../screens/new-request/new-request-screen"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -40,6 +42,8 @@ export type PrimaryParamList = {
   requester: undefined
   permissions: undefined
   welcome: undefined
+  newRequest: undefined
+  requestDetail: undefined
 }
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
@@ -62,6 +66,8 @@ export function MainNavigator() {
       <Stack.Screen name="roleSelect" component={RoleSelectScreen} />
       <Stack.Screen name="requester" component={RequesterScreen} />
       <Stack.Screen name="home" component={HomeScreen} />
+      <Stack.Screen name="newRequest" component={NewRequestScreen} />
+      <Stack.Screen name="requestDetail" component={RequestDetailScreen} />
     </Stack.Navigator>
   )
 }

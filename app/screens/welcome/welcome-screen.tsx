@@ -42,7 +42,7 @@ const CONTENT: TextStyle = {
   marginBottom: spacing[5],
 }
 const FOOTER: ViewStyle = {
-  backgroundColor: color.palette.grey,
+  backgroundColor: color.background,
 }
 const FOOTER_CONTENT: ViewStyle = {
   paddingVertical: spacing[2],
@@ -70,7 +70,7 @@ export const WelcomeScreen = observer(function WelcomeScreen() {
 
   // Example: Save data to db
   const handleLogin = () => {
-    exampleStore.signIn({userEmail, userPassword})
+    exampleStore.signIn({ userEmail, userPassword })
     exampleStore.saveUser(userID, {
       userEmail,
       userPassword,

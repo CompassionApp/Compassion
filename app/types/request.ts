@@ -19,6 +19,20 @@ export enum RequestStatusEnum {
 }
 
 /**
+ * Types for a request
+ */
+export enum RequestTypeEnum {
+  /** (Default) Request was submitted by the requester without a type */
+  UNKNOWN = "UNKNOWN",
+  /** Request for a grocery store */
+  GROCERY = "GROCERY",
+  /** Request for a doctor visit */
+  DOCTOR = "DOCTOR",
+  /** Request for a walk */
+  WALK = "WALK",
+}
+
+/**
  * @format uuid
  */
 export type RequestID = string
@@ -85,4 +99,9 @@ export interface Request {
    * Pointer to the rescheduled request ID
    */
   rescheduledRequestId: RequestID
+
+  /**
+   * Type of request
+   */
+  type: RequestTypeEnum
 }

@@ -41,6 +41,7 @@ export const RequesterScreen = observer(function RequesterScreen() {
   const [currentLocation, setCurrentLocation] = useState<LatLng>(null)
   const [pickupLocation, setPickupLocation] = useState<LatLng>(null)
   const [dropoffLocation, setDropoffLocation] = useState<LatLng>(null)
+  // const { request } = useStores()
 
   // Pull in navigation via hook
   const navigation = useNavigation()

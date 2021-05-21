@@ -50,6 +50,12 @@
     "pickupPlaceholder": "Where to?",
     "dropoffPlaceholder": "Dropoff location"
   },
+  "newRequestScreen": {
+    "title": "New Request"
+  },
+  "requestDetailScreen": {
+    "title": "Chaperone Match"
+  },
   "homeScreen": {
     "title": "Home",
     "welcome": "Welcome"
@@ -77,5 +83,11 @@
   "storybook": {
     "placeholder": "Placeholder",
     "field": "Field"
+  },
+  "card": {
+    "unmatched": "Unmatched",
+    "matched": "Matched",
+    "delete": "Delete",
+    "cancel": "Cancel"
   }
 }

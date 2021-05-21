@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { observer } from "mobx-react-lite"
 import { View, ViewStyle } from "react-native"
 import styled from "styled-components/native"
@@ -8,6 +8,9 @@ import { useNavigation } from "@react-navigation/native"
 import { color, globalStyles, typography } from "../../theme"
 import { Card } from "./card"
 import { Footer } from "../../components/footer/footer"
+import { useStores } from "../../models/root-store/root-store-context"
+import { RequestStatusEnum, RequestTypeEnum } from "../../types"
+import { NoRequestsNotice } from "./no-requests-notice"
 
 const ROOT: ViewStyle = {
   backgroundColor: color.background,
@@ -21,16 +24,25 @@ const TitleView = styled.View`
 `
 const Title = styled(Text)`
   font-family: ${typography.secondary};
-  font-size: 24;
+  font-size: 24px;
 `
 
 export const HomeScreen = observer(function HomeScreen() {
-  // Pull in one of our MST stores
-  // const { someStore, anotherStore } = useStores()
-
-  // Pull in navigation via hook
+  const { requestStore } = useStores()
+  const { requests } = requestStore
   const navigation = useNavigation()
   const navigateBack = () => navigation.goBack()
+
+  useEffect(() => {
+    async function fetchData() {
+      requestStore.getRequests()
+    }
+
+    fetchData()
+  }, [])
+
+  console.log("Home Screen rendering. Requests:", requests)
+
   return (
     <View testID="HomeScreen" style={globalStyles.full}>
       <Screen style={{ ...globalStyles.root, ...ROOT }} preset="fixed">
@@ -45,17 +57,17 @@ export const HomeScreen = observer(function HomeScreen() {
           <Title text=", John Doe" />
         </TitleView>
         <Screen preset="scroll">
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
+          {requestStore.sortByCreated.length === 0 && <NoRequestsNotice />}
+          {requestStore.sortByCreated.map((request) => (
+            <Card
+              key={request.id}
+              // Nasty casting here
+              status={request.status as RequestStatusEnum}
+              type={request.type as RequestTypeEnum}
+              requestId={request.id}
+              requestedAt={request.requestedAt}
+            />
+          ))}
         </Screen>
       </Screen>
       <Footer />
