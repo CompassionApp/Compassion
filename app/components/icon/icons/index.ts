@@ -3,6 +3,7 @@ export const icons = {
   bullet: require("./bullet.png"),
   home: require("./home.png"),
   menu: require("./menu.png"),
+  notification: require("./notification.png"),
   request: require("./request.png"),
 }
 

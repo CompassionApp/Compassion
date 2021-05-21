@@ -1,3 +1,4 @@
+import { Request } from "../../types"
 import { GeneralApiProblem } from "./api-problem"
 
 /**
@@ -9,5 +10,11 @@ export interface User {
   name: string
 }
 
+export interface AuthContext {
+  userId: string
+}
 export type GetUsersResult = { kind: "ok"; users: User[] } | GeneralApiProblem
 export type GetUserResult = { kind: "ok"; user: User } | GeneralApiProblem
+export type CreateRequestResult = { kind: "ok"; request: Request } | GeneralApiProblem
+export type GetRequestsResult = { kind: "ok"; requests: Request[] } | GeneralApiProblem
+export type DeleteRequestResult = { kind: "ok" } | GeneralApiProblem

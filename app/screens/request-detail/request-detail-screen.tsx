@@ -11,18 +11,19 @@ const ROOT: ViewStyle = {
   flex: 1,
 }
 
-export const <%= props.pascalCaseName %>Screen = observer(function <%= props.pascalCaseName %>Screen() {
+export const RequestDetailScreen = observer(function RequestDetailScreen() {
   // Pull in one of our MST stores
   // const { someStore, anotherStore } = useStores()
-  
+
+  // Pull in navigation via hook
   const navigation = useNavigation()
   const navigateBack = () => navigation.goBack()
-  
+
   return (
-    <View testID="<%= props.pascalCaseName %>Screen" style={globalStyles.full}>
+    <View testID="RequestDetailScreen" style={globalStyles.full}>
       <Screen style={{ ...globalStyles.root, ...ROOT }} preset="fixed">
         <Header
-          headerTx="homeScreen.title"
+          headerTx="requestDetailScreen.title"
           leftIcon="back"
           onLeftPress={navigateBack}
           style={globalStyles.header}
