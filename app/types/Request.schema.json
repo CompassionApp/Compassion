@@ -62,12 +62,7 @@
     },
     "type": {
       "type": "string",
-      "enum": [
-        "UNKNOWN",
-        "GROCERY",
-        "DOCTOR",
-        "WALK"
-      ],
+      "enum": ["UNKNOWN", "GROCERY", "DOCTOR", "WALK"],
       "description": "Type of request"
     }
   },

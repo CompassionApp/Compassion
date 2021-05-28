@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
 import { View, ViewStyle } from "react-native"
 import { Header, Screen, Text } from "../../components"
-import { Calendar } from 'react-native-calendars'
+import { Calendar } from "react-native-calendars"
 import { color, globalStyles } from "../../theme"
 import { useNavigation } from "@react-navigation/core"
 
@@ -23,11 +23,11 @@ export const ChaperoneScreen = observer(function ChaperoneScreen() {
 
   const SelectionStyles = {
     selected: true,
-    selectedColor: 'blue',
-    selectedTextColor: 'white',
+    selectedColor: "blue",
+    selectedTextColor: "white",
   }
 
-  const onDayPress = day => {
+  const onDayPress = (day) => {
     if (selectedDates[day.dateString]) {
       const selectedDatesData = selectedDates
       delete selectedDatesData[day.dateString]
@@ -47,12 +47,8 @@ export const ChaperoneScreen = observer(function ChaperoneScreen() {
           style={globalStyles.header}
           titleStyle={{}}
         />
-        <Calendar
-          onDayPress={onDayPress}
-          markedDates={selectedDates}
-          disableArrowLeft={true}
-        />
-      <Text >BLUE SHOWS AVAILABLE DAYS GREY SHOWS UNAVAILABLE DAYS</Text>
+        <Calendar onDayPress={onDayPress} markedDates={selectedDates} disableArrowLeft={true} />
+        <Text>BLUE SHOWS AVAILABLE DAYS GREY SHOWS UNAVAILABLE DAYS</Text>
       </Screen>
     </View>
   )

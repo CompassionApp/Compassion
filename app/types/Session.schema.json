@@ -21,11 +21,7 @@
     },
     "status": {
       "type": "string",
-      "enum": [
-        "AWAITING_START",
-        "STARTED",
-        "ENDED"
-      ],
+      "enum": ["AWAITING_START", "STARTED", "ENDED"],
       "description": "Status of the session"
     },
     "chaperone": {

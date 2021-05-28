@@ -24,10 +24,16 @@ export const ExampleStoreModel = types
       })
     },
     createUser: async (payload: { userEmail: string; userPassword: string }) => {
-      return self.environment.firebaseApi.authentication.createUserWithEmailAndPassword(payload.userEmail, payload.userPassword)
+      return self.environment.firebaseApi.authentication.createUserWithEmailAndPassword(
+        payload.userEmail,
+        payload.userPassword,
+      )
     },
     signIn: async (payload: { userEmail: string; userPassword: string }) => {
-      return self.environment.firebaseApi.authentication.signInWithEmailAndPassword(payload.userEmail, payload.userPassword)
+      return self.environment.firebaseApi.authentication.signInWithEmailAndPassword(
+        payload.userEmail,
+        payload.userPassword,
+      )
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
 

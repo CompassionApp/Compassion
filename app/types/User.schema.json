@@ -21,11 +21,7 @@
     },
     "role": {
       "type": "string",
-      "enum": [
-        "ADMIN",
-        "CHAPERONE",
-        "REQUESTER"
-      ],
+      "enum": ["ADMIN", "CHAPERONE", "REQUESTER"],
       "description": "Active role for user"
     },
     "email": {
@@ -56,11 +52,7 @@
     },
     "status": {
       "type": "string",
-      "enum": [
-        "ACTIVE",
-        "INACTIVE",
-        "DISALLOW"
-      ],
+      "enum": ["ACTIVE", "INACTIVE", "DISALLOW"],
       "description": "User status"
     },
     "latestCovidTestVerifiedAt": {
