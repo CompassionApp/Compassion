@@ -29,7 +29,7 @@ export const viewPresets: Record<string, TextStyle> = {
   /**
    * A smaller piece of secondard information.
    */
-  primary: { ...BASE_VIEW, backgroundColor: color.palette.darkBlue } as ViewStyle,
+  primary: { ...BASE_VIEW, backgroundColor: color.palette.blue } as ViewStyle,
 
   /**
    * A button with an outline and no background color

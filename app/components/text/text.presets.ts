@@ -24,18 +24,17 @@ export const presets = {
   /**
    * A bold version of the default text.
    */
-  bold: { ...BASE, fontWeight: "bold" } as TextStyle,
+  bold: { fontWeight: "bold", fontFamily: typography.tertiary } as TextStyle,
 
   /**
    * Large headers.
    */
-  header: { ...BASE, fontSize: 24, fontWeight: "bold" } as TextStyle,
+  header: { fontSize: 24, fontWeight: "bold" } as TextStyle,
 
   /**
    * Field labels that appear on forms above the inputs.
    */
   fieldLabel: {
-    ...BASE,
     fontFamily: typography.secondary,
     fontSize: 14,
     color: color.palette.black,
@@ -47,7 +46,7 @@ export const presets = {
   /**
    * A smaller piece of secondard information.
    */
-  secondary: { ...BASE, fontSize: 9, color: color.dim } as TextStyle,
+  secondary: { fontSize: 9, color: color.dim } as TextStyle,
 }
 
 /**
