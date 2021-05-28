@@ -15,7 +15,7 @@ import { Platform } from "react-native"
  */
 export const typography = {
   /**
-   * The primary font.  Used in most places.
+   * The primary font. Used in most places.
    */
   primary: Platform.select({ ios: "Quicksand-Regular", android: "Quicksand-Regular" }),
 
@@ -23,6 +23,11 @@ export const typography = {
    * An alternate font used for perhaps titles and stuff.
    */
   secondary: Platform.select({ ios: "Quicksand-SemiBold", android: "Quicksand-SemiBold" }),
+
+  /**
+   * An alternate font for really bold stuff
+   */
+  tertiary: Platform.select({ ios: "Quicksand-Bold", android: "Quicksand-Bold" }),
 
   /**
    * Lets get fancy with a monospace font!
