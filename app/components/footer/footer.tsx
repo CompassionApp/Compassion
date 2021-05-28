@@ -31,7 +31,7 @@ export function Footer() {
     navigation.navigate("home")
   }
   const handlePressRequest = () => {
-    navigation.navigate("newRequest")
+    navigation.navigate("newRequest", { params: { screen: "new" } })
   }
   const handlePressNotifications = () => {
     // TODO: Change when we have a notification screen

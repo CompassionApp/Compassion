@@ -54,7 +54,11 @@
     "title": "New Request"
   },
   "requestDetailScreen": {
-    "title": "Chaperone Match"
+    "title": "Request Details",
+    "rescheduleButton": "Reschedule",
+    "okButton": "Ok",
+    "cancelButton": "Cancel Request",
+    "deleteButton": "Delete Request"
   },
   "homeScreen": {
     "title": "Home",
@@ -63,7 +67,7 @@
     "noticeText1": "Make a new chaperone request.",
     "noticeText2": "Chaperones cannot be requested within 48H of desired day.",
     "noticeText3": "You could make a immediate request by calling",
-    "noticeTextPhoneNumber": "(888) 888-8888",
+    "noticeTextPhoneNumber": "(510) 200-8682",
     "noticeText4": "or you can schedule a chaparone request.",
     "requestButton": "REQUEST"
   },
@@ -92,9 +96,44 @@
     "field": "Field"
   },
   "card": {
-    "unmatched": "Unmatched",
-    "matched": "Matched",
     "delete": "Delete",
     "cancel": "Cancel"
+  },
+  "newRequestDateSelectionScreen": {
+    "title": "Select a Date",
+    "nextButton": "Next: TIME"
+  },
+  "newRequestTimeSelectionScreen": {
+    "title": "Select a Time",
+    "nextButton": "Next: LOCATION"
+  },
+  "newRequestLocationSelectionScreen": {
+    "title": "Select a Location",
+    "nextButton": "Next: ACTIVITY",
+    "pickupPlaceholder": "Your pickup location",
+    "destinationPlaceholder": "Your destination"
+  },
+  "newRequestActivitySelectionScreen": {
+    "title": "Select an Activity",
+    "nextButton": "Next: REVIEW",
+    "additionalNotesLabel": "Additional Notes",
+    "additionalNotesPlaceholder": "Add anything we should know."
+  },
+  "newRequestReviewScreen": {
+    "title": "Review Your Request",
+    "nextButton": "SEND REQUEST"
+  },
+  "enumRequestStatus": {
+    "undefined": "Unknown",
+    "REQUESTED": "Requested",
+    "CANCELED_BY_REQUESTER": "Canceled",
+    "SCHEDULED": "Scheduled"
+  },
+  "enumRequestType": {
+    "undefined": "Unknown",
+    "UNKNOWN": "Unspecified",
+    "DOCTOR": "Doctor Visit",
+    "GROCERY": "Grocery Shopping",
+    "WALK": "Walk"
   }
 }

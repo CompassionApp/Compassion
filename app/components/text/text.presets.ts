@@ -32,6 +32,11 @@ export const presets = {
   header: { fontSize: 24, fontWeight: "bold" } as TextStyle,
 
   /**
+   * Centered
+   */
+  center: { textAlign: "center" } as TextStyle,
+
+  /**
    * Field labels that appear on forms above the inputs.
    */
   fieldLabel: {

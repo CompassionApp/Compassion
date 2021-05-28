@@ -1,4 +1,4 @@
-import { Request } from "../../types"
+import { RequestSnapshot, RequestStoreSnapshot } from "../../models"
 import { GeneralApiProblem } from "./api-problem"
 
 /**
@@ -15,6 +15,6 @@ export interface AuthContext {
 }
 export type GetUsersResult = { kind: "ok"; users: User[] } | GeneralApiProblem
 export type GetUserResult = { kind: "ok"; user: User } | GeneralApiProblem
-export type CreateRequestResult = { kind: "ok"; request: Request } | GeneralApiProblem
-export type GetRequestsResult = { kind: "ok"; requests: Request[] } | GeneralApiProblem
+export type CreateRequestResult = { kind: "ok"; request: RequestSnapshot } | GeneralApiProblem
+export type GetRequestsResult = { kind: "ok"; requests: RequestStoreSnapshot } | GeneralApiProblem
 export type DeleteRequestResult = { kind: "ok" } | GeneralApiProblem

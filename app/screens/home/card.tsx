@@ -2,15 +2,17 @@ import React from "react"
 import { observer } from "mobx-react-lite"
 import styled from "styled-components/native"
 import { Button, Text } from "../../components"
-import { useNavigation } from "@react-navigation/native"
-import { useStores } from "../../models"
 import { color, typography } from "../../theme"
 import { RequestStatusEnum, RequestTypeEnum } from "../../types"
 import * as datefns from "date-fns"
+import { Break } from "../../components/break/break"
+import { TxKeyPath } from "../../i18n"
+import { TITLE_DATE_FORMAT, TIME_RANGE_FORMAT } from "../../constants/date-formats"
+import { statusColorMap } from "../../constants/colors"
 
 const BORDER_RADIUS = 5
 
-const Container = styled.View`
+const Container = styled.TouchableOpacity`
   background-color: ${color.palette.white};
   border-radius: ${BORDER_RADIUS}px;
   margin-vertical: 5px;
@@ -42,44 +44,23 @@ const ButtonRow = styled.View`
   width: 100%;
 `
 
-const StatusButton = styled(Button)`
+const StatusButton = styled(Button)<{ color?: string }>`
   margin-vertical: 0;
   border-radius: 0;
   padding-vertical: 9px;
-  font-family: ${typography.secondary};
+  flex: 1;
+  ${({ color }) => (color ? `background-color: ${color}` : "")};
 `
-
-const BUTTON_STYLE_OVERRIDE = {
-  flex: 1,
-}
-
-/** Maps the request type enum to a human-readable string */
-const mapRequestType = new Map<RequestTypeEnum, string>([
-  [RequestTypeEnum.DOCTOR, "Doctor"],
-  [RequestTypeEnum.GROCERY, "Grocery"],
-  [RequestTypeEnum.WALK, "Walk"],
-])
-
-/** Maps the request status enum to a human-readable string */
-const mapRequestStatus = new Map<RequestStatusEnum, string>([
-  [RequestStatusEnum.CANCELED_BY_REQUESTER, "Canceled"],
-  [RequestStatusEnum.SCHEDULED, "Scheduled"],
-  [RequestStatusEnum.REQUESTED, "Requested"],
-])
 
 export interface CardProps {
   requestedAt: string
   type: RequestTypeEnum
   status: RequestStatusEnum
   requestId: string
+  onPress?: () => void
 }
 
-export const Card = observer(function Card({ requestedAt, type, status, requestId }: CardProps) {
-  const { requestStore } = useStores()
-  const navigation = useNavigation()
-
-  const TITLE_DATE_FORMAT = "MMMM dd, yyyy"
-  const TIME_RANGE_FORMAT = "h:mm a"
+export const Card = observer(function Card({ onPress, requestedAt, type, status }: CardProps) {
   const titleDate = datefns.format(new Date(requestedAt), TITLE_DATE_FORMAT)
   const requestStartTime = new Date(requestedAt)
   // TODO: Defaulting the end time to always be +3 hrs; change this as we get a better estimate of the time range
@@ -87,52 +68,21 @@ export const Card = observer(function Card({ requestedAt, type, status, requestI
   const requestStartTimeFormatted = datefns.format(requestStartTime, TIME_RANGE_FORMAT)
   const requestEndTimeFormatted = datefns.format(requestEndTime, TIME_RANGE_FORMAT)
 
-  const handlePressStatus = () => {
-    navigation.navigate("requestDetail")
-  }
-  const handlePressReschedule = () => {
-    requestStore.rescheduleRequest(requestId)
-  }
-  const handlePressCancel = () => {
-    requestStore.cancelRequest(requestId)
-  }
-
   return (
-    <Container>
+    <Container onPress={onPress}>
       <Content>
         <Title>{titleDate}</Title>
-        <Description>{mapRequestType.get(type)}</Description>
+        <Description tx={`enumRequestType.${type}` as TxKeyPath} />
         <Description>
           {requestStartTimeFormatted} - {requestEndTimeFormatted}
         </Description>
-        <Description>{requestId}</Description>
-        <Description>Status: {mapRequestStatus.get(status)}</Description>
+        <Break size={1} />
       </Content>
       <ButtonRow>
-        {status === RequestStatusEnum.REQUESTED && (
-          <StatusButton
-            tx="card.unmatched"
-            onPress={handlePressStatus}
-            style={BUTTON_STYLE_OVERRIDE}
-          />
-        )}
-        {status === RequestStatusEnum.SCHEDULED && (
-          <StatusButton tx="card.matched" style={BUTTON_STYLE_OVERRIDE} />
-        )}
-        {status === RequestStatusEnum.CANCELED_BY_REQUESTER && (
-          <StatusButton
-            tx="card.delete"
-            onPress={handlePressReschedule}
-            style={BUTTON_STYLE_OVERRIDE}
-          />
-        )}
-        {status === RequestStatusEnum.REQUESTED && (
-          <StatusButton
-            tx="card.cancel"
-            onPress={handlePressCancel}
-            style={BUTTON_STYLE_OVERRIDE}
-          />
-        )}
+        <StatusButton
+          tx={`enumRequestStatus.${status}` as TxKeyPath}
+          color={statusColorMap.get(status)}
+        />
       </ButtonRow>
     </Container>
   )

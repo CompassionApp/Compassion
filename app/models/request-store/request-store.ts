@@ -1,4 +1,4 @@
-import { Instance, SnapshotOut, types } from "mobx-state-tree"
+import { applySnapshot, flow, Instance, SnapshotOut, types } from "mobx-state-tree"
 import R from "ramda"
 // import { async } from "validate.js"
 import { RequestApi } from "../../services/firebase-api/request-api"
@@ -17,12 +17,10 @@ export const RequestStoreModel = types
   .props({
     requests: types.array(RequestModel),
     isLoading: types.optional(types.boolean, false),
+    currentRequestId: types.maybe(types.string),
   })
   .extend(withEnvironment)
   .views((self) => ({
-    //   get requests() {
-    //     return getParent(self)
-    //   },
     get sortByCreated() {
       return sortByCreatedAt(self.requests)
     },
@@ -31,8 +29,8 @@ export const RequestStoreModel = types
     markLoading: () => {
       self.isLoading = true
     },
-    saveRequests: (requestSnapshots: RequestSnapshot[]) => {
-      self.requests.replace(requestSnapshots)
+    saveRequests: (requestStoreSnapshot: RequestStoreSnapshot) => {
+      applySnapshot(self, requestStoreSnapshot)
       self.isLoading = false
     },
     saveRequest: (requestSnapshot: RequestSnapshot) => {
@@ -50,17 +48,24 @@ export const RequestStoreModel = types
       const original = self.requests[index]
       self.requests[index] = R.mergeDeepRight<Request>(original, request as Request)
     },
+    /** Sets the current request by id */
+    selectCurrentRequest: (requestId: string) => {
+      self.currentRequestId = requestId
+    },
   }))
   .actions((self) => ({
-    createRequest: async (request: Request) => {
+    /**
+     * Sends the request to the server
+     */
+    createRequest: flow(function* createRequest(request: RequestSnapshot) {
       const requestApi = new RequestApi(self.environment.firebaseApi)
-      const result = await requestApi.createRequest(request, authContext)
+      const result = yield requestApi.createRequest(request, authContext)
       if (result.kind === "ok") {
         self.saveRequest(result.request)
       } else {
         __DEV__ && console.tron.log(result.kind)
       }
-    },
+    }),
     getRequests: async () => {
       self.markLoading()
       const requestApi = new RequestApi(self.environment.firebaseApi)

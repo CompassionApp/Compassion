@@ -9,7 +9,7 @@ storiesOf("IconButton", module)
   .add("Style Presets", () => (
     <Story>
       <UseCase text="Primary" usage="The primary.">
-        <IconButton style={{ backgroundColor: color.error }} />
+        <IconButton icon="request" style={{ backgroundColor: color.error }} />
       </UseCase>
     </Story>
   ))
