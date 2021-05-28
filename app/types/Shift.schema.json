@@ -57,10 +57,7 @@
           "maximum": 180
         }
       },
-      "required": [
-        "lat",
-        "lng"
-      ],
+      "required": ["lat", "lng"],
       "additionalProperties": false,
       "description": "Chaperone-specified geolocation limit center"
     },

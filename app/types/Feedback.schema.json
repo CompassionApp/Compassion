@@ -23,10 +23,7 @@
     },
     "type": {
       "type": "string",
-      "enum": [
-        "GENERAL_FEEDBACK",
-        "SESSION_FEEDBACK"
-      ],
+      "enum": ["GENERAL_FEEDBACK", "SESSION_FEEDBACK"],
       "description": "Feedback type"
     },
     "comments": {
@@ -34,12 +31,7 @@
       "description": "(Optional) Freeform comments"
     }
   },
-  "required": [
-    "id",
-    "createdAt",
-    "submittedBy",
-    "type"
-  ],
+  "required": ["id", "createdAt", "submittedBy", "type"],
   "additionalProperties": false,
   "description": "Feedback submitted by either chaperones or requesters at the end of a session",
   "definitions": {}

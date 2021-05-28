@@ -1,8 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "additionalProperties": false,
-  "definitions": {
-  },
+  "definitions": {},
   "description": "Geographical coordinate",
   "properties": {
     "lat": {
@@ -16,9 +15,6 @@
       "type": "number"
     }
   },
-  "required": [
-    "lat",
-    "lng"
-  ],
+  "required": ["lat", "lng"],
   "type": "object"
 }
