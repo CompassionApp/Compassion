@@ -1,7 +1,7 @@
 import * as React from "react"
-import { TextStyle, View, ViewStyle } from "react-native"
+import { TouchableOpacityProps, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
-import { color, spacing, typography } from "../../theme"
+import { color, spacing } from "../../theme"
 import { Button, Text } from "../"
 import { icons, IconTypes } from "../icon/icons"
 import { Break } from "../break/break"
@@ -28,7 +28,7 @@ const HUGE_BUTTON_STYLE: ViewStyle = {
   paddingVertical: spacing[2],
 }
 
-export interface IconButtonProps {
+export interface IconButtonProps extends TouchableOpacityProps {
   /**
    * The name of the icon
    */

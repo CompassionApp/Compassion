@@ -7,7 +7,7 @@ import * as Location from "expo-location"
 import { Button, Header, Screen, TextField } from "../../components"
 // import { useStores } from "../../models"
 import { color, globalStyles, spacing } from "../../theme"
-import { EDGE_PADDING, START_REGION } from "./map.constants"
+import { EDGE_PADDING, START_REGION } from "../../constants/map"
 
 const ROOT: ViewStyle = {
   backgroundColor: color.background,

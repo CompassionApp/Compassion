@@ -15,9 +15,9 @@ const BASE_VIEW: ViewStyle = {
 
 const BASE_TEXT: TextStyle = {
   fontSize: 13,
-  fontFamily: typography.primary,
+  fontFamily: typography.tertiary,
   fontWeight: "bold",
-  letterSpacing: 2,
+  letterSpacing: 1,
 }
 
 /**

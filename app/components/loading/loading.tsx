@@ -1,9 +1,6 @@
 import * as React from "react"
-import { ActivityIndicator, ViewStyle } from "react-native"
+import { ActivityIndicator, View, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
-import styled from "styled-components/native"
-
-const Container = styled.View``
 
 export interface LoadingProps {
   size?: number | "small" | "large"
@@ -20,8 +17,8 @@ export const Loading = observer(function Loading(props: LoadingProps) {
   const { size = "small", style } = props
 
   return (
-    <Container style={style}>
+    <View style={style}>
       <ActivityIndicator size={size} />
-    </Container>
+    </View>
   )
 })

@@ -15,18 +15,19 @@ const INPUT: TextStyle = {
   fontFamily: typography.primary,
   color: color.text,
   minHeight: 44,
-  fontSize: 18,
+  fontSize: 16,
   backgroundColor: color.transparent,
   borderColor: color.palette.black,
   borderWidth: 1,
   borderRadius: 8,
-  paddingHorizontal: 18,
-  paddingVertical: 15,
+  paddingHorizontal: spacing[4],
+  paddingVertical: spacing[4],
+  paddingTop: spacing[4],
 }
 
 const OFFSET_LABEL: ViewStyle = {
   position: "absolute",
-  bottom: 56,
+  top: 4,
   left: 15,
 }
 

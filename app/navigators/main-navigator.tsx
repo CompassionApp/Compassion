@@ -18,7 +18,7 @@ import {
   HomeScreen,
   RequestDetailScreen,
 } from "../screens"
-import { NewRequestScreen } from "../screens/new-request/new-request-screen"
+import { NewRequestNavigator } from "./new-request/new-request-navigator"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -32,7 +32,7 @@ import { NewRequestScreen } from "../screens/new-request/new-request-screen"
  *   https://reactnavigation.org/docs/params/
  *   https://reactnavigation.org/docs/typescript#type-checking-the-navigator
  */
-export type PrimaryParamList = {
+export type MainNavigatorParamList = {
   demo: undefined
   demoList: undefined
   home: undefined
@@ -47,7 +47,7 @@ export type PrimaryParamList = {
 }
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
-const Stack = createStackNavigator<PrimaryParamList>()
+const Stack = createStackNavigator<MainNavigatorParamList>()
 
 export function MainNavigator() {
   return (
@@ -66,7 +66,7 @@ export function MainNavigator() {
       <Stack.Screen name="roleSelect" component={RoleSelectScreen} />
       <Stack.Screen name="requester" component={RequesterScreen} />
       <Stack.Screen name="home" component={HomeScreen} />
-      <Stack.Screen name="newRequest" component={NewRequestScreen} />
+      <Stack.Screen name="newRequest" component={NewRequestNavigator} />
       <Stack.Screen name="requestDetail" component={RequestDetailScreen} />
     </Stack.Navigator>
   )

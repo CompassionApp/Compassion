@@ -9,6 +9,7 @@ import {
 // import { User } from "../api/api.types"
 // import { typeConverter } from "./utils"
 import { Request, RequestStatusEnum } from "../../types"
+import { RequestSnapshot } from "../../models"
 
 export class RequestApi {
   private firebase: FirebaseApi
@@ -20,7 +21,10 @@ export class RequestApi {
   /**
    * Creates a new request by storing it under the "/user" and "/request" collection
    */
-  async createRequest(request: Request, authContext: AuthContext): Promise<CreateRequestResult> {
+  async createRequest(
+    request: RequestSnapshot,
+    authContext: AuthContext,
+  ): Promise<CreateRequestResult> {
     try {
       console.log("Saving to firestore...", request)
       await this.firebase.firestore.collection("requests").doc(request.id).set(request)

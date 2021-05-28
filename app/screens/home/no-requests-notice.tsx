@@ -1,4 +1,5 @@
 import React from "react"
+import { Linking } from "react-native"
 import { observer } from "mobx-react-lite"
 import styled from "styled-components/native"
 import { Text } from "../../components"
@@ -6,6 +7,7 @@ import { useNavigation } from "@react-navigation/native"
 import { color } from "../../theme"
 import { Break } from "../../components/break/break"
 import { IconButton } from "../../components/icon-button/icon-button"
+import { TouchableOpacity } from "react-native-gesture-handler"
 
 const BORDER_RADIUS = 5
 
@@ -16,39 +18,44 @@ const Container = styled.View`
 `
 
 const NoticeContent = styled.View``
-const NoticeBold = styled(Text)`
-  text-align: center;
-`
-const Notice = styled(Text)`
-  text-align: center;
-`
 
-export interface NoRequestsNoticeProps {}
+const CIO_PHONE_NUMBER = "5102008682"
 
-export const NoRequestsNotice = observer(function NoRequestsNotice() {
+export interface NoRequestsNoticeProps {
+  onPress?: () => void
+}
+
+export const NoRequestsNotice = observer(function NoRequestsNotice({
+  onPress,
+}: NoRequestsNoticeProps) {
   const navigation = useNavigation()
 
   const handlePressNewRequest = () => {
     navigation.navigate("newRequest")
   }
 
+  const handlePressPhoneNumber = () => {
+    Linking.openURL(`tel://${CIO_PHONE_NUMBER}`)
+  }
+
   return (
     <Container>
       <NoticeContent>
-        <NoticeBold preset="bold" tx="homeScreen.noneScheduledNoticeBold" />
-        <Notice tx="homeScreen.noticeText1" />
+        <Text preset={["center"]} tx="homeScreen.noticeText1" />
         <Break />
-        <Notice tx="homeScreen.noticeText2" />
+        <Text preset={["center"]} tx="homeScreen.noticeText2" />
         <Break />
-        <Notice tx="homeScreen.noticeText3" />
-        <Notice preset={["header", "bold"]} tx="homeScreen.noticeTextPhoneNumber" />
-        <Notice tx="homeScreen.noticeText4" />
+        <Text preset={["center"]} tx="homeScreen.noticeText3" />
+        <TouchableOpacity onPress={handlePressPhoneNumber}>
+          <Text preset={["center", "header", "bold"]} tx="homeScreen.noticeTextPhoneNumber" />
+        </TouchableOpacity>
+        <Text preset={["center"]} tx="homeScreen.noticeText4" />
         <Break size={4} />
       </NoticeContent>
       <IconButton
         icon="requestWhite"
         tx="homeScreen.requestButton"
-        onPress={handlePressNewRequest}
+        onPress={onPress || handlePressNewRequest}
       />
     </Container>
   )

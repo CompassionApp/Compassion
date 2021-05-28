@@ -4,7 +4,6 @@ import { View, ViewStyle } from "react-native"
 import styled from "styled-components/native"
 import { Header, Screen, Text } from "../../components"
 import { useNavigation } from "@react-navigation/native"
-// import { useStores } from "../../models"
 import { color, globalStyles, typography } from "../../theme"
 import { Card } from "./card"
 import { Footer } from "../../components/footer/footer"
@@ -32,6 +31,10 @@ export const HomeScreen = observer(function HomeScreen() {
   const { requests } = requestStore
   const navigation = useNavigation()
   const navigateBack = () => navigation.goBack()
+  const handlePressRequestDetail = (requestId: string) => () => {
+    requestStore.selectCurrentRequest(requestId)
+    navigation.navigate("requestDetail")
+  }
 
   useEffect(() => {
     async function fetchData() {
@@ -57,7 +60,12 @@ export const HomeScreen = observer(function HomeScreen() {
           <Title text=", John Doe" />
         </TitleView>
         <Screen preset="scroll">
-          {requestStore.sortByCreated.length === 0 && <NoRequestsNotice />}
+          {requestStore.sortByCreated.length === 0 && (
+            <>
+              <Text preset={["bold", "center"]} tx="homeScreen.noneScheduledNoticeBold" />
+              <NoRequestsNotice />
+            </>
+          )}
           {requestStore.sortByCreated.map((request) => (
             <Card
               key={request.id}
@@ -66,6 +74,7 @@ export const HomeScreen = observer(function HomeScreen() {
               type={request.type as RequestTypeEnum}
               requestId={request.id}
               requestedAt={request.requestedAt}
+              onPress={handlePressRequestDetail(request.id)}
             />
           ))}
         </Screen>

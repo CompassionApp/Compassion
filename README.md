@@ -4,7 +4,7 @@
 
 # Compassion App
 
-Compassion App is a [React Native](https://reactnative.dev/) application built with the [Ignite](https://github.com/infinitered/ignite) boilerplate. Please take a look at the documentation for Ignite to get familiar with its library choices, architecture, and--most importantly--[generators](https://github.com/infinitered/ignite/blob/master/docs/Generators.md).
+Compassion App is a [React Native](https://reactnative.dev/)/[Expo Framework](https://docs.expo.io/) application built with the [Ignite](https://github.com/infinitered/ignite) boilerplate. Please take a look at the documentation for Ignite to get familiar with its library choices, architecture, and development style.
 
 ## Setup
 
@@ -15,12 +15,7 @@ Compassion App is a [React Native](https://reactnative.dev/) application built w
    $ nvm install 16.0.0 && nvm alias default 16.0.0
    ```
 
-1. Install simulators. Follow the instructions below for Android and iOS simulators:
-
-   - **Android** Install [Android Studio](https://docs.expo.io/workflow/android-studio-emulator) and through its interface download the SDK and simulator
-     - ...
-   - **iOS** Install [xcode CLI tools](https://docs.expo.io/workflow/ios-simulator/)
-     - Enable location mocking in the simulator by going to `Features > Location > City Run`
+1. Install simulators by [following the instructions here.](docs/simulator-setup.md)
 
 1. Install `yarn`
 
@@ -65,10 +60,16 @@ $ yarn compile --watch
 $ yarn test --watch
 ```
 
-Occasionally, you'll have to open [the Expo developer menu](https://docs.expo.io/workflow/development-mode/#showing-the-developer-menu) to reload the app or to debug issues. To activate the menu, use the following:
+### Debugging
+
+Occasionally, you'll have to open [the Expo developer menu](https://docs.expo.io/workflow/development-mode/#showing-the-developer-menu) to reload the app or to debug issues. To activate the menu, use the following keyboard shortcuts:
 
 - For iOS simulators, press <kbd>Ctrl</kbd>+<kbd>Cmd</kbd>+<kbd>z</kbd>
 - For Android simulators, press <kbd>Cmd</kbd>+<kbd>m</kbd>
+
+![Expo Menu](docs/expo-menu.png)
+
+What's very useful from this menu is the **Element Inspector**, which acts similar to Chrome's DevTools for inspecting the bounds and attributes of UI elements.
 
 ## Testing
 
@@ -187,6 +188,13 @@ yarn generate
 ```
 
 **Note:** The above will only work if the filename matches the exported type.
+
+## Resources
+
+Below are recommended resources to reference and read about when working with the app.
+
+- **[react-navigation's guide on nested navigators](https://reactnavigation.org/docs/nesting-navigators/)**
+  This is a great guide to explain the difference between browser-based navigation (via manipulating route parameters in the URL) and the _stack navigator_ which is what most mobile apps employ.
 
 ---
 
