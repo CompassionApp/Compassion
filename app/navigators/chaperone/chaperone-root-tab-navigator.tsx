@@ -1,24 +1,23 @@
 import React from "react"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { MenuScreen, NotificationsScreen } from "../../screens"
-import { NewRequestStackNavigator } from "./new-request-stack-navigator"
 import { TabBarIcon } from "../../components"
 import { color } from "../../theme"
-import { RequesterHomeStackNavigator } from "./requester-home-stack-navigator"
+import { ChaperoneHomeStackNavigator } from "./chaperone-home-stack-navigator"
+import { ChaperoneScheduleScreen } from "../../screens/chaperone-schedule/chaperone-schedule-screen"
 
-export type RequesterTabNavigatorParamList = {
+export type ChaperoneTabNavigatorParamList = {
   home: undefined
-  permissions: undefined
-  welcome: undefined
-  newRequest: undefined
+  chaperone: undefined
   requestDetail: undefined
   notifications: undefined
+  schedule: undefined
   menu: undefined
 }
 
-const Tab = createBottomTabNavigator<RequesterTabNavigatorParamList>()
+const Tab = createBottomTabNavigator<ChaperoneTabNavigatorParamList>()
 
-export function RequesterMainTabNavigator() {
+export function ChaperoneMainTabNavigator() {
   return (
     <Tab.Navigator
       initialRouteName="home"
@@ -31,13 +30,13 @@ export function RequesterMainTabNavigator() {
     >
       <Tab.Screen
         name="home"
-        component={RequesterHomeStackNavigator}
+        component={ChaperoneHomeStackNavigator}
         options={{ tabBarLabel: "Home", tabBarIcon: () => <TabBarIcon icon="home" /> }}
       />
       <Tab.Screen
-        name="newRequest"
-        component={NewRequestStackNavigator}
-        options={{ tabBarLabel: "Request", tabBarIcon: () => <TabBarIcon icon="request" /> }}
+        name="schedule"
+        component={ChaperoneScheduleScreen}
+        options={{ tabBarLabel: "Schedule", tabBarIcon: () => <TabBarIcon icon="home" /> }}
       />
       <Tab.Screen
         name="notifications"

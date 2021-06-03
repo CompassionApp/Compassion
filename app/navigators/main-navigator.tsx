@@ -6,14 +6,9 @@
  */
 import React from "react"
 import { createStackNavigator } from "@react-navigation/stack"
-import {
-  SignUpScreen,
-  ChaperoneScreen,
-  RoleSelectScreen,
-  PermissionsScreen,
-  WelcomeScreen,
-} from "../screens"
+import { SignUpScreen, RoleSelectScreen, PermissionsScreen, WelcomeScreen } from "../screens"
 import { RequesterMainTabNavigator } from "./requester/requester-root-tab-navigator"
+import { ChaperoneMainTabNavigator } from "./chaperone/chaperone-root-tab-navigator"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -51,8 +46,8 @@ export function MainNavigator() {
       <Stack.Screen name="permissions" component={PermissionsScreen} />
       <Stack.Screen name="welcome" component={WelcomeScreen} />
       <Stack.Screen name="signup" component={SignUpScreen} />
-      <Stack.Screen name="chaperone" component={ChaperoneScreen} />
       <Stack.Screen name="roleSelect" component={RoleSelectScreen} />
+      <Stack.Screen name="chaperone" component={ChaperoneMainTabNavigator} />
       <Stack.Screen name="requester" component={RequesterMainTabNavigator} />
     </Stack.Navigator>
   )

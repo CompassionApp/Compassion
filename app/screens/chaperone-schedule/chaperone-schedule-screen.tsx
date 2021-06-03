@@ -1,15 +1,15 @@
 import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
 import { View, ViewStyle } from "react-native"
-import { Calendar, DateObject, DotMarking } from "react-native-calendars"
 import { useNavigation } from "@react-navigation/native"
-import { format, addMonths, parse } from "date-fns"
 import R from "ramda"
-import { Button, Header, Screen, Text } from "../../components"
+import { addMonths, format, parse } from "date-fns"
+// import { useStores } from "../../models"
+import { Break, Button, Header, Screen, Text } from "../../components"
 import { color, globalStyles } from "../../theme"
-import { useStores } from "../../models"
-import { CALENDAR_DATE_FORMAT } from "../../constants"
-import { Break } from "../../components/break/break"
+import { CALENDAR_DATE_FORMAT, CHAPERONE_MAX_MONTHS_FORWARD } from "../../constants"
+import { Calendar, DateObject, DotMarking } from "react-native-calendars"
+import { TimeSlot } from "./time-slot"
 
 const ROOT: ViewStyle = {
   backgroundColor: color.background,
@@ -25,14 +25,14 @@ const CALENDAR_THEME = {
   backgroundColor: color.background,
   calendarBackground: color.background,
 }
-export const NewRequestDateSelectionScreen = observer(function NewRequestDateSelectionScreen() {
-  const { newRequestStore } = useStores()
+
+export const ChaperoneScheduleScreen = observer(function ChaperoneScheduleScreen() {
   const [selectedDate, setSelectedDate] = useState<string>()
   const [markedDates, setMarkedDates] = useState<Record<string, DotMarking>>({})
 
   const navigation = useNavigation()
   const navigateBack = () => navigation.goBack()
-  const navigateNext = () => navigation.navigate("newRequest", { screen: "timeSelect" })
+  const navigateHome = () => navigation.navigate("home")
 
   const handlePressNext = () => {
     if (!selectedDate) {
@@ -40,8 +40,7 @@ export const NewRequestDateSelectionScreen = observer(function NewRequestDateSel
     }
 
     const date = parse(selectedDate, CALENDAR_DATE_FORMAT, new Date()).toUTCString()
-    newRequestStore.request.setRequestDateTime(date)
-    navigateNext()
+    navigateHome()
   }
 
   const handlePressDay = (day: DateObject) => {
@@ -63,10 +62,10 @@ export const NewRequestDateSelectionScreen = observer(function NewRequestDateSel
   }
 
   return (
-    <View testID="NewRequestDateSelectionScreen" style={globalStyles.full}>
+    <View testID="ChaperoneScheduleScreen" style={globalStyles.full}>
       <Screen style={{ ...globalStyles.root, ...ROOT }} preset="fixed">
         <Header
-          headerTx="newRequestDateSelectionScreen.title"
+          headerTx="chaperoneScheduleScreen.title"
           leftIcon="back"
           onLeftPress={navigateBack}
           style={globalStyles.header}
@@ -77,15 +76,24 @@ export const NewRequestDateSelectionScreen = observer(function NewRequestDateSel
           onDayPress={handlePressDay}
           markedDates={markedDates}
           minDate={format(new Date(), CALENDAR_DATE_FORMAT)}
-          maxDate={format(addMonths(new Date(), REQUEST_MAX_MONTHS_FORWARD), CALENDAR_DATE_FORMAT)}
+          maxDate={format(
+            addMonths(new Date(), CHAPERONE_MAX_MONTHS_FORWARD),
+            CALENDAR_DATE_FORMAT,
+          )}
         />
         <Break />
         {selectedDate && (
-          <Text preset={["center", "bold"]} text="12 volunteers available on this date" />
+          <>
+            <Text preset={["center", "bold"]} tx="chaperoneScheduleScreen.scheduleSlotTitle" />
+            <Break />
+            <TimeSlot text="8:00 AM - 11:00 AM" state="scheduled" />
+            <TimeSlot text="11:00 AM - 2:00 PM" state="available" />
+            <TimeSlot text="2:00 PM - 5:00 PM" state="available" />
+          </>
         )}
         <Break />
         <Button
-          tx="newRequestDateSelectionScreen.nextButton"
+          tx="chaperoneScheduleScreen.submitButton"
           disabled={!!selectedDate === false}
           onPress={handlePressNext}
         />
@@ -93,6 +101,3 @@ export const NewRequestDateSelectionScreen = observer(function NewRequestDateSel
     </View>
   )
 })
-function REQUEST_MAX_MONTHS_FORWARD(arg0: Date, REQUEST_MAX_MONTHS_FORWARD: any): number | Date {
-  throw new Error("Function not implemented.")
-}
