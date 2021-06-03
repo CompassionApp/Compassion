@@ -131,6 +131,11 @@
     "additionalNotesLabel": "Additional Notes",
     "additionalNotesPlaceholder": "Add anything we should know."
   },
+  "chaperoneScheduleScreen": {
+    "title": "Volunteer Schedule",
+    "submitButton": "Submit",
+    "scheduleSlotTitle": "Volunteer Slots Available"
+  },
   "newRequestReviewScreen": {
     "title": "Review Your Request",
     "nextButton": "SEND REQUEST"
