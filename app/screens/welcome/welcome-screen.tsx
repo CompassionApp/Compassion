@@ -80,7 +80,7 @@ export const WelcomeScreen = observer(function WelcomeScreen() {
 
   // Example: fetch data on first screen render
   useEffect(() => {
-    ;(() => {
+    (() => {
       exampleStore
         .getUser(userID)
         .then((doc) => {

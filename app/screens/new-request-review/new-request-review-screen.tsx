@@ -5,7 +5,6 @@ import { Button, Header, Screen, Text } from "../../components"
 import { useNavigation } from "@react-navigation/native"
 import { RequestModel, useStores } from "../../models"
 import { color, globalStyles } from "../../theme"
-import { Footer } from "../../components/footer/footer"
 import { RequestStatusEnum, RequestTypeEnum } from "../../types"
 import { generateUuid } from "../../utils/uuid"
 import { getSnapshot } from "mobx-state-tree"
@@ -88,7 +87,6 @@ export const NewRequestReviewScreen = observer(function NewRequestReviewScreen()
 
         {/* <Text>{request?.id}</Text> */}
       </Screen>
-      <Footer />
     </View>
   )
 })

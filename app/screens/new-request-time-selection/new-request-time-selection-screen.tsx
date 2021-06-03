@@ -4,7 +4,6 @@ import { View, ViewStyle } from "react-native"
 import { Button, Header, Screen, Text } from "../../components"
 import { useNavigation } from "@react-navigation/native"
 import { color, globalStyles, spacing } from "../../theme"
-import { Footer } from "../../components/footer/footer"
 import { format, parse } from "date-fns"
 import { useStores } from "../../models"
 import styled from "styled-components/native"
@@ -145,7 +144,6 @@ export const NewRequestTimeSelectionScreen = observer(function NewRequestTimeSel
           onPress={handlePressNext}
         />
       </Screen>
-      <Footer />
     </View>
   )
 })

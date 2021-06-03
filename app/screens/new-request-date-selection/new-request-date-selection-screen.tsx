@@ -5,7 +5,6 @@ import { Calendar, DateObject, DotMarking } from "react-native-calendars"
 import { Button, Header, Screen, Text } from "../../components"
 import { useNavigation } from "@react-navigation/native"
 import { color, globalStyles } from "../../theme"
-import { Footer } from "../../components/footer/footer"
 import { format, addMonths, parse } from "date-fns"
 import { useStores } from "../../models"
 import { CALENDAR_DATE_FORMAT } from "../../constants/date-formats"
@@ -95,7 +94,6 @@ export const NewRequestDateSelectionScreen = observer(function NewRequestDateSel
           onPress={handlePressNext}
         />
       </Screen>
-      <Footer />
     </View>
   )
 })

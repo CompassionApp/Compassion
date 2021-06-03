@@ -4,7 +4,6 @@ import { ViewStyle, View } from "react-native"
 import { Header, Screen } from "../../components"
 import { useNavigation } from "@react-navigation/native"
 import { color, globalStyles } from "../../theme"
-import { Footer } from "../../components/footer/footer"
 import { RequestModel, useStores } from "../../models"
 import { generateUuid } from "../../utils/uuid"
 import { RequestStatusEnum } from "../../types"
@@ -53,7 +52,6 @@ export const NewRequestScreen = observer(function NewRequestScreen() {
         <Break size={5} />
         <NoRequestsNotice onPress={handlePressNewRequest} />
       </Screen>
-      <Footer />
     </View>
   )
 })

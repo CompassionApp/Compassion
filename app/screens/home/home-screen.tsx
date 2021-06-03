@@ -6,7 +6,6 @@ import { Header, Screen, Text } from "../../components"
 import { useNavigation } from "@react-navigation/native"
 import { color, globalStyles, typography } from "../../theme"
 import { Card } from "./card"
-import { Footer } from "../../components/footer/footer"
 import { useStores } from "../../models/root-store/root-store-context"
 import { RequestStatusEnum, RequestTypeEnum } from "../../types"
 import { NoRequestsNotice } from "./no-requests-notice"
@@ -79,7 +78,6 @@ export const HomeScreen = observer(function HomeScreen() {
           ))}
         </Screen>
       </Screen>
-      <Footer />
     </View>
   )
 })

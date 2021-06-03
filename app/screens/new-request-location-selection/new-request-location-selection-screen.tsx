@@ -5,7 +5,6 @@ import { Button, Header, Screen, TextField } from "../../components"
 import { useNavigation } from "@react-navigation/native"
 import * as Location from "expo-location"
 import { color, globalStyles } from "../../theme"
-import { Footer } from "../../components/footer/footer"
 import MapView, { LatLng, Marker } from "react-native-maps"
 import { START_REGION } from "../../constants/map"
 import { useStores } from "../../models"
@@ -57,7 +56,7 @@ export const NewRequestLocationSelectionScreen = observer(
     }
 
     useEffect(() => {
-      ;(async () => {
+      (async () => {
         const { status } = await Location.requestPermissionsAsync()
         if (status !== "granted") {
           console.tron.log("Permission to access location was denied")
@@ -112,7 +111,6 @@ export const NewRequestLocationSelectionScreen = observer(
             <Button tx="newRequestLocationSelectionScreen.nextButton" onPress={handlePressNext} />
           </FlexView>
         </Screen>
-        <Footer />
       </View>
     )
   },

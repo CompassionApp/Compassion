@@ -12,13 +12,10 @@ import {
   SignUpScreen,
   ChaperoneScreen,
   RoleSelectScreen,
-  RequesterScreen,
   PermissionsScreen,
   WelcomeScreen,
-  HomeScreen,
-  RequestDetailScreen,
 } from "../screens"
-import { NewRequestNavigator } from "./new-request/new-request-navigator"
+import { RequesterMainTabNavigator } from "./requester/requester-root-tab-navigator"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -64,10 +61,7 @@ export function MainNavigator() {
       <Stack.Screen name="signup" component={SignUpScreen} />
       <Stack.Screen name="chaperone" component={ChaperoneScreen} />
       <Stack.Screen name="roleSelect" component={RoleSelectScreen} />
-      <Stack.Screen name="requester" component={RequesterScreen} />
-      <Stack.Screen name="home" component={HomeScreen} />
-      <Stack.Screen name="newRequest" component={NewRequestNavigator} />
-      <Stack.Screen name="requestDetail" component={RequestDetailScreen} />
+      <Stack.Screen name="requester" component={RequesterMainTabNavigator} />
     </Stack.Navigator>
   )
 }

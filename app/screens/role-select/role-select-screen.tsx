@@ -30,7 +30,7 @@ export const RoleSelectScreen = observer(function RoleSelectScreen() {
   const navigation = useNavigation()
   const navigateBack = () => navigation.goBack()
   const navigateChaperone = () => navigation.navigate("chaperone")
-  const navigateRequester = () => navigation.navigate("home")
+  const navigateRequester = () => navigation.navigate("requester")
 
   return (
     <View testID="RoleSelectScreen" style={globalStyles.full}>
