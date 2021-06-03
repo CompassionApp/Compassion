@@ -1,7 +1,7 @@
 import React from "react"
 import { observer } from "mobx-react-lite"
 import { View, ViewStyle } from "react-native"
-import { Button, Header, Icon, Screen, Text } from "../../components"
+import { Break, Button, Header, Icon, Screen, Text } from "../../components"
 import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "../../models"
 import { color, globalStyles, spacing } from "../../theme"
@@ -18,17 +18,18 @@ const MenuList = styled.View`
   justify-content: flex-start;
 `
 
-const MenuListItem = styled.View`
-  margin: ${spacing[3]}px auto;
+const MenuListItem = styled.TouchableOpacity`
+  margin: ${spacing[4]}px auto;
   display: flex;
   flex-flow: row nowrap;
   justify-content: flex-start;
+  width: 150px;
 `
 
 const ICON_SIZE = {
   width: 30,
   height: 30,
-  marginRight: spacing[3],
+  marginRight: spacing[4],
 }
 
 export const MenuScreen = observer(function MenuScreen() {
@@ -36,6 +37,7 @@ export const MenuScreen = observer(function MenuScreen() {
 
   const navigation = useNavigation()
   const navigateBack = () => navigation.goBack()
+  const navigateLogin = () => navigation.navigate("welcome")
 
   return (
     <View testID="MenuScreen" style={globalStyles.full}>
@@ -47,29 +49,30 @@ export const MenuScreen = observer(function MenuScreen() {
           style={globalStyles.header}
         />
         <Text preset={["header", "center", "bold"]} text="Mary Requester" />
+        <Break />
         <Button preset="ghost" text="Edit profile" />
         <MenuList>
-          <MenuListItem>
+          <MenuListItem disabled>
             <Icon icon="home" style={ICON_SIZE} />
             <Text preset={[]} tx="menuScreen.menuButtonRequesterInfo" />
           </MenuListItem>
-          <MenuListItem>
+          <MenuListItem disabled>
             <Icon icon="home" style={ICON_SIZE} />
             <Text preset={[]} tx="menuScreen.menuButtonAboutUs" />
           </MenuListItem>
-          <MenuListItem>
+          <MenuListItem onPress={() => navigation.navigate("userAgreement")}>
             <Icon icon="home" style={ICON_SIZE} />
             <Text preset={[]} tx="menuScreen.menuButtonUserAgreement" />
           </MenuListItem>
-          <MenuListItem>
+          <MenuListItem disabled>
             <Icon icon="home" style={ICON_SIZE} />
             <Text preset={[]} tx="menuScreen.menuButtonResetPassword" />
           </MenuListItem>
-          <MenuListItem>
+          <MenuListItem disabled>
             <Icon icon="home" style={ICON_SIZE} />
             <Text preset={[]} tx="menuScreen.menuButtonAskQuestion" />
           </MenuListItem>
-          <MenuListItem>
+          <MenuListItem onPress={navigateLogin}>
             <Icon icon="home" style={ICON_SIZE} />
             <Text preset={[]} tx="menuScreen.menuButtonSignOut" />
           </MenuListItem>

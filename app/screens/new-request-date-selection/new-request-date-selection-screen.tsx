@@ -8,7 +8,7 @@ import R from "ramda"
 import { Button, Header, Screen, Text } from "../../components"
 import { color, globalStyles } from "../../theme"
 import { useStores } from "../../models"
-import { CALENDAR_DATE_FORMAT } from "../../constants"
+import { CALENDAR_DATE_FORMAT, REQUEST_MAX_MONTHS_FORWARD } from "../../constants"
 import { Break } from "../../components/break/break"
 
 const ROOT: ViewStyle = {
@@ -93,6 +93,3 @@ export const NewRequestDateSelectionScreen = observer(function NewRequestDateSel
     </View>
   )
 })
-function REQUEST_MAX_MONTHS_FORWARD(arg0: Date, REQUEST_MAX_MONTHS_FORWARD: any): number | Date {
-  throw new Error("Function not implemented.")
-}
