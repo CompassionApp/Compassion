@@ -7,7 +7,7 @@ import { NewRequestLocationSelectionScreen } from "../../screens/new-request-loc
 import { NewRequestActivitySelectionScreen } from "../../screens/new-request-activity-selection/new-request-activity-selection-screen"
 import { NewRequestReviewScreen } from "../../screens/new-request-review/new-request-review-screen"
 
-export type NewRequestNavigatorParamList = {
+export type NewRequestNavigatorStackParamList = {
   new: undefined
   dateSelect: undefined
   timeSelect: undefined
@@ -16,9 +16,9 @@ export type NewRequestNavigatorParamList = {
   review: undefined
 }
 
-const Stack = createStackNavigator<NewRequestNavigatorParamList>()
+const Stack = createStackNavigator<NewRequestNavigatorStackParamList>()
 
-export const NewRequestNavigator = () => (
+export const NewRequestStackNavigator = () => (
   <Stack.Navigator
     initialRouteName="new"
     screenOptions={{

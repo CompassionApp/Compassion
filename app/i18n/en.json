@@ -60,6 +60,18 @@
     "cancelButton": "Cancel Request",
     "deleteButton": "Delete Request"
   },
+  "notificationsScreen": {
+    "title": "Notifications"
+  },
+  "menuScreen": {
+    "title": "Menu",
+    "menuButtonRequesterInfo": "Requester Info",
+    "menuButtonAboutUs": "About Us",
+    "menuButtonUserAgreement": "User Agreement",
+    "menuButtonResetPassword": "Reset Password",
+    "menuButtonAskQuestion": "Ask a Question",
+    "menuButtonSignOut": "Sign Out"
+  },
   "homeScreen": {
     "title": "Home",
     "welcome": "Welcome",

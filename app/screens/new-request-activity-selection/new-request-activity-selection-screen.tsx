@@ -5,7 +5,6 @@ import { Picker } from "@react-native-picker/picker"
 import { useNavigation } from "@react-navigation/native"
 import { Button, Header, Screen, TextField } from "../../components"
 import { color, globalStyles } from "../../theme"
-import { Footer } from "../../components/footer/footer"
 import { RequestTypeEnum } from "../../types"
 import { translate, TxKeyPath } from "../../i18n"
 import { useStores } from "../../models"
@@ -73,7 +72,6 @@ export const NewRequestActivitySelectionScreen = observer(
 
           <Button tx="newRequestActivitySelectionScreen.nextButton" onPress={handlePressNext} />
         </Screen>
-        <Footer />
       </View>
     )
   },

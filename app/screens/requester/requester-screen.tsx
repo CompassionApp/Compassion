@@ -106,7 +106,7 @@ export const RequesterScreen = observer(function RequesterScreen() {
   }
 
   useEffect(() => {
-    ;(async () => {
+    (async () => {
       const { status } = await Location.requestPermissionsAsync()
       if (status !== "granted") {
         console.tron.log("Permission to access location was denied")
