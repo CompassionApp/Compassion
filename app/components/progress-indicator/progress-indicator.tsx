@@ -2,7 +2,7 @@ import React from "react"
 import { View, ViewStyle } from "react-native"
 
 import { color } from "../../theme"
-import { ProgressIndicatorItemViewProps, ProgressIndicatorProps } from "./progressIndicator.props"
+import { ProgressIndicatorItemViewProps, ProgressIndicatorProps } from "./progress-indicator.props"
 
 const PROGRESS_AREA_WRAPPER: ViewStyle = {
   justifyContent: "space-between",

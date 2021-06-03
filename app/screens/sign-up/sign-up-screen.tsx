@@ -6,7 +6,7 @@ import { Button, FormRow, Header, Screen, Text, TextField } from "../../componen
 // import { useStores } from "../../models"
 import { color, globalStyles, spacing } from "../../theme"
 import { useNavigation } from "@react-navigation/core"
-import ProgressIndicator from "../../components/progress-indicator/progressIndicator"
+import ProgressIndicator from "../../components/progress-indicator/progress-indicator"
 
 const ROOT: ViewStyle = {
   flex: 1,
@@ -56,7 +56,7 @@ export const SignUpScreen = observer(function SignUpScreen() {
         <View style={FOOTER_CONTENT}>
           <Button testID="submit-button" tx="signUpScreen.submit" onPress={navigateBack} />
           <View style={PROGRESS_INDICATOR_WRAPPER}>
-            <ProgressIndicator totalSteps={4} currentStep={2}/>
+            <ProgressIndicator totalSteps={4} currentStep={2} />
           </View>
         </View>
       </SafeAreaView>
