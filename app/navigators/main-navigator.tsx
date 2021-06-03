@@ -7,8 +7,6 @@
 import React from "react"
 import { createStackNavigator } from "@react-navigation/stack"
 import {
-  DemoScreen,
-  DemoListScreen,
   SignUpScreen,
   ChaperoneScreen,
   RoleSelectScreen,
@@ -30,8 +28,6 @@ import { RequesterMainTabNavigator } from "./requester/requester-root-tab-naviga
  *   https://reactnavigation.org/docs/typescript#type-checking-the-navigator
  */
 export type MainNavigatorParamList = {
-  demo: undefined
-  demoList: undefined
   home: undefined
   signup: undefined
   chaperone: undefined
@@ -39,8 +35,6 @@ export type MainNavigatorParamList = {
   requester: undefined
   permissions: undefined
   welcome: undefined
-  newRequest: undefined
-  requestDetail: undefined
 }
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
@@ -56,8 +50,6 @@ export function MainNavigator() {
     >
       <Stack.Screen name="permissions" component={PermissionsScreen} />
       <Stack.Screen name="welcome" component={WelcomeScreen} />
-      <Stack.Screen name="demo" component={DemoScreen} />
-      <Stack.Screen name="demoList" component={DemoListScreen} />
       <Stack.Screen name="signup" component={SignUpScreen} />
       <Stack.Screen name="chaperone" component={ChaperoneScreen} />
       <Stack.Screen name="roleSelect" component={RoleSelectScreen} />

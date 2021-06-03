@@ -58,7 +58,6 @@ export const WelcomeScreen = observer(function WelcomeScreen() {
   const navigation = useNavigation()
   const navigateSignUp = () => navigation.navigate("signup")
   const navigateRoleSelect = () => navigation.navigate("roleSelect")
-  const navigateDemo = () => navigation.navigate("demoList")
   const navigatePermissions = () => navigation.navigate("permissions")
 
   const userID = "test-user-id"
@@ -80,7 +79,7 @@ export const WelcomeScreen = observer(function WelcomeScreen() {
 
   // Example: fetch data on first screen render
   useEffect(() => {
-    (() => {
+    ;(() => {
       exampleStore
         .getUser(userID)
         .then((doc) => {
@@ -141,12 +140,6 @@ export const WelcomeScreen = observer(function WelcomeScreen() {
               testID="next-screen-button"
               text="Permissions"
               onPress={navigatePermissions}
-            />
-            <Button
-              preset="link"
-              testID="next-screen-button"
-              text="Demo Page"
-              onPress={navigateDemo}
             />
           </View>
         </View>
