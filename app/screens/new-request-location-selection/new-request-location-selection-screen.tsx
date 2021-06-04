@@ -1,14 +1,15 @@
 import React, { useEffect, useRef, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { Dimensions, View, ViewStyle } from "react-native"
-import { Button, Header, Screen, TextField } from "../../components"
+import { Button, Header, Screen } from "../../components"
 import { useNavigation } from "@react-navigation/native"
 import * as Location from "expo-location"
-import { color, globalStyles } from "../../theme"
+import { color, globalStyles, spacing } from "../../theme"
 import MapView, { LatLng, Marker } from "react-native-maps"
 import { START_REGION } from "../../constants/map"
 import { useStores } from "../../models"
 import styled from "styled-components/native"
+import PickupDropoff from "../../components/pickup-dropoff/pickupDropoff"
 
 const ROOT: ViewStyle = {
   backgroundColor: color.background,
@@ -55,8 +56,13 @@ export const NewRequestLocationSelectionScreen = observer(
       navigateNext()
     }
 
+    const PICKUP_DROPOFF_WRAPPER: ViewStyle = {
+      paddingVertical: spacing[2],
+      paddingHorizontal: spacing[4],
+    }
+
     useEffect(() => {
-      (async () => {
+      ;(async () => {
         const { status } = await Location.requestPermissionsAsync()
         if (status !== "granted") {
           console.tron.log("Permission to access location was denied")
@@ -106,8 +112,9 @@ export const NewRequestLocationSelectionScreen = observer(
               )}
             </MapView>
 
-            <TextField placeholderTx="newRequestLocationSelectionScreen.pickupPlaceholder" />
-            <TextField placeholderTx="newRequestLocationSelectionScreen.destinationPlaceholder" />
+            <View style={PICKUP_DROPOFF_WRAPPER}>
+              <PickupDropoff totalSteps={2} />
+            </View>
             <Button tx="newRequestLocationSelectionScreen.nextButton" onPress={handlePressNext} />
           </FlexView>
         </Screen>

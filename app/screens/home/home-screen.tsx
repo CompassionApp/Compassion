@@ -56,7 +56,7 @@ export const HomeScreen = observer(function HomeScreen() {
         />
         <TitleView>
           <Title tx="homeScreen.welcome" />
-          <Title text=", John Doe" />
+          <Title text=", John Chen" />
         </TitleView>
         <Screen preset="scroll">
           {requestStore.sortByCreated.length === 0 && (
