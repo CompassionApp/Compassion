@@ -45,7 +45,7 @@ export function RequesterMainTabNavigator() {
         options={{
           tabBarLabel: "Notifications",
           tabBarIcon: () => <TabBarIcon icon="notification" />,
-          tabBarBadge: 2,
+          tabBarBadge: 3,
         }}
       />
       <Tab.Screen
