@@ -13,7 +13,7 @@ const styles = {
   header: {
     backgroundColor: color.background,
     paddingBottom: spacing[4] + spacing[1],
-    paddingHorizontal: 0,
+    paddingHorizontal: spacing[4],
     paddingTop: spacing[3],
   } as ViewStyle,
   root: { backgroundColor: color.background, paddingHorizontal: spacing[4] } as ViewStyle,
