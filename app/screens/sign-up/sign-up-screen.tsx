@@ -48,7 +48,7 @@ export const SignUpScreen = observer(function SignUpScreen() {
           <TextField
             preset="header"
             labelTx="signUpScreen.email"
-            placeholder="john.doe@gmail.com"
+            placeholder="john.chen@gmail.com"
           />
         </FormRow>
       </Screen>
