@@ -1,4 +1,5 @@
-import * as firebase from "firebase"
+import * as firebase from "firebase/app"
+import "firebase/auth"
 import "firebase/firestore"
 
 import { FirebaseConfig, DEFAULT_FIREBASE_CONFIG } from "./firebase-config"
@@ -7,6 +8,11 @@ import { FirebaseConfig, DEFAULT_FIREBASE_CONFIG } from "./firebase-config"
  * Manages all requests to the API.
  */
 export class FirebaseApi {
+  /**
+   * Firebase App instance
+   */
+  app: firebase.app.App
+
   /**
    * The underlying firestore database instance
    */
@@ -41,9 +47,10 @@ export class FirebaseApi {
   setup() {
     // Check if already initialized before re-initializing. This will prevent an error from occurring during a hot reload.
     if (firebase.apps.length === 0) {
-      firebase.initializeApp(this.config)
+      this.app = firebase.initializeApp(this.config)
     }
-    this.firestore = firebase.firestore()
+
+    this.firestore = firebase.firestore(this.app)
     this.authentication = firebase.auth()
   }
 }
