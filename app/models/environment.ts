@@ -1,5 +1,6 @@
 import { Api } from "../services/api"
 import { FirebaseApi } from "../services/firebase-api"
+import { Notifications } from "../services/notifications"
 
 let ReactotronDev
 if (__DEV__) {
@@ -20,6 +21,7 @@ export class Environment {
     }
     this.api = new Api()
     this.firebaseApi = new FirebaseApi()
+    this.notifications = new Notifications()
   }
 
   async setup() {
@@ -29,6 +31,7 @@ export class Environment {
     }
     await this.api.setup()
     await this.firebaseApi.setup()
+    await this.notifications.setup()
   }
 
   /**
@@ -45,4 +48,9 @@ export class Environment {
    * Firebase API adapter
    */
   firebaseApi: FirebaseApi
+
+  /**
+   * Notifications service
+   */
+  notifications: Notifications
 }
