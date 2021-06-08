@@ -115,7 +115,7 @@ exports[`Storyshots Button Style Presets 1`] = `
               style={
                 Object {
                   "alignItems": "center",
-                  "backgroundColor": "#093B58",
+                  "backgroundColor": "#1B70A4",
                   "borderRadius": 4,
                   "justifyContent": "center",
                   "marginVertical": 8,
@@ -128,11 +128,11 @@ exports[`Storyshots Button Style Presets 1`] = `
               <Text
                 style={
                   Object {
-                    "color": "#ffffff",
-                    "fontFamily": "Helvetica",
+                    "color": "#fff",
+                    "fontFamily": "Quicksand-Bold",
                     "fontSize": 13,
                     "fontWeight": "bold",
-                    "letterSpacing": 2,
+                    "letterSpacing": 1,
                     "textTransform": "uppercase",
                   }
                 }
@@ -233,7 +233,7 @@ exports[`Storyshots Button Style Presets 1`] = `
               style={
                 Object {
                   "alignItems": "center",
-                  "backgroundColor": "#093B58",
+                  "backgroundColor": "#1B70A4",
                   "borderRadius": 4,
                   "justifyContent": "center",
                   "marginVertical": 8,
@@ -246,11 +246,11 @@ exports[`Storyshots Button Style Presets 1`] = `
               <Text
                 style={
                   Object {
-                    "color": "#ffffff",
-                    "fontFamily": "Helvetica",
+                    "color": "#fff",
+                    "fontFamily": "Quicksand-Bold",
                     "fontSize": 13,
                     "fontWeight": "bold",
-                    "letterSpacing": 2,
+                    "letterSpacing": 1,
                     "opacity": 0.4,
                     "textTransform": "uppercase",
                   }
@@ -352,7 +352,7 @@ exports[`Storyshots Button Style Presets 1`] = `
               style={
                 Object {
                   "alignItems": "center",
-                  "backgroundColor": "#093B58",
+                  "backgroundColor": "#1B70A4",
                   "borderRadius": 0,
                   "justifyContent": "center",
                   "marginVertical": 8,
@@ -366,10 +366,10 @@ exports[`Storyshots Button Style Presets 1`] = `
                 style={
                   Object {
                     "color": "#a511dc",
-                    "fontFamily": "Helvetica",
+                    "fontFamily": "Quicksand-Bold",
                     "fontSize": 20,
                     "fontWeight": "bold",
-                    "letterSpacing": 2,
+                    "letterSpacing": 1,
                     "textTransform": "uppercase",
                   }
                 }
@@ -510,7 +510,7 @@ exports[`Storyshots Checkbox Behaviour 1`] = `
                 style={
                   Object {
                     "alignItems": "center",
-                    "borderColor": "#EB9918",
+                    "borderColor": "#093B58",
                     "borderRadius": 1,
                     "borderWidth": 1,
                     "height": 16,
@@ -525,7 +525,7 @@ exports[`Storyshots Checkbox Behaviour 1`] = `
                 style={
                   Object {
                     "color": "#1d1d1d",
-                    "fontFamily": "Helvetica",
+                    "fontFamily": "Quicksand-Regular",
                     "fontSize": 15,
                     "paddingLeft": 8,
                   }
@@ -637,7 +637,7 @@ exports[`Storyshots Checkbox Behaviour 1`] = `
                 style={
                   Object {
                     "alignItems": "center",
-                    "borderColor": "#EB9918",
+                    "borderColor": "#093B58",
                     "borderRadius": 1,
                     "borderWidth": 1,
                     "height": 16,
@@ -650,7 +650,7 @@ exports[`Storyshots Checkbox Behaviour 1`] = `
                 <View
                   style={
                     Object {
-                      "backgroundColor": "#093B58",
+                      "backgroundColor": "#1B70A4",
                       "height": 12,
                       "width": 12,
                     }
@@ -662,7 +662,7 @@ exports[`Storyshots Checkbox Behaviour 1`] = `
                 style={
                   Object {
                     "color": "#1d1d1d",
-                    "fontFamily": "Helvetica",
+                    "fontFamily": "Quicksand-Regular",
                     "fontSize": 15,
                     "paddingLeft": 8,
                   }
@@ -774,7 +774,7 @@ exports[`Storyshots Checkbox Behaviour 1`] = `
                 style={
                   Object {
                     "alignItems": "center",
-                    "borderColor": "#EB9918",
+                    "borderColor": "#093B58",
                     "borderRadius": 1,
                     "borderWidth": 1,
                     "height": 16,
@@ -789,7 +789,7 @@ exports[`Storyshots Checkbox Behaviour 1`] = `
                 style={
                   Object {
                     "color": "#1d1d1d",
-                    "fontFamily": "Helvetica",
+                    "fontFamily": "Quicksand-Regular",
                     "fontSize": 15,
                     "paddingLeft": 8,
                   }
@@ -932,7 +932,7 @@ exports[`Storyshots Checkbox Styling 1`] = `
                   style={
                     Object {
                       "alignItems": "center",
-                      "borderColor": "#EB9918",
+                      "borderColor": "#093B58",
                       "borderRadius": 1,
                       "borderWidth": 1,
                       "height": 16,
@@ -947,7 +947,7 @@ exports[`Storyshots Checkbox Styling 1`] = `
                   style={
                     Object {
                       "color": "#1d1d1d",
-                      "fontFamily": "Helvetica",
+                      "fontFamily": "Quicksand-Regular",
                       "fontSize": 15,
                       "paddingLeft": 8,
                     }
@@ -1064,7 +1064,7 @@ exports[`Storyshots Checkbox Styling 1`] = `
                   style={
                     Object {
                       "alignItems": "center",
-                      "borderColor": "#EB9918",
+                      "borderColor": "#093B58",
                       "borderRadius": 1,
                       "borderWidth": 1,
                       "height": 16,
@@ -1079,7 +1079,7 @@ exports[`Storyshots Checkbox Styling 1`] = `
                   style={
                     Object {
                       "color": "#1d1d1d",
-                      "fontFamily": "Helvetica",
+                      "fontFamily": "Quicksand-Regular",
                       "fontSize": 15,
                       "paddingLeft": 8,
                     }
@@ -1208,7 +1208,7 @@ exports[`Storyshots Checkbox Styling 1`] = `
                   style={
                     Object {
                       "color": "#1d1d1d",
-                      "fontFamily": "Helvetica",
+                      "fontFamily": "Quicksand-Regular",
                       "fontSize": 15,
                       "paddingLeft": 8,
                     }
@@ -1322,7 +1322,7 @@ exports[`Storyshots Checkbox Styling 1`] = `
                   style={
                     Object {
                       "alignItems": "center",
-                      "borderColor": "#EB9918",
+                      "borderColor": "#093B58",
                       "borderRadius": 1,
                       "borderWidth": 1,
                       "height": 16,
@@ -1337,7 +1337,7 @@ exports[`Storyshots Checkbox Styling 1`] = `
                   style={
                     Object {
                       "color": "#1d1d1d",
-                      "fontFamily": "Helvetica",
+                      "fontFamily": "Quicksand-Regular",
                       "fontSize": 15,
                       "paddingLeft": 8,
                     }
@@ -1466,7 +1466,7 @@ exports[`Storyshots Checkbox Styling 1`] = `
                   style={
                     Object {
                       "color": "#1d1d1d",
-                      "fontFamily": "Helvetica",
+                      "fontFamily": "Quicksand-Regular",
                       "fontSize": 15,
                       "paddingLeft": 8,
                     }
@@ -1590,7 +1590,7 @@ exports[`Storyshots FormRow Assembled 1`] = `
               style={
                 Object {
                   "borderBottomWidth": 0,
-                  "borderColor": "#e6e6e6",
+                  "borderColor": "#d2d2d2",
                   "borderTopLeftRadius": 8,
                   "borderTopRightRadius": 8,
                   "borderWidth": 1,
@@ -1601,9 +1601,12 @@ exports[`Storyshots FormRow Assembled 1`] = `
               <Text
                 style={
                   Object {
+                    "backgroundColor": "#f8f8f8",
                     "color": "#1d1d1d",
-                    "fontFamily": "Helvetica",
-                    "fontSize": 13,
+                    "fontFamily": "Quicksand-SemiBold",
+                    "fontSize": 14,
+                    "paddingHorizontal": 4,
+                    "textTransform": "uppercase",
                   }
                 }
               >
@@ -1614,7 +1617,7 @@ exports[`Storyshots FormRow Assembled 1`] = `
               style={
                 Object {
                   "borderBottomWidth": 0,
-                  "borderColor": "#e6e6e6",
+                  "borderColor": "#d2d2d2",
                   "borderWidth": 1,
                   "padding": 8,
                 }
@@ -1624,7 +1627,7 @@ exports[`Storyshots FormRow Assembled 1`] = `
                 style={
                   Object {
                     "color": "#1d1d1d",
-                    "fontFamily": "Helvetica",
+                    "fontFamily": "Quicksand-Regular",
                     "fontSize": 15,
                   }
                 }
@@ -1636,7 +1639,7 @@ exports[`Storyshots FormRow Assembled 1`] = `
               style={
                 Object {
                   "borderBottomWidth": 0,
-                  "borderColor": "#e6e6e6",
+                  "borderColor": "#d2d2d2",
                   "borderWidth": 1,
                   "padding": 8,
                 }
@@ -1646,7 +1649,7 @@ exports[`Storyshots FormRow Assembled 1`] = `
                 style={
                   Object {
                     "color": "#1d1d1d",
-                    "fontFamily": "Helvetica",
+                    "fontFamily": "Quicksand-Regular",
                     "fontSize": 9,
                   }
                 }
@@ -1659,7 +1662,7 @@ exports[`Storyshots FormRow Assembled 1`] = `
                 Object {
                   "borderBottomLeftRadius": 8,
                   "borderBottomRightRadius": 8,
-                  "borderColor": "#e6e6e6",
+                  "borderColor": "#d2d2d2",
                   "borderWidth": 1,
                   "padding": 8,
                 }
@@ -1669,7 +1672,7 @@ exports[`Storyshots FormRow Assembled 1`] = `
                 style={
                   Object {
                     "color": "#1d1d1d",
-                    "fontFamily": "Helvetica",
+                    "fontFamily": "Quicksand-Regular",
                     "fontSize": 15,
                   }
                 }
@@ -1770,7 +1773,7 @@ exports[`Storyshots FormRow Assembled 1`] = `
                 style={
                   Object {
                     "color": "#1d1d1d",
-                    "fontFamily": "Helvetica",
+                    "fontFamily": "Quicksand-Regular",
                     "fontSize": 15,
                   }
                 }
@@ -1781,7 +1784,7 @@ exports[`Storyshots FormRow Assembled 1`] = `
             <View
               style={
                 Object {
-                  "borderColor": "#e6e6e6",
+                  "borderColor": "#d2d2d2",
                   "borderRadius": 8,
                   "borderWidth": 1,
                   "padding": 8,
@@ -1792,7 +1795,7 @@ exports[`Storyshots FormRow Assembled 1`] = `
                 style={
                   Object {
                     "color": "#1d1d1d",
-                    "fontFamily": "Helvetica",
+                    "fontFamily": "Quicksand-Regular",
                     "fontSize": 15,
                   }
                 }
@@ -1804,7 +1807,7 @@ exports[`Storyshots FormRow Assembled 1`] = `
               style={
                 Object {
                   "backgroundColor": "#ffe",
-                  "borderColor": "#e6e6e6",
+                  "borderColor": "#d2d2d2",
                   "borderWidth": 1,
                   "marginTop": 10,
                   "padding": 8,
@@ -1815,7 +1818,7 @@ exports[`Storyshots FormRow Assembled 1`] = `
                 style={
                   Object {
                     "color": "#1d1d1d",
-                    "fontFamily": "Helvetica",
+                    "fontFamily": "Quicksand-Regular",
                     "fontSize": 15,
                   }
                 }
@@ -1937,7 +1940,7 @@ exports[`Storyshots FormRow Presets 1`] = `
               style={
                 Object {
                   "borderBottomWidth": 0,
-                  "borderColor": "#e6e6e6",
+                  "borderColor": "#d2d2d2",
                   "borderTopLeftRadius": 8,
                   "borderTopRightRadius": 8,
                   "borderWidth": 1,
@@ -1949,7 +1952,7 @@ exports[`Storyshots FormRow Presets 1`] = `
                 style={
                   Object {
                     "color": "#1d1d1d",
-                    "fontFamily": "Helvetica",
+                    "fontFamily": "Quicksand-Regular",
                     "fontSize": 15,
                   }
                 }
@@ -1960,7 +1963,7 @@ exports[`Storyshots FormRow Presets 1`] = `
                 style={
                   Object {
                     "color": "#1d1d1d",
-                    "fontFamily": "Helvetica",
+                    "fontFamily": "Quicksand-Regular",
                     "fontSize": 15,
                   }
                 }
@@ -2052,7 +2055,7 @@ exports[`Storyshots FormRow Presets 1`] = `
               style={
                 Object {
                   "borderBottomWidth": 0,
-                  "borderColor": "#e6e6e6",
+                  "borderColor": "#d2d2d2",
                   "borderWidth": 1,
                   "padding": 8,
                 }
@@ -2062,7 +2065,7 @@ exports[`Storyshots FormRow Presets 1`] = `
                 style={
                   Object {
                     "color": "#1d1d1d",
-                    "fontFamily": "Helvetica",
+                    "fontFamily": "Quicksand-Regular",
                     "fontSize": 15,
                   }
                 }
@@ -2155,7 +2158,7 @@ exports[`Storyshots FormRow Presets 1`] = `
                 Object {
                   "borderBottomLeftRadius": 8,
                   "borderBottomRightRadius": 8,
-                  "borderColor": "#e6e6e6",
+                  "borderColor": "#d2d2d2",
                   "borderWidth": 1,
                   "padding": 8,
                 }
@@ -2165,7 +2168,7 @@ exports[`Storyshots FormRow Presets 1`] = `
                 style={
                   Object {
                     "color": "#1d1d1d",
-                    "fontFamily": "Helvetica",
+                    "fontFamily": "Quicksand-Regular",
                     "fontSize": 15,
                   }
                 }
@@ -2176,7 +2179,7 @@ exports[`Storyshots FormRow Presets 1`] = `
                 style={
                   Object {
                     "color": "#1d1d1d",
-                    "fontFamily": "Helvetica",
+                    "fontFamily": "Quicksand-Regular",
                     "fontSize": 15,
                   }
                 }
@@ -2267,7 +2270,7 @@ exports[`Storyshots FormRow Presets 1`] = `
             <View
               style={
                 Object {
-                  "borderColor": "#e6e6e6",
+                  "borderColor": "#d2d2d2",
                   "borderRadius": 8,
                   "borderWidth": 1,
                   "padding": 8,
@@ -2278,7 +2281,7 @@ exports[`Storyshots FormRow Presets 1`] = `
                 style={
                   Object {
                     "color": "#1d1d1d",
-                    "fontFamily": "Helvetica",
+                    "fontFamily": "Quicksand-Regular",
                     "fontSize": 15,
                   }
                 }
@@ -2369,7 +2372,7 @@ exports[`Storyshots FormRow Presets 1`] = `
             <View
               style={
                 Object {
-                  "borderColor": "#e6e6e6",
+                  "borderColor": "#d2d2d2",
                   "borderWidth": 1,
                   "padding": 8,
                 }
@@ -2379,7 +2382,7 @@ exports[`Storyshots FormRow Presets 1`] = `
                 style={
                   Object {
                     "color": "#1d1d1d",
-                    "fontFamily": "Helvetica",
+                    "fontFamily": "Quicksand-Regular",
                     "fontSize": 15,
                   }
                 }
@@ -2480,7 +2483,7 @@ exports[`Storyshots FormRow Presets 1`] = `
                 style={
                   Object {
                     "color": "#1d1d1d",
-                    "fontFamily": "Helvetica",
+                    "fontFamily": "Quicksand-Regular",
                     "fontSize": 15,
                   }
                 }
@@ -2611,7 +2614,7 @@ exports[`Storyshots FormRow Styling 1`] = `
                 style={
                   Object {
                     "color": "#1d1d1d",
-                    "fontFamily": "Helvetica",
+                    "fontFamily": "Quicksand-Regular",
                     "fontSize": 15,
                   }
                 }
@@ -2768,7 +2771,7 @@ exports[`Storyshots Header Behavior 1`] = `
                     style={
                       Object {
                         "color": "#1d1d1d",
-                        "fontFamily": "Helvetica",
+                        "fontFamily": "Quicksand-Regular",
                         "fontSize": 12,
                         "fontWeight": "bold",
                         "letterSpacing": 1.5,
@@ -2934,7 +2937,7 @@ exports[`Storyshots Header Behavior 1`] = `
                     style={
                       Object {
                         "color": "#1d1d1d",
-                        "fontFamily": "Helvetica",
+                        "fontFamily": "Quicksand-Regular",
                         "fontSize": 12,
                         "fontWeight": "bold",
                         "letterSpacing": 1.5,
@@ -3074,7 +3077,7 @@ exports[`Storyshots Header Behavior 1`] = `
                     style={
                       Object {
                         "color": "#1d1d1d",
-                        "fontFamily": "Helvetica",
+                        "fontFamily": "Quicksand-Regular",
                         "fontSize": 12,
                         "fontWeight": "bold",
                         "letterSpacing": 1.5,
@@ -3453,7 +3456,7 @@ exports[`Storyshots Switch Behaviour 1`] = `
               onStartShouldSetResponder={[Function]}
               style={
                 Object {
-                  "backgroundColor": "#e6e6e6",
+                  "backgroundColor": "#f8f8f8",
                   "borderColor": "rgba(0, 0, 0, 0.1)",
                   "borderRadius": 22.5,
                   "borderWidth": 1,
@@ -3465,7 +3468,7 @@ exports[`Storyshots Switch Behaviour 1`] = `
               <View
                 style={
                   Object {
-                    "backgroundColor": "#E5E5E5",
+                    "backgroundColor": "#f8f8f8",
                     "borderColor": "rgba(0, 0, 0, 0.1)",
                     "borderRadius": 15,
                     "borderWidth": 1,
@@ -3581,8 +3584,8 @@ exports[`Storyshots Switch Behaviour 1`] = `
               onStartShouldSetResponder={[Function]}
               style={
                 Object {
-                  "backgroundColor": "#093B58",
-                  "borderColor": "#093B58",
+                  "backgroundColor": "#1B70A4",
+                  "borderColor": "#1B70A4",
                   "borderRadius": 22.5,
                   "borderWidth": 1,
                   "height": 32,
@@ -3593,7 +3596,7 @@ exports[`Storyshots Switch Behaviour 1`] = `
               <View
                 style={
                   Object {
-                    "backgroundColor": "#E5E5E5",
+                    "backgroundColor": "#f8f8f8",
                     "borderColor": "rgba(0, 0, 0, 0.1)",
                     "borderRadius": 15,
                     "borderWidth": 1,
@@ -3709,7 +3712,7 @@ exports[`Storyshots Switch Behaviour 1`] = `
               onStartShouldSetResponder={[Function]}
               style={
                 Object {
-                  "backgroundColor": "#e6e6e6",
+                  "backgroundColor": "#f8f8f8",
                   "borderColor": "rgba(0, 0, 0, 0.1)",
                   "borderRadius": 22.5,
                   "borderWidth": 1,
@@ -3721,7 +3724,7 @@ exports[`Storyshots Switch Behaviour 1`] = `
               <View
                 style={
                   Object {
-                    "backgroundColor": "#E5E5E5",
+                    "backgroundColor": "#f8f8f8",
                     "borderColor": "rgba(0, 0, 0, 0.1)",
                     "borderRadius": 15,
                     "borderWidth": 1,
@@ -4157,7 +4160,7 @@ exports[`Storyshots Text Passing Content 1`] = `
                 style={
                   Object {
                     "color": "#1d1d1d",
-                    "fontFamily": "Helvetica",
+                    "fontFamily": "Quicksand-Regular",
                     "fontSize": 15,
                   }
                 }
@@ -4257,7 +4260,7 @@ exports[`Storyshots Text Passing Content 1`] = `
                 style={
                   Object {
                     "color": "#1d1d1d",
-                    "fontFamily": "Helvetica",
+                    "fontFamily": "Quicksand-Regular",
                     "fontSize": 15,
                   }
                 }
@@ -4268,7 +4271,7 @@ exports[`Storyshots Text Passing Content 1`] = `
                 style={
                   Object {
                     "color": "#1d1d1d",
-                    "fontFamily": "Helvetica",
+                    "fontFamily": "Quicksand-Regular",
                     "fontSize": 15,
                   }
                 }
@@ -4368,7 +4371,7 @@ exports[`Storyshots Text Passing Content 1`] = `
                 style={
                   Object {
                     "color": "#1d1d1d",
-                    "fontFamily": "Helvetica",
+                    "fontFamily": "Quicksand-Regular",
                     "fontSize": 15,
                   }
                 }
@@ -4468,7 +4471,7 @@ exports[`Storyshots Text Passing Content 1`] = `
                 style={
                   Object {
                     "color": "#1d1d1d",
-                    "fontFamily": "Helvetica",
+                    "fontFamily": "Quicksand-Regular",
                     "fontSize": 15,
                   }
                 }
@@ -4479,7 +4482,7 @@ exports[`Storyshots Text Passing Content 1`] = `
                   style={
                     Object {
                       "color": "#1d1d1d",
-                      "fontFamily": "Helvetica",
+                      "fontFamily": "Quicksand-Bold",
                       "fontSize": 15,
                       "fontWeight": "bold",
                     }
@@ -4612,7 +4615,7 @@ exports[`Storyshots Text Style Presets 1`] = `
                 style={
                   Object {
                     "color": "#1d1d1d",
-                    "fontFamily": "Helvetica",
+                    "fontFamily": "Quicksand-Regular",
                     "fontSize": 15,
                   }
                 }
@@ -4623,7 +4626,7 @@ exports[`Storyshots Text Style Presets 1`] = `
                 style={
                   Object {
                     "color": "#1d1d1d",
-                    "fontFamily": "Helvetica",
+                    "fontFamily": "Quicksand-Regular",
                     "fontSize": 15,
                     "paddingTop": 10,
                   }
@@ -4641,7 +4644,7 @@ exports[`Storyshots Text Style Presets 1`] = `
                 style={
                   Object {
                     "color": "#1d1d1d",
-                    "fontFamily": "Helvetica",
+                    "fontFamily": "Quicksand-Regular",
                     "fontSize": 15,
                     "paddingTop": 10,
                   }
@@ -4653,7 +4656,7 @@ exports[`Storyshots Text Style Presets 1`] = `
                 style={
                   Object {
                     "color": "#1d1d1d",
-                    "fontFamily": "Helvetica",
+                    "fontFamily": "Quicksand-Regular",
                     "fontSize": 15,
                   }
                 }
@@ -4753,7 +4756,7 @@ exports[`Storyshots Text Style Presets 1`] = `
                 style={
                   Object {
                     "color": "#1d1d1d",
-                    "fontFamily": "Helvetica",
+                    "fontFamily": "Quicksand-Bold",
                     "fontSize": 15,
                     "fontWeight": "bold",
                   }
@@ -4854,7 +4857,7 @@ exports[`Storyshots Text Style Presets 1`] = `
                 style={
                   Object {
                     "color": "#1d1d1d",
-                    "fontFamily": "Helvetica",
+                    "fontFamily": "Quicksand-Regular",
                     "fontSize": 24,
                     "fontWeight": "bold",
                   }
@@ -4990,7 +4993,7 @@ exports[`Storyshots Text Styling 1`] = `
                 style={
                   Object {
                     "color": "#1d1d1d",
-                    "fontFamily": "Helvetica",
+                    "fontFamily": "Quicksand-Regular",
                     "fontSize": 15,
                   }
                 }
@@ -5001,7 +5004,7 @@ exports[`Storyshots Text Styling 1`] = `
                   style={
                     Object {
                       "color": "#1d1d1d",
-                      "fontFamily": "Helvetica",
+                      "fontFamily": "Quicksand-Bold",
                       "fontSize": 15,
                       "fontWeight": "bold",
                     }
@@ -5129,37 +5132,54 @@ exports[`Storyshots TextField Labelling 1`] = `
                 }
               }
             >
-              <Text
-                style={
-                  Object {
-                    "color": "#939AA4",
-                    "fontFamily": "Helvetica",
-                    "fontSize": 13,
-                  }
-                }
-              >
-                Name
-              </Text>
               <TextInput
                 allowFontScaling={true}
                 onChangeText={[Function]}
                 placeholder="omg your name"
-                placeholderTextColor="#939AA4"
+                placeholderTextColor="#949494"
                 rejectResponderTermination={true}
                 style={
                   Object {
                     "backgroundColor": "rgba(0, 0, 0, 0)",
-                    "borderBottomColor": "#093B58",
-                    "borderBottomWidth": 1,
+                    "borderColor": "#1d1d1d",
+                    "borderRadius": 8,
+                    "borderWidth": 1,
                     "color": "#1d1d1d",
-                    "fontFamily": "Helvetica",
-                    "fontSize": 18,
+                    "fontFamily": "Quicksand-Regular",
+                    "fontSize": 16,
                     "minHeight": 44,
+                    "paddingHorizontal": 16,
+                    "paddingTop": 16,
+                    "paddingVertical": 16,
                   }
                 }
                 underlineColorAndroid="rgba(0, 0, 0, 0)"
                 value=""
               />
+              <View
+                style={
+                  Object {
+                    "left": 15,
+                    "position": "absolute",
+                    "top": 4,
+                  }
+                }
+              >
+                <Text
+                  style={
+                    Object {
+                      "backgroundColor": "#f8f8f8",
+                      "color": "#1d1d1d",
+                      "fontFamily": "Quicksand-SemiBold",
+                      "fontSize": 14,
+                      "paddingHorizontal": 4,
+                      "textTransform": "uppercase",
+                    }
+                  }
+                >
+                  Name
+                </Text>
+              </View>
             </View>
           </View>
         </View>
@@ -5248,37 +5268,54 @@ exports[`Storyshots TextField Labelling 1`] = `
                 }
               }
             >
-              <Text
-                style={
-                  Object {
-                    "color": "#939AA4",
-                    "fontFamily": "Helvetica",
-                    "fontSize": 13,
-                  }
-                }
-              >
-                Field
-              </Text>
               <TextInput
                 allowFontScaling={true}
                 onChangeText={[Function]}
                 placeholder="Placeholder"
-                placeholderTextColor="#939AA4"
+                placeholderTextColor="#949494"
                 rejectResponderTermination={true}
                 style={
                   Object {
                     "backgroundColor": "rgba(0, 0, 0, 0)",
-                    "borderBottomColor": "#093B58",
-                    "borderBottomWidth": 1,
+                    "borderColor": "#1d1d1d",
+                    "borderRadius": 8,
+                    "borderWidth": 1,
                     "color": "#1d1d1d",
-                    "fontFamily": "Helvetica",
-                    "fontSize": 18,
+                    "fontFamily": "Quicksand-Regular",
+                    "fontSize": 16,
                     "minHeight": 44,
+                    "paddingHorizontal": 16,
+                    "paddingTop": 16,
+                    "paddingVertical": 16,
                   }
                 }
                 underlineColorAndroid="rgba(0, 0, 0, 0)"
                 value=""
               />
+              <View
+                style={
+                  Object {
+                    "left": 15,
+                    "position": "absolute",
+                    "top": 4,
+                  }
+                }
+              >
+                <Text
+                  style={
+                    Object {
+                      "backgroundColor": "#f8f8f8",
+                      "color": "#1d1d1d",
+                      "fontFamily": "Quicksand-SemiBold",
+                      "fontSize": 14,
+                      "paddingHorizontal": 4,
+                      "textTransform": "uppercase",
+                    }
+                  }
+                >
+                  Field
+                </Text>
+              </View>
             </View>
           </View>
         </View>
@@ -5386,47 +5423,61 @@ exports[`Storyshots TextField Ref Forwarding 1`] = `
                 }
               }
             >
-              <Text
-                style={
-                  Object {
-                    "color": "#939AA4",
-                    "fontFamily": "Helvetica",
-                    "fontSize": 13,
-                  }
-                }
-              >
-                Name
-              </Text>
               <TextInput
                 allowFontScaling={true}
                 onChangeText={[Function]}
                 onFocus={[Function]}
-                placeholderTextColor="#939AA4"
+                placeholderTextColor="#949494"
                 rejectResponderTermination={true}
                 style={
                   Object {
                     "backgroundColor": "rebeccapurple",
-                    "borderBottomColor": "#093B58",
-                    "borderBottomWidth": 1,
                     "borderColor": "hotpink",
                     "borderRadius": 4,
                     "borderWidth": 10,
                     "color": "white",
-                    "fontFamily": "Helvetica",
-                    "fontSize": 18,
+                    "fontFamily": "Quicksand-Regular",
+                    "fontSize": 16,
                     "minHeight": 44,
                     "padding": 40,
+                    "paddingHorizontal": 16,
+                    "paddingTop": 16,
+                    "paddingVertical": 16,
                   }
                 }
                 underlineColorAndroid="rgba(0, 0, 0, 0)"
                 value="fancy colour"
               />
+              <View
+                style={
+                  Object {
+                    "left": 15,
+                    "position": "absolute",
+                    "top": 4,
+                  }
+                }
+              >
+                <Text
+                  style={
+                    Object {
+                      "backgroundColor": "#f8f8f8",
+                      "color": "#1d1d1d",
+                      "fontFamily": "Quicksand-SemiBold",
+                      "fontSize": 14,
+                      "paddingHorizontal": 4,
+                      "textTransform": "uppercase",
+                    }
+                  }
+                >
+                  Name
+                </Text>
+              </View>
             </View>
             <Text
               style={
                 Object {
-                  "color": "#939AA4",
-                  "fontFamily": "Helvetica",
+                  "color": "#d2d2d2",
+                  "fontFamily": "Quicksand-Regular",
                   "fontSize": 9,
                 }
               }
@@ -5552,36 +5603,53 @@ exports[`Storyshots TextField Style Overrides 1`] = `
                 }
               }
             >
-              <Text
-                style={
-                  Object {
-                    "color": "#939AA4",
-                    "fontFamily": "Helvetica",
-                    "fontSize": 13,
-                  }
-                }
-              >
-                First Name
-              </Text>
               <TextInput
                 allowFontScaling={true}
                 onChangeText={[Function]}
-                placeholderTextColor="#939AA4"
+                placeholderTextColor="#949494"
                 rejectResponderTermination={true}
                 style={
                   Object {
                     "backgroundColor": "rgba(0, 0, 0, 0)",
-                    "borderBottomColor": "#093B58",
-                    "borderBottomWidth": 1,
+                    "borderColor": "#1d1d1d",
+                    "borderRadius": 8,
+                    "borderWidth": 1,
                     "color": "#1d1d1d",
-                    "fontFamily": "Helvetica",
-                    "fontSize": 18,
+                    "fontFamily": "Quicksand-Regular",
+                    "fontSize": 16,
                     "minHeight": 44,
+                    "paddingHorizontal": 16,
+                    "paddingTop": 16,
+                    "paddingVertical": 16,
                   }
                 }
                 underlineColorAndroid="rgba(0, 0, 0, 0)"
                 value="Inigo"
               />
+              <View
+                style={
+                  Object {
+                    "left": 15,
+                    "position": "absolute",
+                    "top": 4,
+                  }
+                }
+              >
+                <Text
+                  style={
+                    Object {
+                      "backgroundColor": "#f8f8f8",
+                      "color": "#1d1d1d",
+                      "fontFamily": "Quicksand-SemiBold",
+                      "fontSize": 14,
+                      "paddingHorizontal": 4,
+                      "textTransform": "uppercase",
+                    }
+                  }
+                >
+                  First Name
+                </Text>
+              </View>
             </View>
             <View
               style={
@@ -5591,36 +5659,53 @@ exports[`Storyshots TextField Style Overrides 1`] = `
                 }
               }
             >
-              <Text
-                style={
-                  Object {
-                    "color": "#939AA4",
-                    "fontFamily": "Helvetica",
-                    "fontSize": 13,
-                  }
-                }
-              >
-                Last Name
-              </Text>
               <TextInput
                 allowFontScaling={true}
                 onChangeText={[Function]}
-                placeholderTextColor="#939AA4"
+                placeholderTextColor="#949494"
                 rejectResponderTermination={true}
                 style={
                   Object {
                     "backgroundColor": "rgba(0, 0, 0, 0)",
-                    "borderBottomColor": "#093B58",
-                    "borderBottomWidth": 1,
+                    "borderColor": "#1d1d1d",
+                    "borderRadius": 8,
+                    "borderWidth": 1,
                     "color": "#1d1d1d",
-                    "fontFamily": "Helvetica",
-                    "fontSize": 18,
+                    "fontFamily": "Quicksand-Regular",
+                    "fontSize": 16,
                     "minHeight": 44,
+                    "paddingHorizontal": 16,
+                    "paddingTop": 16,
+                    "paddingVertical": 16,
                   }
                 }
                 underlineColorAndroid="rgba(0, 0, 0, 0)"
                 value="Montoya"
               />
+              <View
+                style={
+                  Object {
+                    "left": 15,
+                    "position": "absolute",
+                    "top": 4,
+                  }
+                }
+              >
+                <Text
+                  style={
+                    Object {
+                      "backgroundColor": "#f8f8f8",
+                      "color": "#1d1d1d",
+                      "fontFamily": "Quicksand-SemiBold",
+                      "fontSize": 14,
+                      "paddingHorizontal": 4,
+                      "textTransform": "uppercase",
+                    }
+                  }
+                >
+                  Last Name
+                </Text>
+              </View>
             </View>
           </View>
         </View>
@@ -5709,46 +5794,60 @@ exports[`Storyshots TextField Style Overrides 1`] = `
                 }
               }
             >
-              <Text
-                style={
-                  Object {
-                    "color": "#939AA4",
-                    "fontFamily": "Helvetica",
-                    "fontSize": 13,
-                  }
-                }
-              >
-                Name
-              </Text>
               <TextInput
                 allowFontScaling={true}
                 onChangeText={[Function]}
-                placeholderTextColor="#939AA4"
+                placeholderTextColor="#949494"
                 rejectResponderTermination={true}
                 style={
                   Object {
                     "backgroundColor": "rebeccapurple",
-                    "borderBottomColor": "#093B58",
-                    "borderBottomWidth": 1,
                     "borderColor": "hotpink",
                     "borderRadius": 4,
                     "borderWidth": 10,
                     "color": "white",
-                    "fontFamily": "Helvetica",
-                    "fontSize": 18,
+                    "fontFamily": "Quicksand-Regular",
+                    "fontSize": 16,
                     "minHeight": 44,
                     "padding": 40,
+                    "paddingHorizontal": 16,
+                    "paddingTop": 16,
+                    "paddingVertical": 16,
                   }
                 }
                 underlineColorAndroid="rgba(0, 0, 0, 0)"
                 value="fancy colour"
               />
+              <View
+                style={
+                  Object {
+                    "left": 15,
+                    "position": "absolute",
+                    "top": 4,
+                  }
+                }
+              >
+                <Text
+                  style={
+                    Object {
+                      "backgroundColor": "#f8f8f8",
+                      "color": "#1d1d1d",
+                      "fontFamily": "Quicksand-SemiBold",
+                      "fontSize": 14,
+                      "paddingHorizontal": 4,
+                      "textTransform": "uppercase",
+                    }
+                  }
+                >
+                  Name
+                </Text>
+              </View>
             </View>
             <Text
               style={
                 Object {
-                  "color": "#939AA4",
-                  "fontFamily": "Helvetica",
+                  "color": "#d2d2d2",
+                  "fontFamily": "Quicksand-Regular",
                   "fontSize": 9,
                 }
               }
@@ -5844,46 +5943,60 @@ exports[`Storyshots TextField Style Overrides 1`] = `
                 }
               }
             >
-              <Text
-                style={
-                  Object {
-                    "color": "#939AA4",
-                    "fontFamily": "Helvetica",
-                    "fontSize": 13,
-                  }
-                }
-              >
-                Name
-              </Text>
               <TextInput
                 allowFontScaling={true}
                 onChangeText={[Function]}
-                placeholderTextColor="#939AA4"
+                placeholderTextColor="#949494"
                 rejectResponderTermination={true}
                 style={
                   Object {
                     "backgroundColor": "rebeccapurple",
-                    "borderBottomColor": "#093B58",
-                    "borderBottomWidth": 1,
                     "borderColor": "#7fff00",
                     "borderRadius": 4,
                     "borderWidth": 10,
                     "color": "white",
-                    "fontFamily": "Helvetica",
-                    "fontSize": 18,
+                    "fontFamily": "Quicksand-Regular",
+                    "fontSize": 16,
                     "minHeight": 44,
                     "padding": 40,
+                    "paddingHorizontal": 16,
+                    "paddingTop": 16,
+                    "paddingVertical": 16,
                   }
                 }
                 underlineColorAndroid="rgba(0, 0, 0, 0)"
                 value="fancy colour"
               />
+              <View
+                style={
+                  Object {
+                    "left": 15,
+                    "position": "absolute",
+                    "top": 4,
+                  }
+                }
+              >
+                <Text
+                  style={
+                    Object {
+                      "backgroundColor": "#f8f8f8",
+                      "color": "#1d1d1d",
+                      "fontFamily": "Quicksand-SemiBold",
+                      "fontSize": 14,
+                      "paddingHorizontal": 4,
+                      "textTransform": "uppercase",
+                    }
+                  }
+                >
+                  Name
+                </Text>
+              </View>
             </View>
             <Text
               style={
                 Object {
-                  "color": "#939AA4",
-                  "fontFamily": "Helvetica",
+                  "color": "#d2d2d2",
+                  "fontFamily": "Quicksand-Regular",
                   "fontSize": 9,
                 }
               }
