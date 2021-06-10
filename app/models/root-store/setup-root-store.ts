@@ -30,10 +30,12 @@ export async function setupRootStore() {
 
   // prepare the environment that will be associated with the RootStore.
   const env = await createEnvironment()
+  // Provide a method to get a reference to the root store within the closure
+  env.getStore = () => rootStore
   try {
     // load data from storage
     data = (await storage.load(ROOT_STATE_STORAGE_KEY)) || {}
-    console.log("Loading data from async storage:", data)
+    // console.log("[setup-root-store] Loading data from async storage:", data)
     rootStore = RootStoreModel.create(data, env)
   } catch (e) {
     // if there's any problems loading, then let's at least fallback to an empty state

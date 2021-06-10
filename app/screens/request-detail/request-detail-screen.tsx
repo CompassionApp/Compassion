@@ -51,8 +51,8 @@ export const RequestDetailScreen = observer(function RequestDetailScreen() {
   const { currentRequest } = requestStore
 
   const isRequestCanceled =
-    currentRequest.status === RequestStatusEnum.CANCELED_BY_CHAPERONE ||
-    currentRequest.status === RequestStatusEnum.CANCELED_BY_REQUESTER
+    currentRequest?.status === RequestStatusEnum.CANCELED_BY_CHAPERONE ||
+    currentRequest?.status === RequestStatusEnum.CANCELED_BY_REQUESTER
 
   const navigation = useNavigation()
   const navigateBack = () => navigation.goBack()
@@ -71,7 +71,7 @@ export const RequestDetailScreen = observer(function RequestDetailScreen() {
     )
   }
   const handlePressDelete = () => {
-    requestStore.deleteRequest(currentRequest.id)
+    requestStore.rescheduleRequest(currentRequest.id)
     navigateBack()
   }
 

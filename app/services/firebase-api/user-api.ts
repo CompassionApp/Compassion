@@ -15,7 +15,6 @@ export class UserApi {
    */
   async saveUserProfile(key: string, profile: UserProfileSnapshot): Promise<SaveUserProfileResult> {
     try {
-      // const batch = this.firebase.firestore.batch()
       await this.firebase.firestore.collection("users").doc(key).set(profile)
 
       return { kind: "ok" }
