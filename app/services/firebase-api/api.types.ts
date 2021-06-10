@@ -1,5 +1,6 @@
-import { RequestSnapshot, RequestStoreSnapshot } from "../../models"
-import { GeneralApiProblem } from "./api-problem"
+import firebase from "firebase"
+import { RequestSnapshot, UserProfileSnapshot } from "../../models"
+import { FirebaseAuthApiProblem, GeneralApiProblem } from "./api-problem"
 
 /**
  * TODO: These are examples from the original ./app/services/api directory. Remove when ready
@@ -13,8 +14,15 @@ export interface User {
 export interface AuthContext {
   userId: string
 }
-export type GetUsersResult = { kind: "ok"; users: User[] } | GeneralApiProblem
-export type GetUserResult = { kind: "ok"; user: User } | GeneralApiProblem
-export type CreateRequestResult = { kind: "ok"; request: RequestSnapshot } | GeneralApiProblem
-export type GetRequestsResult = { kind: "ok"; requests: RequestStoreSnapshot } | GeneralApiProblem
+export type GetUserProfileResult = { kind: "ok"; profile: UserProfileSnapshot } | GeneralApiProblem
+export type SaveUserProfileResult = { kind: "ok" } | GeneralApiProblem
+export type CreateRequestResult = { kind: "ok" } | GeneralApiProblem
+export type GetRequestsResult = { kind: "ok"; requests: RequestSnapshot[] } | GeneralApiProblem
 export type DeleteRequestResult = { kind: "ok" } | GeneralApiProblem
+export type SignInResult =
+  | { kind: "ok"; user: firebase.auth.UserCredential }
+  | FirebaseAuthApiProblem
+export type SignOutResult = { kind: "ok" } | FirebaseAuthApiProblem
+export type CreateUserResult =
+  | { kind: "ok"; user: firebase.auth.UserCredential }
+  | FirebaseAuthApiProblem

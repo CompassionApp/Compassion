@@ -51,6 +51,9 @@ export class FirebaseApi {
     }
 
     this.firestore = firebase.firestore(this.app)
+
     this.authentication = firebase.auth()
+    // For reCAPTCHA/SMS verification:
+    this.authentication.languageCode = "en"
   }
 }

@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite"
 import { View, ViewStyle } from "react-native"
 import { Break, Button, Header, Icon, Screen, Text } from "../../components"
 import { useNavigation } from "@react-navigation/native"
-// import { useStores } from "../../models"
+import { useStores } from "../../models"
 import { color, globalStyles, spacing } from "../../theme"
 import styled from "styled-components/native"
 
@@ -33,11 +33,16 @@ const ICON_SIZE = {
 }
 
 export const MenuScreen = observer(function MenuScreen() {
-  // const { someStore, anotherStore } = useStores()
-
+  const { authStore } = useStores()
+  const profile = authStore.user?.profile
   const navigation = useNavigation()
   const navigateBack = () => navigation.goBack()
   const navigateLogin = () => navigation.navigate("welcome")
+
+  const handlePressSignOut = async () => {
+    await authStore.signOut()
+    navigateLogin()
+  }
 
   return (
     <View testID="MenuScreen" style={globalStyles.full}>
@@ -48,7 +53,10 @@ export const MenuScreen = observer(function MenuScreen() {
           onLeftPress={navigateBack}
           style={globalStyles.header}
         />
-        <Text preset={["header", "center", "bold"]} text="Mary Requester" />
+        <Text
+          preset={["header", "center", "bold"]}
+          text={`${profile?.firstName ?? "Unknown"} ${profile?.lastName ?? ""}`}
+        />
         <Break />
         <Button preset="ghost" text="Edit profile" />
         <MenuList>
@@ -72,7 +80,7 @@ export const MenuScreen = observer(function MenuScreen() {
             <Icon icon="home" style={ICON_SIZE} />
             <Text preset={[]} tx="menuScreen.menuButtonAskQuestion" />
           </MenuListItem>
-          <MenuListItem onPress={navigateLogin}>
+          <MenuListItem onPress={handlePressSignOut}>
             <Icon icon="home" style={ICON_SIZE} />
             <Text preset={[]} tx="menuScreen.menuButtonSignOut" />
           </MenuListItem>

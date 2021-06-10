@@ -20,13 +20,14 @@ export const NewRequestScreen = observer(function NewRequestScreen() {
   const navigateBack = () => navigation.goBack()
   const navigateNext = () => navigation.navigate("newRequest", { screen: "dateSelect" })
 
-  const { newRequestStore } = useStores()
+  const { authStore, newRequestStore } = useStores()
 
   const handlePressNewRequest = () => {
     // Create an empty request object
     const _request = RequestModel.create({
       id: generateUuid(),
       status: RequestStatusEnum.REQUESTED,
+      requestedBy: authStore.user.email,
       createdAt: new Date().toUTCString(),
       updatedAt: new Date().toUTCString(),
       // Default request date to Jan 1, 2021

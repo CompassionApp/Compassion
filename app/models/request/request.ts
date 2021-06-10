@@ -8,7 +8,8 @@ export const RequestModel = types
   .model("Request")
   .props({
     id: types.identifier,
-    createdAt: types.maybe(types.string),
+    requestedBy: types.string,
+    createdAt: types.string,
     requestedAt: types.maybe(types.string),
     updatedAt: types.maybe(types.string),
     meetAddress: types.maybe(types.string),

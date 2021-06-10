@@ -3,11 +3,8 @@ import { observer } from "mobx-react-lite"
 import { View, ViewStyle } from "react-native"
 import { Button, Header, Screen, Text } from "../../components"
 import { useNavigation } from "@react-navigation/native"
-import { RequestModel, useStores } from "../../models"
+import { useStores } from "../../models"
 import { color, globalStyles } from "../../theme"
-import { RequestStatusEnum, RequestTypeEnum } from "../../types"
-import { generateUuid } from "../../utils/uuid"
-import { getSnapshot } from "mobx-state-tree"
 import { Break } from "../../components/break/break"
 import { format } from "date-fns"
 import { TIME_RANGE_FORMAT, TITLE_DATE_FORMAT } from "../../constants/date-formats"
@@ -23,8 +20,6 @@ const ADDRESS_TEXT_OVERRIDE = {
 }
 
 export const NewRequestReviewScreen = observer(function NewRequestReviewScreen() {
-  // Pull in one of our MST stores
-
   const { newRequestStore, requestStore } = useStores()
   const { request } = newRequestStore
   const navigation = useNavigation()
@@ -32,23 +27,8 @@ export const NewRequestReviewScreen = observer(function NewRequestReviewScreen()
   const navigateNext = () => navigation.navigate("home")
 
   const handlePressSubmit = () => {
-    const _request = RequestModel.create({
-      id: generateUuid(),
-      createdAt: new Date().toUTCString(),
-      requestedAt: new Date().toUTCString(),
-      updatedAt: new Date().toUTCString(),
-      meetAddress: "1234 Main, Oakland, CA",
-      destinationAddress: "5 Old Town Road, Oakland, CA",
-      status: RequestStatusEnum.REQUESTED,
-      type: RequestTypeEnum.GROCERY,
-      chaperones: [],
-      requestStatusReason: "",
-      otherComments: "",
-    })
-    console.log("Staged mock request:", getSnapshot(_request))
     newRequestStore.free(request)
     requestStore.createRequest(request)
-    // requestStore.createRequest(_request)
     navigateNext()
   }
 

@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import { View, ViewStyle, TextStyle, SafeAreaView, Image, ImageStyle } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 import { observer } from "mobx-react-lite"
 import { Button, FormRow, Header, Screen, Text, TextField } from "../../components"
 import { color, globalStyles, spacing, typography } from "../../theme"
 import { useStores } from "../../models"
+import { roleTypeToScreenMap } from "../../utils/navigation"
 export const logo = require("./logo.png")
 
 const ROOT: ViewStyle = {
@@ -54,54 +55,67 @@ const ROW: ViewStyle = {
   justifyContent: "space-between",
 }
 
+/** Remove these later when not launching */
+const DEFAULT_USERNAME = "app@compassioninoakland.org"
+const DEFAULT_PASSWORD = "testing"
+
 export const WelcomeScreen = observer(function WelcomeScreen() {
   const navigation = useNavigation()
   const navigateSignUp = () => navigation.navigate("signup")
-  const navigateRoleSelect = () => navigation.navigate("roleSelect")
   const navigatePermissions = () => navigation.navigate("permissions")
 
-  const userID = "test-user-id"
+  const { authStore, clearStorage } = useStores()
+  const [userEmail, setUserEmail] = useState<string>(DEFAULT_USERNAME)
+  const [userPassword, setUserPassword] = useState<string>(DEFAULT_PASSWORD)
+  const [loginErrorMessage, setLoginErrorMessage] = useState<string>("")
+  /** Prevents the user from spamming log in while a request is pending */
+  const [loginInProgress, setLoginInProgress] = useState<boolean>(false)
 
-  const { exampleStore } = useStores()
-  const [userEmail, setUserEmail] = useState("")
-  const [userPassword, setUserPassword] = useState("")
-  const [dataToDisplay, setDataToDisplay] = useState("")
+  const handleLogin = async () => {
+    try {
+      setLoginInProgress(true)
+      await authStore.signIn(userEmail, userPassword)
 
-  // Example: Save data to db
-  const handleLogin = () => {
-    exampleStore.signIn({ userEmail, userPassword })
-    exampleStore.saveUser(userID, {
-      userEmail,
-      userPassword,
-    })
-    navigateRoleSelect()
+      const { profile } = authStore.user
+      const screen = roleTypeToScreenMap.get(profile.role)
+      navigation.navigate(screen)
+      setLoginErrorMessage("")
+      setLoginInProgress(false)
+    } catch (ex) {
+      setLoginInProgress(false)
+      setLoginErrorMessage(ex.message)
+    }
   }
 
-  // Example: fetch data on first screen render
-  useEffect(() => {
-    ;(() => {
-      exampleStore
-        .getUser(userID)
-        .then((doc) => {
-          const data = doc.data()
+  const handleClear = () => {
+    clearStorage()
+  }
 
-          setUserEmail(data.email)
-          setUserEmail(data.password)
-        })
-        .catch((error) => {
-          console.log(error)
-        })
-    })()
-  }, [])
+  // // Example: fetch data on first screen render
+  // useEffect(() => {
+  //   ;(() => {
+  //     exampleStore
+  //       .getUser(userID)
+  //       .then((doc) => {
+  //         const data = doc.data()
 
-  // Example: Listen to realtime changes in the db
-  exampleStore.environment.firebaseApi.firestore
-    .collection("users")
-    .doc(userID)
-    .onSnapshot((doc) => {
-      setDataToDisplay(doc.data().email)
-      console.log("Current data: ", doc.data())
-    })
+  //         setUserEmail(data.email)
+  //         setUserPassword(data.password)
+  //       })
+  //       .catch((error) => {
+  //         console.log(error)
+  //       })
+  //   })()
+  // }, [])
+
+  // // Example: Listen to realtime changes in the db
+  // exampleStore.environment.firebaseApi.firestore
+  //   .collection("users")
+  //   .doc(userID)
+  //   .onSnapshot((doc) => {
+  //     setDataToDisplay(doc.data().email)
+  //     console.log("Current data: ", doc.data())
+  //   })
 
   return (
     <View testID="WelcomeScreen" style={globalStyles.full}>
@@ -112,23 +126,35 @@ export const WelcomeScreen = observer(function WelcomeScreen() {
           <Text style={TITLE} text="Compassion In Oakland" />
         </Text>
         <Text style={CONTENT} tx="welcomeScreen.missionStatement"></Text>
-        <Text style={CONTENT}>{dataToDisplay}</Text>
       </Screen>
       <SafeAreaView style={FOOTER}>
         <View style={FOOTER_CONTENT}>
           <FormRow preset="bottom">
+            {!!loginErrorMessage && <Text preset="error" text={loginErrorMessage} />}
             <TextField
               preset="header"
-              onChangeText={(data) => setUserEmail(data)}
+              onChangeText={(text) => setUserEmail(text)}
+              autoCorrect={false}
+              autoCapitalize="none"
+              defaultValue={userEmail}
               labelTx="welcomeScreen.loginEmail"
             />
             <TextField
               preset="header"
-              onChangeText={(data) => setUserPassword(data)}
+              onChangeText={(text) => setUserPassword(text)}
+              autoCorrect={false}
+              autoCapitalize="none"
+              secureTextEntry
+              defaultValue={userPassword}
               labelTx="welcomeScreen.loginPassword"
             />
           </FormRow>
-          <Button testID="next-screen-button" tx="welcomeScreen.login" onPress={handleLogin} />
+          <Button
+            testID="next-screen-button"
+            tx="welcomeScreen.login"
+            onPress={handleLogin}
+            disabled={loginInProgress || !userEmail || !userPassword}
+          />
           <Button
             testID="next-screen-button"
             tx="welcomeScreen.signUpVolunteer"
@@ -141,6 +167,7 @@ export const WelcomeScreen = observer(function WelcomeScreen() {
               text="Permissions"
               onPress={navigatePermissions}
             />
+            <Button preset="link" text="Reset Storage" onPress={handleClear} />
           </View>
         </View>
       </SafeAreaView>

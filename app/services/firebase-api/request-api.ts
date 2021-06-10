@@ -8,8 +8,9 @@ import {
 } from "./api.types"
 // import { User } from "../api/api.types"
 // import { typeConverter } from "./utils"
-import { Request, RequestStatusEnum } from "../../types"
+import { RequestStatusEnum } from "../../types"
 import { RequestSnapshot } from "../../models"
+import { typeConverter } from "./utils"
 
 export class RequestApi {
   private firebase: FirebaseApi
@@ -26,18 +27,22 @@ export class RequestApi {
     authContext: AuthContext,
   ): Promise<CreateRequestResult> {
     try {
-      console.log("Saving to firestore...", request)
-      await this.firebase.firestore.collection("requests").doc(request.id).set(request)
-
-      await this.firebase.firestore
+      console.log(`Saving requestId:${request.id} to Firestore`)
+      const batch = this.firebase.firestore.batch()
+      const requestsByIdRef = this.firebase.firestore.collection("requests").doc(request.id)
+      const requestsByUserRef = this.firebase.firestore
         .collection("users")
         .doc(authContext.userId)
         .collection("requests")
         .doc(request.id)
-        .set(request)
 
-      console.log(`Saved to ${request.id}!`)
-      return { kind: "ok", request }
+      batch.set(requestsByIdRef, request)
+      batch.set(requestsByUserRef, request)
+      await batch.commit()
+      console.log(
+        `[request-api] Saved to "/requests/${request.id}" and "/users/${authContext.userId}/requests/${request.id}"`,
+      )
+      return { kind: "ok" }
     } catch (e) {
       const error = <FirebaseError>e
       const { message } = error
@@ -51,16 +56,17 @@ export class RequestApi {
    */
   async getRequests(authContext: AuthContext): Promise<GetRequestsResult> {
     try {
-      console.log(`Getting requests for ${authContext.userId}...`)
-      const result = await this.firebase.firestore
+      console.log(`[request-api] Getting requests @ /user/${authContext.userId}/requests/*`)
+      const snapshot = await this.firebase.firestore
         .collection("users")
         .doc(authContext.userId)
         .collection("requests")
-        // .withConverter(typeConverter<Request>())
+        .withConverter(typeConverter<RequestSnapshot>())
         .get()
-      console.tron.log(result)
 
-      return { kind: "ok", requests: (result as unknown) as Request[] }
+      const requests = snapshot.docs.map((doc) => (doc.data() as unknown) as RequestSnapshot)
+      console.log("From firebase:", requests)
+      return { kind: "ok", requests }
     } catch (e) {
       const error = <FirebaseError>e
       const { message } = error
@@ -78,7 +84,7 @@ export class RequestApi {
     authContext: AuthContext,
   ): Promise<DeleteRequestResult> {
     try {
-      console.log(`Changing status for ${requestId}...`)
+      console.log(`[request-api] Changing status for ${requestId}...`)
       await this.firebase.firestore.collection("requests").doc(requestId).update({
         status,
       })
@@ -105,7 +111,7 @@ export class RequestApi {
    */
   async deleteRequest(requestId: string, authContext: AuthContext): Promise<DeleteRequestResult> {
     try {
-      console.log(`Deleting ${requestId} from Firestore...`)
+      console.log(`[request-api] Deleting ${requestId} from Firestore...`)
       await this.firebase.firestore.collection("requests").doc(requestId).delete()
       await this.firebase.firestore
         .collection("users")

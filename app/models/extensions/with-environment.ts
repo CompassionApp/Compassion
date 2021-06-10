@@ -3,7 +3,7 @@ import { Environment } from "../environment"
 
 /**
  * Adds a environment property to the node for accessing our
- * Environment in strongly typed.
+ * Environment in a strongly typed fashion.
  */
 export const withEnvironment = (self: IStateTreeNode) => ({
   views: {

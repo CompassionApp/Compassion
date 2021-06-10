@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite"
 import { View, ViewStyle } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 import R from "ramda"
-import { addMonths, format, parse } from "date-fns"
+import { addMonths, format } from "date-fns"
 // import { useStores } from "../../models"
 import { Break, Button, Header, Screen, Text } from "../../components"
 import { color, globalStyles } from "../../theme"
@@ -39,7 +39,7 @@ export const ChaperoneScheduleScreen = observer(function ChaperoneScheduleScreen
       return
     }
 
-    const date = parse(selectedDate, CALENDAR_DATE_FORMAT, new Date()).toUTCString()
+    // const date = parse(selectedDate, CALENDAR_DATE_FORMAT, new Date()).toUTCString()
     navigateHome()
   }
 

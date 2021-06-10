@@ -1,8 +1,8 @@
-import { applySnapshot, flow, Instance, SnapshotOut, types } from "mobx-state-tree"
+import { applyPatch, flow, Instance, SnapshotOut, types } from "mobx-state-tree"
 import R from "ramda"
 // import { async } from "validate.js"
 import { RequestApi } from "../../services/firebase-api/request-api"
-import { Request, RequestStatusEnum } from "../../types"
+import { RequestStatusEnum } from "../../types"
 import { withEnvironment } from "../extensions/with-environment"
 import { RequestModel, RequestSnapshot } from "../request/request"
 
@@ -10,14 +10,14 @@ import { RequestModel, RequestSnapshot } from "../request/request"
 const authContext = { userId: "test-user" }
 
 /**
- * Model description here for TypeScript hints.
+ * Stores the active requests for the user and its loading state
  */
 export const RequestStoreModel = types
   .model("RequestStore")
   .props({
     requests: types.array(RequestModel),
     isLoading: types.optional(types.boolean, false),
-    currentRequestId: types.maybe(types.string),
+    currentRequest: types.safeReference(RequestModel),
   })
   .extend(withEnvironment)
   .views((self) => ({
@@ -29,8 +29,8 @@ export const RequestStoreModel = types
     markLoading: () => {
       self.isLoading = true
     },
-    saveRequests: (requestStoreSnapshot: RequestStoreSnapshot) => {
-      applySnapshot(self, requestStoreSnapshot)
+    updateRequests: (requests: RequestSnapshot[]) => {
+      applyPatch(self, { op: "replace", path: "/requests", value: requests })
       self.isLoading = false
     },
     saveRequest: (requestSnapshot: RequestSnapshot) => {
@@ -42,67 +42,73 @@ export const RequestStoreModel = types
       const index = self.requests.findIndex((request) => request.id === requestId)
       self.requests.splice(index, 1)
     },
-    updateRequest: (requestId: string, request: Partial<Request>) => {
+    updateRequest: (requestId: string, request: Partial<RequestSnapshot>) => {
       // Modifying the local store
       const index = self.requests.findIndex((request) => request.id === requestId)
       const original = self.requests[index]
-      self.requests[index] = R.mergeDeepRight<Request>(original, request as Request)
+      applyPatch(self, {
+        op: "replace",
+        path: `/requests/${index}`,
+        value: R.mergeDeepRight<RequestSnapshot, Partial<RequestSnapshot>>(original, request),
+      })
     },
-    /** Sets the current request by id */
+    /** Sets the current request that's viewed */
     selectCurrentRequest: (requestId: string) => {
-      self.currentRequestId = requestId
+      self.currentRequest = self.requests.find((r) => r.id === requestId)
     },
   }))
   .actions((self) => ({
     /**
      * Sends the request to the server
      */
-    createRequest: flow(function* createRequest(request: RequestSnapshot) {
+    createRequest: flow(function* (request: RequestSnapshot) {
       const requestApi = new RequestApi(self.environment.firebaseApi)
       const result = yield requestApi.createRequest(request, authContext)
       if (result.kind === "ok") {
-        self.saveRequest(result.request)
+        self.saveRequest(request)
       } else {
         __DEV__ && console.tron.log(result.kind)
       }
     }),
-    getRequests: async () => {
+    /**
+     * Get all requests for the user
+     */
+    getRequests: flow(function* () {
       self.markLoading()
       const requestApi = new RequestApi(self.environment.firebaseApi)
-      const result = await requestApi.getRequests(authContext)
+      const {
+        kind,
+        requests,
+      }: { kind: string; requests: RequestSnapshot[] } = yield requestApi.getRequests(authContext)
 
-      if (result.kind === "ok") {
-        self.saveRequests(result.requests)
+      if (kind === "ok") {
+        self.updateRequests(requests)
       } else {
-        __DEV__ && console.tron.log(result.kind)
+        __DEV__ && console.log(kind)
       }
-    },
-    rescheduleRequest: async (requestId: string) => {
-      console.log("Rescheduling (deleting)", requestId)
+    }),
+    rescheduleRequest: flow(function* (requestId: string) {
+      console.log("[request-store] Rescheduling (deleting)", requestId)
       const requestApi = new RequestApi(self.environment.firebaseApi)
-      const result = await requestApi.deleteRequest(requestId, authContext)
+      const result = yield requestApi.deleteRequest(requestId, authContext)
 
       if (result.kind === "ok") {
         self.deleteRequest(requestId)
       } else {
         __DEV__ && console.tron.log(result.kind)
       }
-    },
-    cancelRequest: async (requestId: string) => {
-      console.log("Cancelling", requestId)
+    }),
+    changeRequestStatus: flow(function* (requestId: string, status: RequestStatusEnum) {
+      console.log("[request-store] Changing status", requestId, status)
       const requestApi = new RequestApi(self.environment.firebaseApi)
-      const result = await requestApi.changeRequestStatus(
-        requestId,
-        RequestStatusEnum.CANCELED_BY_REQUESTER,
-        authContext,
-      )
+      const result = yield requestApi.changeRequestStatus(requestId, status, authContext)
 
       if (result.kind === "ok") {
-        self.updateRequest(requestId, { status: RequestStatusEnum.CANCELED_BY_REQUESTER })
+        self.updateRequest(requestId, { status })
       } else {
         __DEV__ && console.tron.log(result.kind)
       }
-    },
+    }),
   }))
 
 /**
