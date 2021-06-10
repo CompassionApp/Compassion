@@ -27,14 +27,20 @@
   },
   "signUpScreen": {
     "title": "Sign up",
-    "description": "Welcome and THANK YOU for your interest in helping to keep our community safer! These are unprecedented times and we are so grateful for your time and efforts. Please fill in this form in its entirety. You will also find our policies at the bottom of the form - please read them, understand them, and reach out if you have any questions. Please note: Due to the overwhelming amount of submissions, there may be a delay in the the response time as we schedule upcoming onboarding sessions. For the safety of our volunteers and the community we are serving, we are asking that ALL volunteers doing in-person work to get tested for COVID-19 and to submit a screenshot/photo of your results at the time of your shift, and complete a 1 hour onboarding session.",
+    "description": "Thank you for signing up!",
     "firstName": "First Name",
+    "firstNamePlaceholder": "Jane",
     "lastName": "Last Name",
+    "lastNamePlaceholder": "Chen",
     "phone": "Phone",
     "dateOfBirth": "Date of Birth (must be 18+)",
     "emergencyContact": "Emergency Contact (Name, Phone number, and Relationship)",
     "email": "Email",
     "emailPlaceholder": "your@email.com",
+    "username": "Username",
+    "usernamePlaceholder": "Your username",
+    "password": "Password",
+    "passwordPlaceholder": "",
     "submit": "SUBMIT"
   },
   "roleSelectScreen": {
@@ -58,6 +64,7 @@
     "rescheduleButton": "Reschedule",
     "okButton": "Ok",
     "cancelButton": "Cancel Request",
+    "uncancelButton": "Uncancel Request",
     "deleteButton": "Delete Request"
   },
   "notificationsScreen": {
@@ -139,7 +146,8 @@
   "userAgreementScreen": {
     "title": "User Agreement",
     "userAgreement": "This user agreement is a contract between you and Compassion. governing your use of your Compassion account and the Compassion services. It applies to U.S. Compassion accounts only. If you are an individual, you must be a resident of the United States or one of its territories and at least 18 years old, or the age of majority in your state of residence to open a U.S. Compassion account and use the Compassion services. If you are a business, the business must be organized in, operating in, or a resident of, the United States or one of its territories to open a U.S. Compassion account and use the Compassion services. By opening and using a Compassion account, you agree to comply with all of the terms and conditions in this user agreement. The terms include an agreement to resolve disputes by arbitration on an individual basis. You also agree to comply with each of the other agreements on the Legal Agreements page that apply to you and the following additional policies.",
-    "userAgreementAcceptButton": "Accept"
+    "userAgreementAcceptButton": "Accept",
+    "acceptedOn": "User agreement accepted on"
   },
   "newRequestReviewScreen": {
     "title": "Review Your Request",

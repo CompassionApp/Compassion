@@ -1,7 +1,7 @@
 import { FirebaseApi } from "./firebase-api"
-import { GetUserResult } from "./api.types"
-import { User } from "../api/api.types"
+import { GetUserProfileResult, SaveUserProfileResult } from "./api.types"
 import { typeConverter } from "./utils"
+import { UserProfileSnapshot } from "../../models"
 
 export class UserApi {
   private firebase: FirebaseApi
@@ -10,30 +10,40 @@ export class UserApi {
     this.firebase = firebase
   }
 
-  async getUser(id: string): Promise<GetUserResult> {
+  /**
+   * Updates or creates a user profile at `/users/[key]` with the snapshot
+   */
+  async saveUserProfile(key: string, profile: UserProfileSnapshot): Promise<SaveUserProfileResult> {
     try {
-      const result = await this.firebase.firestore
-        .collection("users")
-        .withConverter(typeConverter<User>())
-        .doc(id)
-        .get()
+      // const batch = this.firebase.firestore.batch()
+      await this.firebase.firestore.collection("users").doc(key).set(profile)
 
-      return { kind: "ok", user: (result as unknown) as User }
+      return { kind: "ok" }
     } catch (e) {
       __DEV__ && console.tron.log(e.message)
       return { kind: "bad-data" }
     }
   }
 
-  async getUsers(id: string): Promise<GetUserResult> {
+  /**
+   * Fetches the user profile document at `/users/[key]`
+   */
+  async getUserProfile(key: string): Promise<GetUserProfileResult> {
     try {
       const result = await this.firebase.firestore
         .collection("users")
-        .withConverter(typeConverter<User>())
-        .doc(id)
+        .doc(key)
+        .withConverter(typeConverter<UserProfileSnapshot>())
         .get()
 
-      return { kind: "ok", user: (result as unknown) as User }
+      if (!result.exists) {
+        throw new Error(`[user-api] User profile for ${key} does not exist!`)
+      }
+
+      return {
+        kind: "ok",
+        profile: result.data() as UserProfileSnapshot,
+      }
     } catch (e) {
       __DEV__ && console.tron.log(e.message)
       return { kind: "bad-data" }

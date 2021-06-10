@@ -33,7 +33,7 @@ export class Notifications {
       }
       token = (await this.notifications.getExpoPushTokenAsync()).data
     } else {
-      console.error("Must use physical device for Push Notifications")
+      console.log("[WARNING] Must use a physical device to receive Push Notifications")
     }
 
     if (Platform.OS === "android") {

@@ -37,6 +37,15 @@ export const presets = {
   center: { textAlign: "center" } as TextStyle,
 
   /**
+   * Error text
+   */
+  error: {
+    color: color.error,
+    textAlign: "center",
+    fontSize: 14,
+  } as TextStyle,
+
+  /**
    * Field labels that appear on forms above the inputs.
    */
   fieldLabel: {

@@ -1,4 +1,5 @@
 import { ApiResponse } from "apisauce"
+import { FirebaseError } from "firebase"
 
 /**
  * TODO: These are examples from the original ./app/services/api directory. Remove when ready
@@ -42,6 +43,21 @@ export type GeneralApiProblem =
    */
   | { kind: "bad-data" }
 
+export enum FirebaseAuthApiProblemType {
+  /* Thrown if the email address is not valid. */
+  INVALID_EMAIL = "Invalid email. Please try again.",
+  /* Thrown if the user corresponding to the given email has been disabled. */
+  USER_DISABLED = "User has been disabled",
+  /* Thrown if there is no user corresponding to the given email. */
+  USER_NOT_FOUND = "User not found",
+  /* Thrown if the password is invalid for the given email, or the account corresponding to the email does not have a password set. */
+  WRONG_PASSWORD = "Password incorrect. Please try again.",
+  /* Thrown if the email is already in use */
+  EMAIL_IN_USE = "Email in already in use. Try another.",
+  UNKNOWN = "Error while signing in",
+}
+export type FirebaseAuthApiProblem = { kind: FirebaseAuthApiProblemType }
+
 /**
  * Attempts to get a common cause of problems from an api response.
  *
@@ -75,4 +91,21 @@ export function getGeneralApiProblem(response: ApiResponse<any>): GeneralApiProb
   }
 
   return null
+}
+
+export function getFirebaseAuthApiProblem(error: FirebaseError): FirebaseAuthApiProblem {
+  switch (error.code) {
+    case "auth/invalid-email":
+      return { kind: FirebaseAuthApiProblemType.INVALID_EMAIL }
+    case "auth/user-disabled":
+      return { kind: FirebaseAuthApiProblemType.USER_DISABLED }
+    case "auth/user-not-found":
+      return { kind: FirebaseAuthApiProblemType.USER_NOT_FOUND }
+    case "auth/wrong-password":
+      return { kind: FirebaseAuthApiProblemType.WRONG_PASSWORD }
+    case "auth/email-already-in-use":
+      return { kind: FirebaseAuthApiProblemType.EMAIL_IN_USE }
+    default:
+      return { kind: FirebaseAuthApiProblemType.UNKNOWN }
+  }
 }

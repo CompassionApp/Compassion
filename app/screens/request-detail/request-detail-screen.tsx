@@ -9,6 +9,7 @@ import styled from "styled-components/native"
 import { format } from "date-fns"
 import { TxKeyPath } from "../../i18n"
 import { TITLE_DATE_FORMAT, TIME_RANGE_FORMAT } from "../../constants/date-formats"
+import { RequestStatusEnum } from "../../types"
 
 const ROOT: ViewStyle = {
   backgroundColor: color.background,
@@ -47,10 +48,12 @@ const LINK_BUTTON_OVERRIDE = {
 
 export const RequestDetailScreen = observer(function RequestDetailScreen() {
   const { requestStore } = useStores()
-  const { requests } = requestStore
-  console.log(requestStore.currentRequestId)
+  const { currentRequest } = requestStore
 
-  const request = requests.find((request) => request.id === requestStore.currentRequestId)
+  const isRequestCanceled =
+    currentRequest.status === RequestStatusEnum.CANCELED_BY_CHAPERONE ||
+    currentRequest.status === RequestStatusEnum.CANCELED_BY_REQUESTER
+
   const navigation = useNavigation()
   const navigateBack = () => navigation.goBack()
 
@@ -60,20 +63,24 @@ export const RequestDetailScreen = observer(function RequestDetailScreen() {
   const handlePressOk = () => {
     navigateBack()
   }
+  // Toggles the canceled status
   const handlePressCancel = () => {
-    requestStore.cancelRequest(request.id)
+    requestStore.changeRequestStatus(
+      currentRequest.id,
+      !isRequestCanceled ? RequestStatusEnum.CANCELED_BY_REQUESTER : RequestStatusEnum.REQUESTED,
+    )
   }
   const handlePressDelete = () => {
-    requestStore.deleteRequest(request.id)
+    requestStore.deleteRequest(currentRequest.id)
     navigateBack()
   }
 
   let requestDate
   let requestTime
 
-  if (request) {
-    requestDate = format(new Date(request.requestedAt), TITLE_DATE_FORMAT)
-    requestTime = format(new Date(request.requestedAt), TIME_RANGE_FORMAT)
+  if (currentRequest) {
+    requestDate = format(new Date(currentRequest.requestedAt), TITLE_DATE_FORMAT)
+    requestTime = format(new Date(currentRequest.requestedAt), TIME_RANGE_FORMAT)
   }
 
   return (
@@ -86,31 +93,31 @@ export const RequestDetailScreen = observer(function RequestDetailScreen() {
           style={globalStyles.header}
         />
 
-        {!request && (
+        {!currentRequest && (
           <Content>
             <Text preset={["header", "bold", "center"]}>Request not found.</Text>
           </Content>
         )}
 
-        {request && (
+        {currentRequest && (
           <Content>
             <Text
               preset={["header", "center"]}
-              tx={`enumRequestType.${request.type}` as TxKeyPath}
+              tx={`enumRequestType.${currentRequest.type}` as TxKeyPath}
             />
             <Text preset={["header", "bold", "center"]}>{requestDate}</Text>
             <Text preset={["header", "center"]}>{requestTime}</Text>
 
             <GrayArea>
-              <Text>ID: {request.id}</Text>
+              <Text>ID: {currentRequest.id}</Text>
               <Text>
-                Status: <Text tx={`enumRequestStatus.${request.status}` as TxKeyPath} />
+                Status: <Text tx={`enumRequestStatus.${currentRequest.status}` as TxKeyPath} />
               </Text>
             </GrayArea>
 
-            <Text preset={["bold", "center"]}>{request.destinationAddress}</Text>
+            <Text preset={["bold", "center"]}>{currentRequest.destinationAddress}</Text>
             <Text preset="center">to</Text>
-            <Text preset={["bold", "center"]}>{request.meetAddress}</Text>
+            <Text preset={["bold", "center"]}>{currentRequest.meetAddress}</Text>
             <ButtonRow>
               <Button
                 preset="ghost"
@@ -125,12 +132,22 @@ export const RequestDetailScreen = observer(function RequestDetailScreen() {
               />
             </ButtonRow>
 
-            <LinkButton
-              preset="link"
-              tx="requestDetailScreen.cancelButton"
-              style={LINK_BUTTON_OVERRIDE}
-              onPress={handlePressCancel}
-            />
+            {!isRequestCanceled && (
+              <LinkButton
+                preset="link"
+                tx="requestDetailScreen.cancelButton"
+                style={LINK_BUTTON_OVERRIDE}
+                onPress={handlePressCancel}
+              />
+            )}
+            {isRequestCanceled && (
+              <LinkButton
+                preset="link"
+                tx="requestDetailScreen.uncancelButton"
+                style={LINK_BUTTON_OVERRIDE}
+                onPress={handlePressCancel}
+              />
+            )}
             <LinkButton
               preset="link"
               tx="requestDetailScreen.deleteButton"

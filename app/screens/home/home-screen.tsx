@@ -1,6 +1,6 @@
 import React, { useEffect } from "react"
 import { observer } from "mobx-react-lite"
-import { View, ViewStyle } from "react-native"
+import { RefreshControl, ScrollView, View, ViewStyle } from "react-native"
 import styled from "styled-components/native"
 import { Header, Screen, Text } from "../../components"
 import { useNavigation } from "@react-navigation/native"
@@ -26,14 +26,22 @@ const Title = styled(Text)`
 `
 
 export const HomeScreen = observer(function HomeScreen() {
-  const { requestStore } = useStores()
-  const { requests } = requestStore
+  const { authStore, requestStore } = useStores()
+  const profile = authStore.user?.profile
   const navigation = useNavigation()
+
+  const [refreshing, setRefreshing] = React.useState(false)
+
   const navigateBack = () => navigation.goBack()
   const handlePressRequestDetail = (requestId: string) => () => {
     requestStore.selectCurrentRequest(requestId)
     navigation.navigate("requestDetail")
   }
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true)
+    requestStore.getRequests().then(() => setRefreshing(false))
+  }, [])
 
   useEffect(() => {
     async function fetchData() {
@@ -42,8 +50,6 @@ export const HomeScreen = observer(function HomeScreen() {
 
     fetchData()
   }, [])
-
-  console.log("Home Screen rendering. Requests:", requests)
 
   return (
     <View testID="HomeScreen" style={globalStyles.full}>
@@ -56,9 +62,11 @@ export const HomeScreen = observer(function HomeScreen() {
         />
         <TitleView>
           <Title tx="homeScreen.welcome" />
-          <Title text=", John Chen" />
+          <Title text={`, ${profile?.firstName ?? "Unknown"} ${profile?.lastName ?? ""}`} />
         </TitleView>
-        <Screen preset="scroll">
+        <ScrollView
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+        >
           {requestStore.sortByCreated.length === 0 && (
             <>
               <Text preset={["bold", "center"]} tx="homeScreen.noneScheduledNoticeBold" />
@@ -76,7 +84,7 @@ export const HomeScreen = observer(function HomeScreen() {
               onPress={handlePressRequestDetail(request.id)}
             />
           ))}
-        </Screen>
+        </ScrollView>
       </Screen>
     </View>
   )
