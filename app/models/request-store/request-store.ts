@@ -3,11 +3,9 @@ import R from "ramda"
 // import { async } from "validate.js"
 import { RequestApi } from "../../services/firebase-api/request-api"
 import { RequestStatusEnum } from "../../types"
+import { withAuthContext } from "../extensions/with-auth-context"
 import { withEnvironment } from "../extensions/with-environment"
 import { RequestModel, RequestSnapshot } from "../request/request"
-
-// TODO: Static auth context for now; replace with firebase auth context later
-const authContext = { userId: "test-user" }
 
 /**
  * Stores the active requests for the user and its loading state
@@ -20,6 +18,7 @@ export const RequestStoreModel = types
     currentRequest: types.safeReference(RequestModel),
   })
   .extend(withEnvironment)
+  .extend(withAuthContext)
   .views((self) => ({
     get sortByCreated() {
       return sortByCreatedAt(self.requests)
@@ -63,7 +62,7 @@ export const RequestStoreModel = types
      */
     createRequest: flow(function* (request: RequestSnapshot) {
       const requestApi = new RequestApi(self.environment.firebaseApi)
-      const result = yield requestApi.createRequest(request, authContext)
+      const result = yield requestApi.createRequest(request, self.authContext)
       if (result.kind === "ok") {
         self.saveRequest(request)
       } else {
@@ -79,7 +78,9 @@ export const RequestStoreModel = types
       const {
         kind,
         requests,
-      }: { kind: string; requests: RequestSnapshot[] } = yield requestApi.getRequests(authContext)
+      }: { kind: string; requests: RequestSnapshot[] } = yield requestApi.getRequests(
+        self.authContext,
+      )
 
       if (kind === "ok") {
         self.updateRequests(requests)
@@ -90,7 +91,7 @@ export const RequestStoreModel = types
     rescheduleRequest: flow(function* (requestId: string) {
       console.log("[request-store] Rescheduling (deleting)", requestId)
       const requestApi = new RequestApi(self.environment.firebaseApi)
-      const result = yield requestApi.deleteRequest(requestId, authContext)
+      const result = yield requestApi.deleteRequest(requestId, self.authContext)
 
       if (result.kind === "ok") {
         self.deleteRequest(requestId)
@@ -101,7 +102,7 @@ export const RequestStoreModel = types
     changeRequestStatus: flow(function* (requestId: string, status: RequestStatusEnum) {
       console.log("[request-store] Changing status", requestId, status)
       const requestApi = new RequestApi(self.environment.firebaseApi)
-      const result = yield requestApi.changeRequestStatus(requestId, status, authContext)
+      const result = yield requestApi.changeRequestStatus(requestId, status, self.authContext)
 
       if (result.kind === "ok") {
         self.updateRequest(requestId, { status })

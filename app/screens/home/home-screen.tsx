@@ -9,6 +9,7 @@ import { Card } from "./card"
 import { useStores } from "../../models/root-store/root-store-context"
 import { RequestStatusEnum, RequestTypeEnum } from "../../types"
 import { NoRequestsNotice } from "./no-requests-notice"
+import { RequestSnapshot } from "../../models"
 
 const ROOT: ViewStyle = {
   backgroundColor: color.background,
@@ -73,10 +74,9 @@ export const HomeScreen = observer(function HomeScreen() {
               <NoRequestsNotice />
             </>
           )}
-          {requestStore.sortByCreated.map((request) => (
+          {requestStore.sortByCreated.map((request: RequestSnapshot) => (
             <Card
               key={request.id}
-              // Nasty casting here
               status={request.status as RequestStatusEnum}
               type={request.type as RequestTypeEnum}
               requestId={request.id}

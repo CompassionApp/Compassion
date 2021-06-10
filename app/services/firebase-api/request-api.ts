@@ -10,7 +10,7 @@ import {
 // import { typeConverter } from "./utils"
 import { RequestStatusEnum } from "../../types"
 import { RequestSnapshot } from "../../models"
-import { typeConverter } from "./utils"
+import { createBatchModifyRequest, typeConverter } from "./utils"
 
 export class RequestApi {
   private firebase: FirebaseApi
@@ -20,7 +20,7 @@ export class RequestApi {
   }
 
   /**
-   * Creates a new request by storing it under the "/user" and "/request" collection
+   * Creates a new request by storing it under the `/users/[user-id]/requests/[id]` and `/requests/[id]` paths
    */
   async createRequest(
     request: RequestSnapshot,
@@ -28,19 +28,17 @@ export class RequestApi {
   ): Promise<CreateRequestResult> {
     try {
       console.log(`Saving requestId:${request.id} to Firestore`)
-      const batch = this.firebase.firestore.batch()
-      const requestsByIdRef = this.firebase.firestore.collection("requests").doc(request.id)
-      const requestsByUserRef = this.firebase.firestore
-        .collection("users")
-        .doc(authContext.userId)
-        .collection("requests")
-        .doc(request.id)
+      const { batch, requestsByIdRef, requestsByUserRef } = createBatchModifyRequest(
+        this.firebase.firestore,
+        request.id,
+        authContext.email,
+      )
 
       batch.set(requestsByIdRef, request)
       batch.set(requestsByUserRef, request)
       await batch.commit()
       console.log(
-        `[request-api] Saved to "/requests/${request.id}" and "/users/${authContext.userId}/requests/${request.id}"`,
+        `[request-api] Saved to "/requests/${request.id}" and "/users/${authContext.email}/requests/${request.id}"`,
       )
       return { kind: "ok" }
     } catch (e) {
@@ -56,10 +54,10 @@ export class RequestApi {
    */
   async getRequests(authContext: AuthContext): Promise<GetRequestsResult> {
     try {
-      console.log(`[request-api] Getting requests @ /user/${authContext.userId}/requests/*`)
+      console.log(`[request-api] Getting requests @ /user/${authContext.email}/requests/*`)
       const snapshot = await this.firebase.firestore
         .collection("users")
-        .doc(authContext.userId)
+        .doc(authContext.email)
         .collection("requests")
         .withConverter(typeConverter<RequestSnapshot>())
         .get()
@@ -85,17 +83,15 @@ export class RequestApi {
   ): Promise<DeleteRequestResult> {
     try {
       console.log(`[request-api] Changing status for ${requestId}...`)
-      await this.firebase.firestore.collection("requests").doc(requestId).update({
-        status,
-      })
-      await this.firebase.firestore
-        .collection("users")
-        .doc(authContext.userId)
-        .collection("requests")
-        .doc(requestId)
-        .update({
-          status,
-        })
+      const { batch, requestsByIdRef, requestsByUserRef } = createBatchModifyRequest(
+        this.firebase.firestore,
+        requestId,
+        authContext.email,
+      )
+
+      batch.update(requestsByIdRef, { status })
+      batch.update(requestsByUserRef, { status })
+      await batch.commit()
 
       return { kind: "ok" }
     } catch (e) {
@@ -112,14 +108,16 @@ export class RequestApi {
   async deleteRequest(requestId: string, authContext: AuthContext): Promise<DeleteRequestResult> {
     try {
       console.log(`[request-api] Deleting ${requestId} from Firestore...`)
-      await this.firebase.firestore.collection("requests").doc(requestId).delete()
-      await this.firebase.firestore
-        .collection("users")
-        .doc(authContext.userId)
-        .collection("requests")
-        .doc(requestId)
-        .delete()
 
+      const { batch, requestsByIdRef, requestsByUserRef } = createBatchModifyRequest(
+        this.firebase.firestore,
+        requestId,
+        authContext.email,
+      )
+
+      batch.delete(requestsByIdRef)
+      batch.delete(requestsByUserRef)
+      await batch.commit()
       return { kind: "ok" }
     } catch (e) {
       const error = <FirebaseError>e

@@ -1,3 +1,4 @@
+import { RootStore } from "."
 import { Api } from "../services/api"
 import { FirebaseApi } from "../services/firebase-api"
 import { Notifications } from "../services/notifications"
@@ -13,6 +14,9 @@ if (__DEV__) {
  * models live. They are made available to every model via dependency injection.
  */
 export class Environment {
+  /** Returns a RootStore instance. Set this when initializing the environment */
+  getStore: () => RootStore
+
   constructor() {
     // create each service
     if (__DEV__) {

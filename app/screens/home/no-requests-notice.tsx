@@ -31,7 +31,7 @@ export const NoRequestsNotice = observer(function NoRequestsNotice({
   const navigation = useNavigation()
 
   const handlePressNewRequest = () => {
-    navigation.navigate("newRequest")
+    navigation.navigate("newRequest", { params: { screen: "new" } })
   }
 
   const handlePressPhoneNumber = () => {
