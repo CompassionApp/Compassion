@@ -106,6 +106,7 @@ export const AuthStoreModel = types
         throw new Error(result.kind)
       }
     }),
+
     /**
      * Signs a user out and deletes the `user` from the model
      */
@@ -118,6 +119,8 @@ export const AuthStoreModel = types
         yield authApi.signOut()
       }
       if (self.user) destroy(self.user)
+      const store = self.environment.getStore()
+      store.requestStore.clear()
     }),
   }))
 

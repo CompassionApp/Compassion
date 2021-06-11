@@ -1,7 +1,7 @@
 import React from "react"
 import { observer } from "mobx-react-lite"
 import { View, ViewStyle } from "react-native"
-import { Button, Header, Screen, Text } from "../../components"
+import { Break, Button, Header, Screen, Text } from "../../components"
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../models"
 import { color, globalStyles, spacing } from "../../theme"
@@ -10,6 +10,7 @@ import { format } from "date-fns"
 import { TxKeyPath } from "../../i18n"
 import { TITLE_DATE_FORMAT, TIME_RANGE_FORMAT } from "../../constants/date-formats"
 import { RequestStatusEnum } from "../../types"
+import { RequestDetailProfilePhoto } from "./profile-photo"
 
 const ROOT: ViewStyle = {
   backgroundColor: color.background,
@@ -20,11 +21,18 @@ const Content = styled.View`
   text-align: center;
 `
 
-const GrayArea = styled.View`
-  background-color: ${color.palette.grey};
-  padding: ${spacing[2]}px;
+export const MatchProfilePhotos = styled.View<{ color?: string }>`
+  background-color: ${({ color: _color }) => _color ?? color.palette.grey};
+  padding: ${spacing[4]}px;
   margin: ${spacing[2]}px 0;
 `
+
+export const UNMATCHED_TEXT_STYLE = {
+  color: color.palette.red,
+}
+export const MATCHED_TEXT_STYLE = {
+  color: color.palette.white,
+}
 
 const ButtonRow = styled.View`
   display: flex;
@@ -35,6 +43,12 @@ const ButtonRow = styled.View`
 
 const LinkButton = styled(Button)`
   margin: ${spacing[2]}px auto;
+`
+
+export const ContentRow = styled.View`
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
 `
 
 const BUTTON_OVERRIDE = {
@@ -107,13 +121,48 @@ export const RequestDetailScreen = observer(function RequestDetailScreen() {
             />
             <Text preset={["header", "bold", "center"]}>{requestDate}</Text>
             <Text preset={["header", "center"]}>{requestTime}</Text>
+            <Break />
 
-            <GrayArea>
-              <Text>ID: {currentRequest.id}</Text>
-              <Text>
-                Status: <Text tx={`enumRequestStatus.${currentRequest.status}` as TxKeyPath} />
-              </Text>
-            </GrayArea>
+            {currentRequest.status === RequestStatusEnum.REQUESTED && (
+              <MatchProfilePhotos>
+                <Text
+                  preset={["center"]}
+                  tx="requestDetailScreen.requestPending"
+                  style={UNMATCHED_TEXT_STYLE}
+                />
+                <Break />
+                <ContentRow>
+                  <RequestDetailProfilePhoto />
+                  <RequestDetailProfilePhoto />
+                </ContentRow>
+                <Break />
+                <Text
+                  preset={["bold", "center"]}
+                  tx="requestDetailScreen.requestPending2"
+                  style={UNMATCHED_TEXT_STYLE}
+                />
+              </MatchProfilePhotos>
+            )}
+
+            {currentRequest.status === RequestStatusEnum.SCHEDULED && (
+              <MatchProfilePhotos color={color.palette.blue}>
+                <Text
+                  preset={["center"]}
+                  tx="requestDetailScreen.youAreMatched"
+                  style={MATCHED_TEXT_STYLE}
+                />
+                <Break />
+                <ContentRow>
+                  {currentRequest.chaperones.map((chaperone) => (
+                    <RequestDetailProfilePhoto
+                      key={chaperone}
+                      name={chaperone}
+                      style={MATCHED_TEXT_STYLE}
+                    />
+                  ))}
+                </ContentRow>
+              </MatchProfilePhotos>
+            )}
 
             <Text preset={["bold", "center"]}>{currentRequest.destinationAddress}</Text>
             <Text preset="center">to</Text>
@@ -154,6 +203,11 @@ export const RequestDetailScreen = observer(function RequestDetailScreen() {
               style={LINK_BUTTON_OVERRIDE}
               onPress={handlePressDelete}
             />
+            <Break />
+            <Text>ID: {currentRequest.id}</Text>
+            <Text>
+              Status: <Text tx={`enumRequestStatus.${currentRequest.status}` as TxKeyPath} />
+            </Text>
           </Content>
         )}
       </Screen>

@@ -60,7 +60,12 @@ export interface CardProps {
   onPress?: () => void
 }
 
-export const Card = observer(function Card({ onPress, requestedAt, type, status }: CardProps) {
+export const RequestCard = observer(function Card({
+  onPress,
+  requestedAt,
+  type,
+  status,
+}: CardProps) {
   const titleDate = datefns.format(new Date(requestedAt), TITLE_DATE_FORMAT)
   const requestStartTime = new Date(requestedAt)
   // TODO: Defaulting the end time to always be +3 hrs; change this as we get a better estimate of the time range

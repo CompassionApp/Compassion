@@ -2,13 +2,12 @@ import React, { useEffect } from "react"
 import { observer } from "mobx-react-lite"
 import { RefreshControl, ScrollView, View, ViewStyle } from "react-native"
 import styled from "styled-components/native"
-import { Header, Screen, Text } from "../../components"
+import { Break, Header, Screen, Text } from "../../components"
 import { useNavigation } from "@react-navigation/native"
 import { color, globalStyles, typography } from "../../theme"
-import { Card } from "./card"
+import { RequestCard } from "./request-card"
 import { useStores } from "../../models/root-store/root-store-context"
 import { RequestStatusEnum, RequestTypeEnum } from "../../types"
-import { NoRequestsNotice } from "./no-requests-notice"
 import { RequestSnapshot } from "../../models"
 
 const ROOT: ViewStyle = {
@@ -26,7 +25,7 @@ const Title = styled(Text)`
   font-size: 24px;
 `
 
-export const HomeScreen = observer(function HomeScreen() {
+export const ChaperoneHomeScreen = observer(function HomeScreen() {
   const { authStore, requestStore } = useStores()
   const profile = authStore.user?.profile
   const navigation = useNavigation()
@@ -41,12 +40,15 @@ export const HomeScreen = observer(function HomeScreen() {
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true)
-    requestStore.getRequests().then(() => setRefreshing(false))
+    Promise.all([requestStore.getRequests(), requestStore.getAvailableRequests()]).then(() =>
+      setRefreshing(false),
+    )
   }, [])
 
   useEffect(() => {
     async function fetchData() {
       requestStore.getRequests()
+      requestStore.getAvailableRequests()
     }
 
     fetchData()
@@ -65,17 +67,38 @@ export const HomeScreen = observer(function HomeScreen() {
           <Title tx="homeScreen.welcome" />
           <Title text={`, ${profile?.firstName ?? "Unknown"} ${profile?.lastName ?? ""}`} />
         </TitleView>
+        <Break />
         <ScrollView
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         >
-          {requestStore.sortByCreated.length === 0 && (
+          <Text preset={["center", "bold"]} text="Available Requests" />
+          <Break />
+          {requestStore.availableRequests.length === 0 && (
             <>
-              <Text preset={["bold", "center"]} tx="homeScreen.noneScheduledNoticeBold" />
-              <NoRequestsNotice />
+              <Text preset={["center"]} tx="chaperoneHomeScreen.noOpenRequests" />
             </>
           )}
-          {requestStore.sortByCreated.map((request: RequestSnapshot) => (
-            <Card
+          {requestStore.availableRequests.map((request: RequestSnapshot) => (
+            <RequestCard
+              key={request.id}
+              status={request.status as RequestStatusEnum}
+              type={request.type as RequestTypeEnum}
+              requestId={request.id}
+              requestedAt={request.requestedAt}
+              onPress={handlePressRequestDetail(request.id)}
+            />
+          ))}
+          <Break />
+          <Break />
+          <Text preset={["center", "bold"]} text="Your Scheduled Requests" />
+          <Break />
+          {requestStore.requests.length === 0 && (
+            <>
+              <Text preset={["center"]} tx="chaperoneHomeScreen.noScheduledRequests" />
+            </>
+          )}
+          {requestStore.requests.map((request: RequestSnapshot) => (
+            <RequestCard
               key={request.id}
               status={request.status as RequestStatusEnum}
               type={request.type as RequestTypeEnum}

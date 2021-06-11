@@ -56,6 +56,7 @@ export const PermissionsScreen = observer(function PermissionsScreen() {
         <Text preset="header" tx="permissionsScreen.heading" />
         <Text tx="permissionsScreen.permissionsBody" />
         <Button text="Grant permissions" onPress={handleAskPermission} />
+        <Button text="Skip to home" onPress={() => navigation.navigate("welcome")} />
       </Screen>
     </View>
   )

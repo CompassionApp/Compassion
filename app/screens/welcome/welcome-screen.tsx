@@ -2,11 +2,11 @@ import React, { useState } from "react"
 import { View, ViewStyle, TextStyle, SafeAreaView, Image, ImageStyle } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 import { observer } from "mobx-react-lite"
-import { Button, FormRow, Header, Screen, Text, TextField } from "../../components"
+import { Button, Header, Screen, Text, TextField } from "../../components"
 import { color, globalStyles, spacing, typography } from "../../theme"
 import { useStores } from "../../models"
 import { roleTypeToScreenMap } from "../../utils/navigation"
-export const logo = require("./logo.png")
+export const logo = require("./logo-text.png")
 
 const ROOT: ViewStyle = {
   flex: 1,
@@ -16,23 +16,14 @@ const TEXT: TextStyle = {
   color: color.palette.black,
   fontFamily: typography.primary,
 }
-const TITLE_WRAPPER: TextStyle = {
-  ...TEXT,
-  textAlign: "center",
-}
 
 const LOGO_IMAGE: ImageStyle = {
   marginBottom: spacing[1],
   alignSelf: "center",
-  width: 175,
-  height: 175,
+  width: (237 * 5) / 6,
+  height: (337 * 5) / 6,
 }
-const TITLE: TextStyle = {
-  fontWeight: "bold",
-  fontSize: 28,
-  lineHeight: 38,
-  textAlign: "center",
-}
+
 const CONTENT: TextStyle = {
   ...TEXT,
   color: "#222",
@@ -91,64 +82,33 @@ export const WelcomeScreen = observer(function WelcomeScreen() {
     clearStorage()
   }
 
-  // // Example: fetch data on first screen render
-  // useEffect(() => {
-  //   ;(() => {
-  //     exampleStore
-  //       .getUser(userID)
-  //       .then((doc) => {
-  //         const data = doc.data()
-
-  //         setUserEmail(data.email)
-  //         setUserPassword(data.password)
-  //       })
-  //       .catch((error) => {
-  //         console.log(error)
-  //       })
-  //   })()
-  // }, [])
-
-  // // Example: Listen to realtime changes in the db
-  // exampleStore.environment.firebaseApi.firestore
-  //   .collection("users")
-  //   .doc(userID)
-  //   .onSnapshot((doc) => {
-  //     setDataToDisplay(doc.data().email)
-  //     console.log("Current data: ", doc.data())
-  //   })
-
   return (
     <View testID="WelcomeScreen" style={globalStyles.full}>
       <Screen style={{ ...globalStyles.root, ...ROOT }}>
         <Header style={globalStyles.header} />
         <Image source={logo} resizeMethod="auto" style={LOGO_IMAGE} />
-        <Text style={TITLE_WRAPPER}>
-          <Text style={TITLE} text="Compassion In Oakland" />
-        </Text>
         <Text style={CONTENT} tx="welcomeScreen.missionStatement"></Text>
       </Screen>
       <SafeAreaView style={FOOTER}>
         <View style={FOOTER_CONTENT}>
-          <FormRow preset="bottom">
-            {!!loginErrorMessage && <Text preset="error" text={loginErrorMessage} />}
-            <TextField
-              preset="header"
-              onChangeText={(text) => setUserEmail(text)}
-              autoCorrect={false}
-              autoCapitalize="none"
-              defaultValue={userEmail}
-              labelTx="welcomeScreen.loginEmail"
-            />
-            <TextField
-              preset="header"
-              onChangeText={(text) => setUserPassword(text)}
-              autoCorrect={false}
-              autoCapitalize="none"
-              secureTextEntry
-              defaultValue={userPassword}
-              labelTx="welcomeScreen.loginPassword"
-            />
-          </FormRow>
+          {!!loginErrorMessage && <Text preset="error" text={loginErrorMessage} />}
+          <TextField
+            preset="header"
+            onChangeText={(text) => setUserEmail(text)}
+            autoCorrect={false}
+            autoCapitalize="none"
+            defaultValue={userEmail}
+            labelTx="welcomeScreen.loginEmail"
+          />
+          <TextField
+            preset="header"
+            onChangeText={(text) => setUserPassword(text)}
+            autoCorrect={false}
+            autoCapitalize="none"
+            secureTextEntry
+            defaultValue={userPassword}
+            labelTx="welcomeScreen.loginPassword"
+          />
           <Button
             testID="next-screen-button"
             tx="welcomeScreen.login"

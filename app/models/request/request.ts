@@ -1,8 +1,11 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
-import { RequestTypeEnum } from "../../types"
+import { MAX_CHAPERONES_PER_REQUEST } from "../../constants/match"
+import { RequestStatusEnum, RequestTypeEnum } from "../../types"
 
 /**
- * Model description here for TypeScript hints.
+ * A Request represents an individual request by requesters to be fulfilled by chaperones. Created
+ * when a request is made by the Requester and updated as the status changes up until it’s fulfilled
+ * by a Session.
  */
 export const RequestModel = types
   .model("Request")
@@ -20,9 +23,26 @@ export const RequestModel = types
     status: types.maybe(types.string),
     type: types.maybe(types.string),
   })
+  .views((self) => ({
+    containsUserAsChaperone: (userId: string) => {
+      return self.chaperones.includes(userId)
+    },
+  }))
   .actions((self) => ({
     touchUpdatedDate: () => {
       self.updatedAt = new Date().toUTCString()
+    },
+    addChaperone: (userId: string) => {
+      if (self.chaperones.length + 1 > MAX_CHAPERONES_PER_REQUEST) {
+        throw new Error("Too many chaperones")
+      }
+      self.chaperones.push(userId)
+    },
+    removeChaperone: (userId: string) => {
+      self.chaperones.remove(userId)
+    },
+    setStatus: (status: RequestStatusEnum) => {
+      self.status = status
     },
     setRequestDateTime: (dateStr: string) => {
       self.requestedAt = dateStr
