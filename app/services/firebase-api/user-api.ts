@@ -15,6 +15,7 @@ export class UserApi {
    */
   async saveUserProfile(key: string, profile: UserProfileSnapshot): Promise<SaveUserProfileResult> {
     try {
+      console.log("[user-api] Saving user profile")
       await this.firebase.firestore.collection("users").doc(key).set(profile)
 
       return { kind: "ok" }

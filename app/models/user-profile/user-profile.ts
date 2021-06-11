@@ -8,17 +8,40 @@ import { withEnvironment } from "../extensions/with-environment"
 export const UserProfileModel = types
   .model("UserProfile")
   .props({
+    id: types.string,
     createdAt: types.optional(types.string, new Date().toUTCString()),
     updatedAt: types.optional(types.string, new Date().toUTCString()),
     role: types.enumeration([UserRoleEnum.ADMIN, UserRoleEnum.CHAPERONE, UserRoleEnum.REQUESTER]),
     firstName: types.string,
     lastName: types.string,
+    email: types.string,
+    phoneNumber: types.maybeNull(types.string),
     status: types.enumeration([UserStatus.ACTIVE, UserStatus.DISALLOW, UserStatus.INACTIVE]),
     latestCovidTestVerifiedAt: types.maybeNull(types.string),
     signedCodeOfConductAt: types.maybeNull(types.string),
     acceptedUserAgreementAt: types.maybeNull(types.string),
   })
   .extend(withEnvironment)
+  .actions((self) => ({
+    acceptUserAgreement: () => {
+      self.acceptedUserAgreementAt = new Date().toUTCString()
+    },
+    signCodeOfConduct: () => {
+      self.signedCodeOfConductAt = new Date().toUTCString()
+    },
+    setPhoneNumber: (value: string) => {
+      self.phoneNumber = value
+    },
+    setFirstName: (value: string) => {
+      self.firstName = value
+    },
+    setLastName: (value: string) => {
+      self.lastName = value
+    },
+    setStatus: (value: UserStatus) => {
+      self.status = value
+    },
+  }))
 
 /**
  * Un-comment the following to omit model attributes from your snapshots (and from async storage).

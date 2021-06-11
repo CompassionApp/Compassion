@@ -55,5 +55,13 @@ export class FirebaseApi {
     this.authentication = firebase.auth()
     // For reCAPTCHA/SMS verification:
     this.authentication.languageCode = "en"
+    this.authentication.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+    firebase.auth().onAuthStateChanged((user: firebase.User) => {
+      console.log(
+        `[firebase-api] Auth state changed: user is logged ${user ? "in" : "out"} as ${
+          user?.email
+        } uid:${user?.uid}`,
+      )
+    })
   }
 }

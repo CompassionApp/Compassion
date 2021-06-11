@@ -26,20 +26,16 @@ export const AuthStoreModel = types
      * Sets the local auth store user details from the UserCredential returned from the sign in
      * process
      */
-    setUserFromCredential: flow(function* (
-      userCredential: firebase.auth.UserCredential,
+    updateUserDetailsFromFirebase: flow(function* (
+      user: firebase.User,
       profile?: UserProfileSnapshot,
     ) {
       // Delete the old user node
       if (self.user) destroy(self.user)
-      const { uid, email, displayName, phoneNumber, photoURL, emailVerified } = userCredential.user
+      const { uid, email } = user
       self.user = UserModel.create({
         id: uid,
         email,
-        displayName,
-        phoneNumber,
-        photoURL,
-        emailVerified,
         profile: profile,
       })
 
@@ -72,25 +68,37 @@ export const AuthStoreModel = types
       })
       const {
         kind,
-        user: firebaseUser,
-      }: { kind: string; user: firebase.auth.UserCredential } = yield authApi.createUser(
+        userCredential,
+      }: { kind: string; userCredential: firebase.auth.UserCredential } = yield authApi.createUser(
         userEmail,
         userPassword,
       )
+
+      const user = userCredential.user
+
+      yield authApi.updateUser({
+        ...user,
+        displayName: `${firstName} ${lastName}`,
+      })
+
       if (kind !== "ok") {
         throw new Error(kind)
       }
       // Creating a new user profile with defaults to save to Firestore
       const profile = UserProfileModel.create({
+        id: user.uid,
         firstName,
         lastName,
         role,
+        email: userEmail,
         status: UserStatus.ACTIVE,
+        phoneNumber: user.phoneNumber,
+        createdAt: user.metadata.creationTime,
       })
       yield userApi.saveUserProfile(userEmail, getSnapshot(profile))
       console.log("[auth-store] New user profile created in Firestore", getSnapshot(profile))
 
-      yield self.setUserFromCredential(firebaseUser, profile)
+      yield self.updateUserDetailsFromFirebase(user, profile)
     }),
 
     /**
@@ -98,12 +106,18 @@ export const AuthStoreModel = types
      */
     signIn: flow(function* (userEmail: string, userPassword: string) {
       const authApi = new AuthApi(self.environment.firebaseApi)
-      const result = yield authApi.signIn(userEmail, userPassword)
-      if (result.kind === "ok") {
-        const { user } = result
-        yield self.setUserFromCredential(user)
+      const {
+        kind,
+        userCredential,
+      }: { kind: string; userCredential: firebase.auth.UserCredential } = yield authApi.signIn(
+        userEmail,
+        userPassword,
+      )
+      if (kind === "ok") {
+        const { user } = userCredential
+        yield self.updateUserDetailsFromFirebase(user)
       } else {
-        throw new Error(result.kind)
+        throw new Error(kind)
       }
     }),
 
@@ -111,7 +125,7 @@ export const AuthStoreModel = types
      * Signs a user out and deletes the `user` from the model
      */
     signOut: flow(function* () {
-      console.log("Signing out user", self.user?.email)
+      console.log("[auth-store] Signing out user", self.user?.email)
       const authApi = new AuthApi(self.environment.firebaseApi)
       if (!self.environment.firebaseApi.authentication.currentUser) {
         console.log("[signOut] No current user, ignoring Firebase auth signout")
@@ -121,6 +135,25 @@ export const AuthStoreModel = types
       if (self.user) destroy(self.user)
       const store = self.environment.getStore()
       store.requestStore.clear()
+    }),
+
+    /**
+     * Updates the Firebase user details. Unused.
+     */
+    updateFirebaseUser: flow(function* (displayName: string, phoneNumber: string) {
+      console.log("[auth-store] Updating user", self.user?.email)
+      const authApi = new AuthApi(self.environment.firebaseApi)
+      const user = authApi.currentUser
+      user.displayName = displayName
+      user.phoneNumber = phoneNumber
+      console.log("[auth-store] updating to...", user)
+
+      const { kind }: { kind: string } = yield authApi.updateUser(user)
+      if (kind === "ok") {
+        yield self.updateUserDetailsFromFirebase(user)
+      } else {
+        throw new Error(kind)
+      }
     }),
   }))
 

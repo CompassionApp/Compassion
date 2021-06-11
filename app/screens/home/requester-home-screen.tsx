@@ -63,7 +63,7 @@ export const RequesterHomeScreen = observer(function HomeScreen() {
         />
         <TitleView>
           <Title tx="homeScreen.welcome" />
-          <Title text={`, ${profile?.firstName ?? "Unknown"} ${profile?.lastName ?? ""}`} />
+          <Title text={`, ${profile?.firstName ?? "Unknown"}`} />
         </TitleView>
         <Break />
         <Text preset={["center", "bold"]} text="Your pending requests" />
