@@ -59,6 +59,15 @@
   "newRequestScreen": {
     "title": "New Request"
   },
+  "editUserProfileScreen": {
+    "title": "User Profile",
+    "phoneNumberLabel": "Phone Number",
+    "phoneNumberPlaceholder": "510 555 5555",
+    "firstNameLabel": "First Name",
+    "lastNameLabel": "Last Name",
+    "saveButton": "Save",
+    "savedNotice": "Your profile has been saved!"
+  },
   "chaperoneRequestDetailScreen": {
     "acceptRequestButton": "Accept Request",
     "releaseRequestButton": "Cancel match"

@@ -58,7 +58,11 @@ export const MenuScreen = observer(function MenuScreen() {
           text={`${profile?.firstName ?? "Unknown"} ${profile?.lastName ?? ""}`}
         />
         <Break />
-        <Button preset="ghost" text="Edit profile" />
+        <Button
+          preset="ghost"
+          text="Edit profile"
+          onPress={() => navigation.navigate("editUserProfile")}
+        />
         <MenuList>
           <MenuListItem disabled>
             <Icon icon="home" style={ICON_SIZE} />

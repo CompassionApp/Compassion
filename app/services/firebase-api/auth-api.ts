@@ -1,6 +1,6 @@
 import { FirebaseApi } from "./firebase-api"
-import { FirebaseError } from "firebase"
-import { CreateUserResult, SignInResult, SignOutResult } from "./api.types"
+import firebase, { FirebaseError } from "firebase"
+import { CreateUserResult, SignInResult, SignOutResult, UpdateUserResult } from "./api.types"
 import { getFirebaseAuthApiProblem } from "./api-problem"
 
 /**
@@ -15,15 +15,22 @@ export class AuthApi {
   }
 
   /**
+   * Returns the current logged in Firebase User
+   */
+  get currentUser(): firebase.User {
+    return this.firebase.authentication.currentUser
+  }
+
+  /**
    * Signs a user in
    */
   async signIn(userEmail: string, userPassword: string): Promise<SignInResult> {
     try {
-      const user = await this.firebase.authentication.signInWithEmailAndPassword(
+      const userCredential = await this.firebase.authentication.signInWithEmailAndPassword(
         userEmail,
         userPassword,
       )
-      return { kind: "ok", user }
+      return { kind: "ok", userCredential }
     } catch (e) {
       const error = <FirebaseError>e
       const problem = getFirebaseAuthApiProblem(error)
@@ -54,11 +61,29 @@ export class AuthApi {
    */
   async createUser(userEmail: string, userPassword: string): Promise<CreateUserResult> {
     try {
-      const user = await this.firebase.authentication.createUserWithEmailAndPassword(
+      const userCredential = await this.firebase.authentication.createUserWithEmailAndPassword(
         userEmail,
         userPassword,
       )
-      return { kind: "ok", user }
+      return { kind: "ok", userCredential }
+    } catch (e) {
+      const error = <FirebaseError>e
+      const problem = getFirebaseAuthApiProblem(error)
+
+      __DEV__ && console.tron.log(problem)
+      return problem
+    }
+  }
+
+  /**
+   * Updates the current user's Firebase auth profile
+   */
+  async updateUser(user: firebase.User): Promise<UpdateUserResult> {
+    try {
+      console.log("[auth-api] Updating Firebase user")
+      await this.firebase.authentication.updateCurrentUser(user)
+      console.log("[auth-api] Success updating", this.firebase.authentication.currentUser)
+      return { kind: "ok" }
     } catch (e) {
       const error = <FirebaseError>e
       const problem = getFirebaseAuthApiProblem(error)

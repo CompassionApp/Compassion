@@ -10,9 +10,10 @@ export type GetRequestsResult = { kind: "ok"; requests: RequestSnapshot[] } | Ge
 export type DeleteRequestResult = { kind: "ok" } | GeneralApiProblem
 export type UpdateRequestResult = { kind: "ok" } | GeneralApiProblem
 export type SignInResult =
-  | { kind: "ok"; user: firebase.auth.UserCredential }
+  | { kind: "ok"; userCredential: firebase.auth.UserCredential }
   | FirebaseAuthApiProblem
 export type SignOutResult = { kind: "ok" } | FirebaseAuthApiProblem
 export type CreateUserResult =
-  | { kind: "ok"; user: firebase.auth.UserCredential }
+  | { kind: "ok"; userCredential: firebase.auth.UserCredential }
   | FirebaseAuthApiProblem
+export type UpdateUserResult = { kind: "ok" } | FirebaseAuthApiProblem

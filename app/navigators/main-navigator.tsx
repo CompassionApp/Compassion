@@ -15,6 +15,7 @@ import {
 } from "../screens"
 import { RequesterMainTabNavigator } from "./requester/requester-root-tab-navigator"
 import { ChaperoneMainTabNavigator } from "./chaperone/chaperone-root-tab-navigator"
+import { EditUserProfileScreen } from "../screens/edit-user-profile/edit-user-profile-screen"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -29,14 +30,15 @@ import { ChaperoneMainTabNavigator } from "./chaperone/chaperone-root-tab-naviga
  *   https://reactnavigation.org/docs/typescript#type-checking-the-navigator
  */
 export type MainNavigatorParamList = {
-  home: undefined
-  signup: undefined
   chaperone: undefined
-  roleSelect: undefined
-  requester: undefined
+  editUserProfile: undefined
+  home: undefined
   permissions: undefined
-  welcome: undefined
+  requester: undefined
+  roleSelect: undefined
+  signup: undefined
   userAgreement: undefined
+  welcome: undefined
 }
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
@@ -57,6 +59,7 @@ export function MainNavigator() {
       <Stack.Screen name="chaperone" component={ChaperoneMainTabNavigator} />
       <Stack.Screen name="requester" component={RequesterMainTabNavigator} />
       <Stack.Screen name="userAgreement" component={UserAgreementScreen} />
+      <Stack.Screen name="editUserProfile" component={EditUserProfileScreen} />
     </Stack.Navigator>
   )
 }

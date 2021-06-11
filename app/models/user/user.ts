@@ -12,18 +12,14 @@ export const UserModel = types
   .props({
     id: types.identifier,
     email: types.maybeNull(types.string),
-    displayName: types.maybeNull(types.string),
-    phoneNumber: types.maybeNull(types.string),
-    photoURL: types.maybeNull(types.string),
-    emailVerified: types.boolean,
     profile: types.maybe(UserProfileModel),
   })
   .extend(withEnvironment)
   .actions((self) => ({
     /**
-     * Updates Firebase with the user profile in the local store
+     * Saves the user profile document on Firestore with the data from the local store
      */
-    updateUserProfile: flow(function* () {
+    save: flow(function* () {
       const userApi = new UserApi(self.environment.firebaseApi)
       console.log("[user] Updating user profile...")
       self.profile.updatedAt = new Date().toUTCString()
@@ -32,8 +28,6 @@ export const UserModel = types
 
     /**
      * Fetches the user profile document from Firestore and attaches it to the user model
-     *
-     * Firestore path: `users/[email]`
      */
     fetchUserProfile: flow(function* () {
       const userApi = new UserApi(self.environment.firebaseApi)
@@ -48,8 +42,8 @@ export const UserModel = types
   }))
   .actions((self) => ({
     acceptUserAgreement: () => {
-      self.profile.acceptedUserAgreementAt = new Date().toUTCString()
-      self.updateUserProfile()
+      self.profile.acceptUserAgreement()
+      self.save()
     },
   }))
 
