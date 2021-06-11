@@ -1,5 +1,5 @@
 import React from "react"
-import { HomeScreen, RequestDetailScreen } from "../../screens"
+import { ChaperoneHomeScreen, ChaperoneRequestDetailScreen } from "../../screens"
 import { createStackNavigator } from "@react-navigation/stack"
 
 export type ChaperoneHomeStackNavigatorParamList = {
@@ -17,8 +17,8 @@ export function ChaperoneHomeStackNavigator() {
         headerShown: false,
       }}
     >
-      <Stack.Screen name="home" component={HomeScreen} />
-      <Stack.Screen name="requestDetail" component={RequestDetailScreen} />
+      <Stack.Screen name="home" component={ChaperoneHomeScreen} />
+      <Stack.Screen name="requestDetail" component={ChaperoneRequestDetailScreen} />
     </Stack.Navigator>
   )
 }

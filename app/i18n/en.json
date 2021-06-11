@@ -59,13 +59,20 @@
   "newRequestScreen": {
     "title": "New Request"
   },
+  "chaperoneRequestDetailScreen": {
+    "acceptRequestButton": "Accept Request",
+    "releaseRequestButton": "Cancel match"
+  },
   "requestDetailScreen": {
     "title": "Request Details",
     "rescheduleButton": "Reschedule",
     "okButton": "Ok",
     "cancelButton": "Cancel Request",
     "uncancelButton": "Uncancel Request",
-    "deleteButton": "Delete Request"
+    "deleteButton": "Delete Request",
+    "requestPending": "Your scheduled request is pending",
+    "requestPending2": "We’ll let you know when you have been matched.",
+    "youAreMatched": "You’re all set! You have been matched."
   },
   "notificationsScreen": {
     "title": "Notifications"
@@ -89,6 +96,10 @@
     "noticeTextPhoneNumber": "(510) 200-8682",
     "noticeText4": "or you can schedule a chaparone request.",
     "requestButton": "REQUEST"
+  },
+  "chaperoneHomeScreen": {
+    "noOpenRequests": "There are currently no open requests. Pull down to refresh.",
+    "noScheduledRequests": "You have no scheduled requests"
   },
   "requesterScreen": {
     "title": "Request a Chaperone",

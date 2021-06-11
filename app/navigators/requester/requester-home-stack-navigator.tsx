@@ -1,5 +1,5 @@
 import React from "react"
-import { HomeScreen, RequestDetailScreen } from "../../screens"
+import { RequesterHomeScreen, RequestDetailScreen } from "../../screens"
 import { createStackNavigator } from "@react-navigation/stack"
 
 export type RequesterHomeStackNavigatorParamList = {
@@ -17,7 +17,7 @@ export function RequesterHomeStackNavigator() {
         headerShown: false,
       }}
     >
-      <Stack.Screen name="home" component={HomeScreen} />
+      <Stack.Screen name="home" component={RequesterHomeScreen} />
       <Stack.Screen name="requestDetail" component={RequestDetailScreen} />
     </Stack.Navigator>
   )

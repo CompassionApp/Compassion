@@ -1,5 +1,6 @@
-import { applyPatch, flow, Instance, SnapshotOut, types } from "mobx-state-tree"
+import { applyPatch, flow, getSnapshot, Instance, SnapshotOut, types } from "mobx-state-tree"
 import R from "ramda"
+import { MAX_CHAPERONES_PER_REQUEST } from "../../constants/match"
 // import { async } from "validate.js"
 import { RequestApi } from "../../services/firebase-api/request-api"
 import { RequestStatusEnum } from "../../types"
@@ -13,7 +14,8 @@ import { RequestModel, RequestSnapshot } from "../request/request"
 export const RequestStoreModel = types
   .model("RequestStore")
   .props({
-    requests: types.array(RequestModel),
+    requests: types.optional(types.array(RequestModel), []),
+    availableRequests: types.optional(types.array(RequestModel), []),
     isLoading: types.optional(types.boolean, false),
     currentRequest: types.safeReference(RequestModel),
   })
@@ -25,8 +27,17 @@ export const RequestStoreModel = types
     },
   }))
   .actions((self) => ({
+    clear: () => {
+      self.requests.clear()
+      self.availableRequests.clear()
+      self.currentRequest = undefined
+    },
     markLoading: () => {
       self.isLoading = true
+    },
+    updateAvailableRequests: (requests: RequestSnapshot[]) => {
+      applyPatch(self, { op: "replace", path: "/availableRequests", value: requests })
+      self.isLoading = false
     },
     updateRequests: (requests: RequestSnapshot[]) => {
       applyPatch(self, { op: "replace", path: "/requests", value: requests })
@@ -36,11 +47,19 @@ export const RequestStoreModel = types
       // Appending a value to the local array via `push`
       self.requests.push(requestSnapshot)
     },
+    saveAvailableRequest: (requestSnapshot: RequestSnapshot) => {
+      self.availableRequests.push(requestSnapshot)
+    },
     deleteRequest: (requestId: string) => {
       // Deleting an element from the local store using `splice` (mutates array)
       const index = self.requests.findIndex((request) => request.id === requestId)
       self.requests.splice(index, 1)
     },
+    deleteAvailableRequest: (requestId: string) => {
+      const index = self.requests.findIndex((request) => request.id === requestId)
+      self.availableRequests.splice(index, 1)
+    },
+
     updateRequest: (requestId: string, request: Partial<RequestSnapshot>) => {
       // Modifying the local store
       const index = self.requests.findIndex((request) => request.id === requestId)
@@ -51,9 +70,22 @@ export const RequestStoreModel = types
         value: R.mergeDeepRight<RequestSnapshot, Partial<RequestSnapshot>>(original, request),
       })
     },
-    /** Sets the current request that's viewed */
+
+    updateAvailableRequest: (requestId: string, request: Partial<RequestSnapshot>) => {
+      const index = self.requests.findIndex((request) => request.id === requestId)
+      const original = self.requests[index]
+      applyPatch(self, {
+        op: "replace",
+        path: `/availableRequests/${index}`,
+        value: R.mergeDeepRight<RequestSnapshot, Partial<RequestSnapshot>>(original, request),
+      })
+    },
+
+    /** Sets the current request that is being viewed in the detail screen */
     selectCurrentRequest: (requestId: string) => {
-      self.currentRequest = self.requests.find((r) => r.id === requestId)
+      const fromUserRequests = self.requests.find((r) => r.id === requestId)
+      const fromAvailableRequests = self.availableRequests.find((r) => r.id === requestId)
+      self.currentRequest = fromUserRequests ?? fromAvailableRequests
     },
   }))
   .actions((self) => ({
@@ -70,7 +102,7 @@ export const RequestStoreModel = types
       }
     }),
     /**
-     * Get all requests for the user
+     * Get all open requests for the requester
      */
     getRequests: flow(function* () {
       self.markLoading()
@@ -88,6 +120,104 @@ export const RequestStoreModel = types
         __DEV__ && console.log(kind)
       }
     }),
+
+    /**
+     * Get all available requests for the chaperone
+     */
+    getAvailableRequests: flow(function* () {
+      self.markLoading()
+      const requestApi = new RequestApi(self.environment.firebaseApi)
+      const {
+        kind,
+        requests,
+      }: { kind: string; requests: RequestSnapshot[] } = yield requestApi.getAvailableRequests()
+
+      if (kind === "ok") {
+        self.updateAvailableRequests(requests)
+      } else {
+        __DEV__ && console.log(kind)
+      }
+    }),
+
+    /**
+     * Accept request as a chaperone
+     */
+    acceptRequest: flow(function* (requestId: string) {
+      console.log("[request-store] Accepting request", requestId)
+      const requestApi = new RequestApi(self.environment.firebaseApi)
+      const request = self.availableRequests.find((r) => r.id === requestId)
+      if (!request) {
+        throw new Error("Request cannot be found")
+      }
+      const requestModel = RequestModel.create(getSnapshot(request))
+
+      // Do some light validation; this logic should be extracted to a helper function later:
+      // validateRequestBeforeAccept
+      if (requestModel.status !== RequestStatusEnum.REQUESTED) {
+        throw new Error("Request is not in the correct state")
+      } else if (requestModel.chaperones.length + 1 > MAX_CHAPERONES_PER_REQUEST) {
+        throw new Error("Too many chaperones")
+      }
+
+      // Start mutating our copy to the "accepted" state
+      requestModel.addChaperone(self.authContext.email)
+      requestModel.setStatus(RequestStatusEnum.SCHEDULED)
+      requestModel.touchUpdatedDate()
+
+      const mutatedRequest = getSnapshot(requestModel)
+      // Update the request record for the requester and in the general request pool
+      const result = yield requestApi.acceptUserRequest(
+        requestId,
+        mutatedRequest,
+        mutatedRequest.requestedBy,
+        self.authContext,
+      )
+
+      if (result.kind === "ok") {
+        self.saveRequest(mutatedRequest)
+        self.deleteAvailableRequest(mutatedRequest.id)
+      } else {
+        __DEV__ && console.tron.log(result.kind)
+      }
+    }),
+
+    /**
+     * Release a request as a chaperone
+     */
+    releaseRequest: flow(function* (requestId: string) {
+      console.log("[request-store] Releasing request", requestId)
+      const requestApi = new RequestApi(self.environment.firebaseApi)
+      const request = self.requests.find((r) => r.id === requestId)
+      if (!request) {
+        throw new Error("Request cannot be found")
+      }
+      const requestModel = RequestModel.create(getSnapshot(request))
+
+      // Start mutating our copy to the "released" state
+      requestModel.removeChaperone(self.authContext.email)
+      requestModel.setStatus(RequestStatusEnum.REQUESTED)
+      requestModel.touchUpdatedDate()
+
+      const mutatedRequest = getSnapshot(requestModel)
+      // Update the request record for the requester and in the general request pool
+      const result = yield requestApi.releaseUserRequest(
+        requestId,
+        mutatedRequest,
+        mutatedRequest.requestedBy,
+        self.authContext,
+      )
+
+      if (result.kind === "ok") {
+        self.deleteRequest(mutatedRequest.id)
+        self.saveAvailableRequest(mutatedRequest)
+      } else {
+        __DEV__ && console.tron.log(result.kind)
+      }
+    }),
+
+    /**
+     * Reschedule a request (currently deletes the request)
+     */
     rescheduleRequest: flow(function* (requestId: string) {
       console.log("[request-store] Rescheduling (deleting)", requestId)
       const requestApi = new RequestApi(self.environment.firebaseApi)

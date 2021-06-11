@@ -8,6 +8,7 @@ export type SaveUserProfileResult = { kind: "ok" } | GeneralApiProblem
 export type CreateRequestResult = { kind: "ok" } | GeneralApiProblem
 export type GetRequestsResult = { kind: "ok"; requests: RequestSnapshot[] } | GeneralApiProblem
 export type DeleteRequestResult = { kind: "ok" } | GeneralApiProblem
+export type UpdateRequestResult = { kind: "ok" } | GeneralApiProblem
 export type SignInResult =
   | { kind: "ok"; user: firebase.auth.UserCredential }
   | FirebaseAuthApiProblem
