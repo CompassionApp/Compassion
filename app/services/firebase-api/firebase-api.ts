@@ -58,7 +58,7 @@ export class FirebaseApi {
     this.authentication.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
     firebase.auth().onAuthStateChanged((user: firebase.User) => {
       console.log(
-        `[firebase-api] Auth state changed: user is logged ${user ? "in" : "out"} as ${
+        `[firebase-api] Auth state changed: user logged ${user ? "in" : "out"}. ${
           user?.email
         } uid:${user?.uid}`,
       )

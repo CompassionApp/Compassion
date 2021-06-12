@@ -46,12 +46,11 @@ export const ChaperoneHomeScreen = observer(function HomeScreen() {
   }, [])
 
   useEffect(() => {
-    async function fetchData() {
-      requestStore.getRequests()
-      requestStore.getAvailableRequests()
-    }
+    requestStore.subscribeAsChaperone()
 
-    fetchData()
+    return () => {
+      requestStore.unsubscribeAll()
+    }
   }, [])
 
   return (
@@ -78,7 +77,7 @@ export const ChaperoneHomeScreen = observer(function HomeScreen() {
               <Text preset={["center"]} tx="chaperoneHomeScreen.noOpenRequests" />
             </>
           )}
-          {requestStore.availableRequests.map((request: RequestSnapshot) => (
+          {requestStore.sortAvailableRequestsByCreated.map((request: RequestSnapshot) => (
             <RequestCard
               key={request.id}
               status={request.status as RequestStatusEnum}

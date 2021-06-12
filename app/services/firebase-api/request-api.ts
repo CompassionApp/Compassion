@@ -1,5 +1,5 @@
 import { FirebaseApi } from "./firebase-api"
-import { FirebaseError } from "firebase"
+import firebase, { FirebaseError } from "firebase"
 import {
   AuthContext,
   CreateRequestResult,
@@ -9,7 +9,6 @@ import {
 } from "./api.types"
 // import { User } from "../api/api.types"
 // import { typeConverter } from "./utils"
-import { RequestStatusEnum } from "../../types"
 import { RequestSnapshot } from "../../models"
 import { createBatchModifyRequest, typeConverter } from "./utils"
 
@@ -18,6 +17,49 @@ export class RequestApi {
 
   constructor(firebase: FirebaseApi) {
     this.firebase = firebase
+  }
+
+  /**
+   * Subscribes to user's requests
+   */
+  subscribeToUserRequests(
+    authContext: AuthContext,
+    onSnapshot?: (requests: RequestSnapshot[]) => void,
+  ) {
+    // TODO: Bug. App crashes here when the user loses auth context
+    if (!authContext?.email) {
+      return undefined
+    }
+
+    console.log(`[request-api] Subscribing to user requests...`)
+    return this.firebase.firestore
+      .collection("users")
+      .doc(authContext.email)
+      .collection("requests")
+      .onSnapshot((querySnapshot: firebase.firestore.QuerySnapshot) => {
+        const requests: RequestSnapshot[] = []
+        querySnapshot.forEach((doc) => {
+          requests.push(doc.data() as RequestSnapshot)
+        })
+        onSnapshot(requests)
+      })
+  }
+
+  /**
+   * Subscribes to available requests
+   */
+  subscribeToAvailableRequests(onSnapshot?: (requests: RequestSnapshot[]) => void) {
+    console.log(`[request-api] Subscribing to available requests...`)
+    return this.firebase.firestore
+      .collection("requests")
+      .where("status", "==", "REQUESTED")
+      .onSnapshot((querySnapshot: firebase.firestore.QuerySnapshot) => {
+        const requests: RequestSnapshot[] = []
+        querySnapshot.forEach((doc) => {
+          requests.push(doc.data() as RequestSnapshot)
+        })
+        onSnapshot(requests)
+      })
   }
 
   /**
@@ -53,7 +95,7 @@ export class RequestApi {
   /**
    * Fetches all the requests for the user by looking at the "/users/[user-id]/requests" path
    */
-  async getRequests(authContext: AuthContext): Promise<GetRequestsResult> {
+  async getUserRequests(authContext: AuthContext): Promise<GetRequestsResult> {
     try {
       console.log(`[request-api] Getting requests @ /user/${authContext.email}/requests/*`)
       const snapshot = await this.firebase.firestore
@@ -64,7 +106,6 @@ export class RequestApi {
         .get()
 
       const requests = snapshot.docs.map((doc) => (doc.data() as unknown) as RequestSnapshot)
-      console.log("From firebase:", requests)
       return { kind: "ok", requests }
     } catch (e) {
       const error = <FirebaseError>e
@@ -87,7 +128,6 @@ export class RequestApi {
         .get()
 
       const requests = snapshot.docs.map((doc) => (doc.data() as unknown) as RequestSnapshot)
-      console.log("From firebase:", requests)
       return { kind: "ok", requests }
     } catch (e) {
       const error = <FirebaseError>e
@@ -98,24 +138,44 @@ export class RequestApi {
   }
 
   /**
-   * Changes a request's status
+   * Updates a request across all of its references
    */
-  async changeRequestStatus(
+  async updateRequest(
     requestId: string,
-    status: RequestStatusEnum,
+    partialRequestUpdate: Partial<RequestSnapshot>,
     authContext: AuthContext,
   ): Promise<DeleteRequestResult> {
     try {
       console.log(`[request-api] Changing status for ${requestId}...`)
-      const { batch, requestsByIdRef, requestsByUserRef } = createBatchModifyRequest(
-        this.firebase.firestore,
-        requestId,
-        authContext.email,
-      )
+      const requestsByIdRef = this.firebase.firestore.collection("requests").doc(requestId)
+      const requestsByUserRef = this.firebase.firestore
+        .collection("users")
+        .doc(authContext.email)
+        .collection("requests")
+        .doc(requestId)
 
-      batch.update(requestsByIdRef, { status })
-      batch.update(requestsByUserRef, { status })
-      await batch.commit()
+      this.firebase.firestore.runTransaction((transaction) => {
+        return transaction.get(requestsByIdRef).then((request) => {
+          if (!request.exists) {
+            throw new Error("Request does not exist")
+          }
+
+          // Delete all the associated chaperones' docs
+          const { chaperones } = request.data() as RequestSnapshot
+          const chaperoneRequestRefs = chaperones.map((chaperone) => {
+            return this.firebase.firestore
+              .collection("users")
+              .doc(chaperone)
+              .collection("requests")
+              .doc(requestId)
+          })
+          chaperoneRequestRefs.forEach((chaperoneRequestRefs) =>
+            transaction.update(chaperoneRequestRefs, partialRequestUpdate),
+          )
+          transaction.update(requestsByIdRef, partialRequestUpdate)
+          transaction.update(requestsByUserRef, partialRequestUpdate)
+        })
+      })
 
       return { kind: "ok" }
     } catch (e) {
@@ -127,7 +187,7 @@ export class RequestApi {
   }
 
   /**
-   * Accepts a request belonging to an arbitrary user
+   * Accepts a request belonging to an arbitrary user as a chaperone
    */
   async acceptUserRequest(
     requestId: string,
@@ -205,15 +265,50 @@ export class RequestApi {
     try {
       console.log(`[request-api] Deleting ${requestId} from Firestore...`)
 
-      const { batch, requestsByIdRef, requestsByUserRef } = createBatchModifyRequest(
-        this.firebase.firestore,
-        requestId,
-        authContext.email,
-      )
+      const requestsByIdRef = this.firebase.firestore.collection("requests").doc(requestId)
+      const requestsByUserRef = this.firebase.firestore
+        .collection("users")
+        .doc(authContext.email)
+        .collection("requests")
+        .doc(requestId)
 
-      batch.delete(requestsByIdRef)
-      batch.delete(requestsByUserRef)
-      await batch.commit()
+      this.firebase.firestore.runTransaction((transaction) => {
+        return transaction.get(requestsByIdRef).then((request) => {
+          if (!request.exists) {
+            throw new Error("Request does not exist")
+          }
+
+          // Delete all the associated chaperones' docs
+          const { requestedBy, chaperones } = request.data() as RequestSnapshot
+          const chaperoneRequestRefs = chaperones.map((chaperone) => {
+            return this.firebase.firestore
+              .collection("users")
+              .doc(chaperone)
+              .collection("requests")
+              .doc(requestId)
+          })
+
+          const requestsByRequesterRef = this.firebase.firestore
+            .collection("users")
+            .doc(requestedBy)
+            .collection("requests")
+            .doc(requestId)
+
+          chaperoneRequestRefs.forEach((chaperoneRequestRef) =>
+            transaction.delete(chaperoneRequestRef),
+          )
+
+          transaction.get(requestsByRequesterRef).then((request) => {
+            if (request.exists) {
+              transaction.delete(requestsByRequesterRef)
+            }
+          })
+
+          transaction.delete(requestsByIdRef)
+          transaction.delete(requestsByUserRef)
+        })
+      })
+
       return { kind: "ok" }
     } catch (e) {
       const error = <FirebaseError>e
