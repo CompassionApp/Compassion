@@ -1,7 +1,7 @@
 import React from "react"
 import { observer } from "mobx-react-lite"
 import { View, ViewStyle } from "react-native"
-import { Button, Header, Screen, Text } from "../../components"
+import { Break, Button, Header, Screen, Text } from "../../components"
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../models"
 import { color, globalStyles, spacing } from "../../theme"
@@ -29,15 +29,22 @@ const ButtonRow = styled.View`
   margin: ${spacing[4]}px 0;
 `
 
+const LinkButton = styled(Button)`
+  margin: ${spacing[2]}px auto;
+`
+
 const BUTTON_OVERRIDE = {
   marginHorizontal: spacing[1],
   minWidth: 150,
+}
+const LINK_BUTTON_OVERRIDE = {
+  marginHorizontal: "auto",
 }
 
 export const ChaperoneRequestDetailScreen = observer(function ChaperoneRequestDetailScreen() {
   const { authStore, requestStore } = useStores()
   const { currentRequest } = requestStore
-  const email = authStore.user?.email
+  const email = authStore.user.profile.email
 
   const navigation = useNavigation()
   const navigateBack = () => navigation.goBack()
@@ -53,6 +60,10 @@ export const ChaperoneRequestDetailScreen = observer(function ChaperoneRequestDe
     navigateBack()
   }
   const handlePressOk = () => {
+    navigateBack()
+  }
+  const handlePressDelete = () => {
+    requestStore.rescheduleRequest(currentRequest.id)
     navigateBack()
   }
 
@@ -156,6 +167,13 @@ export const ChaperoneRequestDetailScreen = observer(function ChaperoneRequestDe
                 />
               )}
             </ButtonRow>
+            <LinkButton
+              preset="link"
+              tx="requestDetailScreen.deleteButton"
+              style={LINK_BUTTON_OVERRIDE}
+              onPress={handlePressDelete}
+            />
+            <Break />
             <Text>ID: {currentRequest.id}</Text>
             <Text>
               Status: <Text tx={`enumRequestStatus.${currentRequest.status}` as TxKeyPath} />

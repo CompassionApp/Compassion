@@ -22,8 +22,11 @@ export const RequestStoreModel = types
   .extend(withEnvironment)
   .extend(withAuthContext)
   .views((self) => ({
-    get sortByCreated() {
+    get sortUserRequestsByCreated() {
       return sortByCreatedAt(self.requests)
+    },
+    get sortAvailableRequestsByCreated() {
+      return sortByCreatedAt(self.availableRequests)
     },
   }))
   .actions((self) => ({
@@ -44,11 +47,14 @@ export const RequestStoreModel = types
       self.isLoading = false
     },
     saveRequest: (requestSnapshot: RequestSnapshot) => {
-      // Appending a value to the local array via `push`
-      self.requests.push(requestSnapshot)
+      if (!self.requests.find((request) => request.id === requestSnapshot.id)) {
+        self.requests.push(requestSnapshot)
+      }
     },
     saveAvailableRequest: (requestSnapshot: RequestSnapshot) => {
-      self.availableRequests.push(requestSnapshot)
+      if (!self.availableRequests.find((request) => request.id === requestSnapshot.id)) {
+        self.availableRequests.push(requestSnapshot)
+      }
     },
     deleteRequest: (requestId: string) => {
       // Deleting an element from the local store using `splice` (mutates array)
@@ -101,6 +107,7 @@ export const RequestStoreModel = types
         __DEV__ && console.tron.log(result.kind)
       }
     }),
+
     /**
      * Get all open requests for the requester
      */
@@ -110,7 +117,7 @@ export const RequestStoreModel = types
       const {
         kind,
         requests,
-      }: { kind: string; requests: RequestSnapshot[] } = yield requestApi.getRequests(
+      }: { kind: string; requests: RequestSnapshot[] } = yield requestApi.getUserRequests(
         self.authContext,
       )
 
@@ -174,8 +181,8 @@ export const RequestStoreModel = types
       )
 
       if (result.kind === "ok") {
-        self.saveRequest(mutatedRequest)
-        self.deleteAvailableRequest(mutatedRequest.id)
+        // self.saveRequest(mutatedRequest)
+        // self.deleteAvailableRequest(mutatedRequest.id)
       } else {
         __DEV__ && console.tron.log(result.kind)
       }
@@ -208,8 +215,8 @@ export const RequestStoreModel = types
       )
 
       if (result.kind === "ok") {
-        self.deleteRequest(mutatedRequest.id)
-        self.saveAvailableRequest(mutatedRequest)
+        // self.deleteRequest(mutatedRequest.id)
+        // self.saveAvailableRequest(mutatedRequest)
       } else {
         __DEV__ && console.tron.log(result.kind)
       }
@@ -229,10 +236,14 @@ export const RequestStoreModel = types
         __DEV__ && console.tron.log(result.kind)
       }
     }),
+
+    /**
+     * Change the request's status
+     */
     changeRequestStatus: flow(function* (requestId: string, status: RequestStatusEnum) {
       console.log("[request-store] Changing status", requestId, status)
       const requestApi = new RequestApi(self.environment.firebaseApi)
-      const result = yield requestApi.changeRequestStatus(requestId, status, self.authContext)
+      const result = yield requestApi.updateRequest(requestId, { status }, self.authContext)
 
       if (result.kind === "ok") {
         self.updateRequest(requestId, { status })
@@ -241,6 +252,82 @@ export const RequestStoreModel = types
       }
     }),
   }))
+
+  /**
+   * Subscriptions
+   */
+  .actions((self) => {
+    /** Collection of unsubscribe handlers from our onSnapshot listeners */
+    const unsubscribeHandlers: (() => void)[] = []
+
+    return {
+      /**
+       * Unsubscribes from all previously registered subscriptions
+       */
+      unsubscribeAll: () => {
+        console.log(`[request-store] Unsubscribing to ${unsubscribeHandlers.length} subscriptions`)
+
+        while (unsubscribeHandlers.length > 0) {
+          const unsubscribe = unsubscribeHandlers.pop()
+          unsubscribe()
+        }
+      },
+
+      /**
+       * Subscribes to changes to requests for a requester
+       *
+       * Returns unsubscribe functions that must be called upon unmount.
+       */
+      subscribeAsRequester: () => {
+        const requestApi = new RequestApi(self.environment.firebaseApi)
+        const unsubscribeUserRequests = requestApi.subscribeToUserRequests(
+          self.authContext,
+          (requests) => {
+            console.log(
+              "[request-store] User's requests from subscription:",
+              requests.map((r) => r.id),
+            )
+            self.updateRequests(requests)
+          },
+        )
+        unsubscribeHandlers.push(unsubscribeUserRequests)
+        return { unsubscribeUserRequests }
+      },
+
+      /**
+       * Subscribes to changes to requests for a chaperone.
+       *
+       * Returns unsubscribe functions that must be called upon unmount.
+       */
+      subscribeAsChaperone: () => {
+        const requestApi = new RequestApi(self.environment.firebaseApi)
+        const unsubscribeAvailableRequests = requestApi.subscribeToAvailableRequests((requests) => {
+          console.log(
+            "[request-store] New requests from subscription:",
+            requests.map((r) => r.id),
+          )
+          self.updateAvailableRequests(requests)
+        })
+        const unsubscribeUserRequests = requestApi.subscribeToUserRequests(
+          self.authContext,
+          (requests) => {
+            console.log(
+              "[request-store] User's requests from subscription:",
+              requests.map((r) => r.id),
+            )
+            self.updateRequests(requests)
+          },
+        )
+
+        unsubscribeHandlers.push(unsubscribeAvailableRequests)
+        unsubscribeHandlers.push(unsubscribeUserRequests)
+        return {
+          unsubscribeAvailableRequests,
+          unsubscribeUserRequests,
+        }
+      },
+    }
+  })
 
 /**
  * Un-comment the following to omit model attributes from your snapshots (and from async storage).

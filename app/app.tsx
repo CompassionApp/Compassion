@@ -69,7 +69,7 @@ function App() {
 
   // Kick off initial async loading actions, like loading fonts and RootStore
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       await initFonts() // expo
       setupRootStore().then(setRootStore)
     })()
@@ -81,6 +81,9 @@ function App() {
   // with your own loading component if you wish.
   if (!rootStore) return null
 
+  if (!rootStore.authStore.user) {
+    console.log("Logged out")
+  }
   // otherwise, we're ready to render the app
   return (
     <ToggleStorybook>

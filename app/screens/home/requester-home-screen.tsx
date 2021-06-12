@@ -45,11 +45,11 @@ export const RequesterHomeScreen = observer(function HomeScreen() {
   }, [])
 
   useEffect(() => {
-    async function fetchData() {
-      requestStore.getRequests()
-    }
+    requestStore.subscribeAsRequester()
 
-    fetchData()
+    return () => {
+      requestStore.unsubscribeAll()
+    }
   }, [])
 
   return (
@@ -70,13 +70,13 @@ export const RequesterHomeScreen = observer(function HomeScreen() {
         <ScrollView
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         >
-          {requestStore.sortByCreated.length === 0 && (
+          {requestStore.sortUserRequestsByCreated.length === 0 && (
             <>
               <Text preset={["bold", "center"]} tx="homeScreen.noneScheduledNoticeBold" />
               <NoRequestsNotice />
             </>
           )}
-          {requestStore.sortByCreated.map((request: RequestSnapshot) => (
+          {requestStore.sortUserRequestsByCreated.map((request: RequestSnapshot) => (
             <RequestCard
               key={request.id}
               status={request.status as RequestStatusEnum}

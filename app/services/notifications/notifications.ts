@@ -33,7 +33,9 @@ export class Notifications {
       }
       token = (await this.notifications.getExpoPushTokenAsync()).data
     } else {
-      console.log("[WARNING] Must use a physical device to receive Push Notifications")
+      console.log(
+        "[WARNING] Could not set up push notification service. Must use a physical device.",
+      )
     }
 
     if (Platform.OS === "android") {
@@ -52,7 +54,6 @@ export class Notifications {
    * Setup
    */
   async setup() {
-    console.log("Setting up notifications...")
     this.notifications.setNotificationHandler({
       handleNotification: async () => ({
         shouldShowAlert: true,
@@ -62,7 +63,13 @@ export class Notifications {
     })
 
     this._token = await this.registerForPushNotificationsAsync()
-    console.log("Subscribed to push notifications:", this.deviceNotificationToken)
+
+    // Bail out if a device token hasn't been established
+    if (!this._token) {
+      return
+    }
+
+    console.log("Subscribed to push notifications with token", this.deviceNotificationToken)
 
     console.log("Registering notification handlers")
     this.notifications.addNotificationReceivedListener((notification) => {
