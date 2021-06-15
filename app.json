@@ -1,7 +1,8 @@
 {
   "expo": {
-    "name": "Compassion",
+    "name": "Compassion App",
     "slug": "Compassion",
+    "owner": "compassion-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -16,7 +17,7 @@
     "assetBundlePatterns": ["**/*"],
     "android": { "softwareKeyboardLayoutMode": "pan" },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": false
     },
     "web": {
       "favicon": "./assets/favicon.png"
