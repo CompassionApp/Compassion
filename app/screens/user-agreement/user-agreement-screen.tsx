@@ -25,7 +25,7 @@ export const UserAgreementScreen = observer(function UserAgreementScreen() {
   }
 
   const acceptedOnDate = format(
-    new Date(user.profile.acceptedUserAgreementAt),
+    new Date(user?.profile.acceptedUserAgreementAt),
     CALENDAR_DATE_FORMAT,
   )
 

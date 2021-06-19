@@ -1,7 +1,8 @@
 import { RootStore } from "."
 import { Api } from "../services/api"
-import { FirebaseApi } from "../services/firebase-api"
-import { Notifications } from "../services/notifications"
+import { FirebaseCoreApiAdapter, AuthApi, RequestApi, UserApi } from "../services/firebase-api"
+import { NotificationApi } from "../services/firebase-api/notification-api"
+import { NotificationsService } from "../services/notifications"
 
 let ReactotronDev
 if (__DEV__) {
@@ -24,8 +25,13 @@ export class Environment {
       this.reactotron = new ReactotronDev()
     }
     this.api = new Api()
-    this.firebaseApi = new FirebaseApi()
-    this.notifications = new Notifications()
+    this.firebaseApi = new FirebaseCoreApiAdapter()
+    this.notifications = new NotificationsService()
+
+    this.authApi = new AuthApi(this.firebaseApi)
+    this.notificationApi = new NotificationApi(this.firebaseApi, this.notifications)
+    this.requestApi = new RequestApi(this.firebaseApi)
+    this.userApi = new UserApi(this.firebaseApi)
   }
 
   async setup() {
@@ -51,10 +57,30 @@ export class Environment {
   /**
    * Firebase API adapter
    */
-  firebaseApi: FirebaseApi
+  firebaseApi: FirebaseCoreApiAdapter
 
   /**
    * Notifications service
    */
-  notifications: Notifications
+  notifications: NotificationsService
+
+  /**
+   * Auth API: CRUD operations for auth
+   */
+  authApi: AuthApi
+
+  /**
+   * Notification API: CRUD operations for user notifications
+   */
+  notificationApi: NotificationApi
+
+  /**
+   * Request API: CRUD operations for requests
+   */
+  requestApi: RequestApi
+
+  /**
+   * User API: CRUD operations for users
+   */
+  userApi: UserApi
 }

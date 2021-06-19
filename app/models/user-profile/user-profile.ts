@@ -1,6 +1,7 @@
-import { Instance, SnapshotOut, types } from "mobx-state-tree"
-import { UserRoleEnum, UserStatus } from "../../types"
+import { applySnapshot, flow, getSnapshot, Instance, SnapshotOut, types } from "mobx-state-tree"
+import { GeoAreaEnum, UserRoleEnum, UserStatusEnum } from "../../types"
 import { withEnvironment } from "../extensions/with-environment"
+import { UserProfilePreviewModel } from "../user-profile-preview/user-profile-preview"
 
 /**
  * A `UserProfile` contains the extraneous attributes for a user that we care about in this app
@@ -11,17 +12,42 @@ export const UserProfileModel = types
     id: types.string,
     createdAt: types.optional(types.string, new Date().toUTCString()),
     updatedAt: types.optional(types.string, new Date().toUTCString()),
-    role: types.enumeration([UserRoleEnum.ADMIN, UserRoleEnum.CHAPERONE, UserRoleEnum.REQUESTER]),
+    role: types.enumeration<UserRoleEnum>(Object.values(UserRoleEnum)),
     firstName: types.string,
     lastName: types.string,
     email: types.string,
     phoneNumber: types.maybeNull(types.string),
-    status: types.enumeration([UserStatus.ACTIVE, UserStatus.DISALLOW, UserStatus.INACTIVE]),
+    status: types.enumeration<UserStatusEnum>(Object.values(UserStatusEnum)),
+    geoArea: types.optional(
+      types.enumeration<GeoAreaEnum>(Object.values(GeoAreaEnum)),
+      GeoAreaEnum.OAK1,
+    ),
     latestCovidTestVerifiedAt: types.maybeNull(types.string),
     signedCodeOfConductAt: types.maybeNull(types.string),
     acceptedUserAgreementAt: types.maybeNull(types.string),
+    notificationToken: types.maybeNull(types.string),
+    enableNotifications: types.maybeNull(types.boolean),
   })
   .extend(withEnvironment)
+  .views((self) => ({
+    /** Returns a "preview profile", which is an abbreviated UserProfile for use to embed in
+     * requests and notifications */
+    get preview() {
+      const profilePreview = UserProfilePreviewModel.create({
+        id: self.id,
+        firstName: self.firstName,
+        lastName: self.lastName,
+        email: self.email,
+        phoneNumber: self.phoneNumber,
+      })
+      return profilePreview
+    },
+  }))
+  .actions((self) => ({
+    updateLocal: (profile: UserProfileSnapshot) => {
+      applySnapshot(self, profile)
+    },
+  }))
   .actions((self) => ({
     acceptUserAgreement: () => {
       self.acceptedUserAgreementAt = new Date().toUTCString()
@@ -38,9 +64,41 @@ export const UserProfileModel = types
     setLastName: (value: string) => {
       self.lastName = value
     },
-    setStatus: (value: UserStatus) => {
+    setStatus: (value: UserStatusEnum) => {
       self.status = value
     },
+    setNotificationToken: (value: string | null) => {
+      self.notificationToken = value
+    },
+    setEnableNotifications: (value: boolean | null) => {
+      self.enableNotifications = value
+    },
+
+    fetch: flow(function* () {
+      console.log("[user-profile] Fetching user profile...")
+
+      const {
+        kind,
+        profile,
+      }: {
+        kind: string
+        profile: UserProfileSnapshot
+      } = yield self.environment.userApi.getUserProfile(self.email)
+      if (kind === "ok") {
+        self.updateLocal(profile)
+      } else {
+        throw new Error(kind)
+      }
+    }),
+
+    /**
+     * Saves the user profile document on Firestore with the data from the local store
+     */
+    save: flow(function* () {
+      console.log("[user-profile] Updating user profile...")
+      self.updatedAt = new Date().toUTCString()
+      yield self.environment.userApi.saveUserProfile(self.email, getSnapshot(self))
+    }),
   }))
 
 /**

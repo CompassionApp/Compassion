@@ -1,6 +1,6 @@
 import Ajv from "ajv"
 import addFormats from "ajv-formats"
-import { LatLng, User, UserRoleEnum, UserStatus } from "."
+import { LatLng, User, UserRoleEnum, UserStatusEnum } from "."
 import UserSchema from "./User.schema.json"
 import LatLngSchema from "./LatLng.schema.json"
 
@@ -29,7 +29,7 @@ describe("schema tests", () => {
       createdAt: "2021-01-01 11:00:00",
       updatedAt: "2021-01-01 11:00:00",
       role: UserRoleEnum.REQUESTER,
-      status: UserStatus.ACTIVE,
+      status: UserStatusEnum.ACTIVE,
       phoneNumber: 1112223333,
       email: "test@google.com",
       password: "password",
@@ -50,7 +50,7 @@ describe("schema tests", () => {
       createdAt: "2021-01-01 11:00:00",
       updatedAt: "2021-01-01 11:00:00",
       role: UserRoleEnum.REQUESTER,
-      status: UserStatus.ACTIVE,
+      status: UserStatusEnum.ACTIVE,
       phoneNumber: 1112223333,
       email: "test@google.com",
       password: "password",

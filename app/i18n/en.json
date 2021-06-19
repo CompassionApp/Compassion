@@ -84,11 +84,13 @@
     "youAreMatched": "You’re all set! You have been matched."
   },
   "notificationsScreen": {
-    "title": "Notifications"
+    "title": "Notifications",
+    "clearAllNotificationsButton": "Clear all notifications"
   },
   "menuScreen": {
     "title": "Menu",
     "menuButtonRequesterInfo": "Requester Info",
+    "menuButtonChaperoneInfo": "Chaperone Info",
     "menuButtonAboutUs": "About Us",
     "menuButtonUserAgreement": "User Agreement",
     "menuButtonResetPassword": "Reset Password",
@@ -108,7 +110,11 @@
   },
   "chaperoneHomeScreen": {
     "noOpenRequests": "There are currently no open requests. Pull down to refresh.",
-    "noScheduledRequests": "You have no scheduled requests"
+    "noScheduledRequests": "You currently have no scheduled requests",
+    "yourScheduledRequests": "Your Scheduled Requests",
+    "availableRequests": "Available Requests",
+    "acceptRequests": "Accept Requests?",
+    "acceptRequestsDescription": "Allow notifications to be sent to you when new requests arrive"
   },
   "requesterScreen": {
     "title": "Request a Chaperone",

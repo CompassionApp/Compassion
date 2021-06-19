@@ -1,11 +1,11 @@
 import React from "react"
 import { createStackNavigator } from "@react-navigation/stack"
 import { NewRequestScreen } from "../../screens"
-import { NewRequestDateSelectionScreen } from "../../screens/new-request-date-selection/new-request-date-selection-screen"
-import { NewRequestTimeSelectionScreen } from "../../screens/new-request-time-selection/new-request-time-selection-screen"
-import { NewRequestLocationSelectionScreen } from "../../screens/new-request-location-selection/new-request-location-selection-screen"
-import { NewRequestActivitySelectionScreen } from "../../screens/new-request-activity-selection/new-request-activity-selection-screen"
-import { NewRequestReviewScreen } from "../../screens/new-request-review/new-request-review-screen"
+import { NewRequestDateSelectionScreen } from "../../screens/new-request/new-request-date-selection-screen"
+import { NewRequestTimeSelectionScreen } from "../../screens/new-request/new-request-time-selection-screen"
+import { NewRequestLocationSelectionScreen } from "../../screens/new-request/new-request-location-selection-screen"
+import { NewRequestActivitySelectionScreen } from "../../screens/new-request/new-request-activity-selection-screen"
+import { NewRequestReviewScreen } from "../../screens/new-request/new-request-review-screen"
 
 export type NewRequestNavigatorStackParamList = {
   new: undefined

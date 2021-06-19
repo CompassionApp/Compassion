@@ -8,6 +8,7 @@ import { color, globalStyles } from "../../theme"
 import { RequestTypeEnum } from "../../types"
 import { translate, TxKeyPath } from "../../i18n"
 import { useStores } from "../../models"
+import { NewRequestFooterArea } from "./common"
 
 const ROOT: ViewStyle = {
   backgroundColor: color.background,
@@ -21,20 +22,19 @@ const ADDITIONAL_NOTES_INPUT_STYLE = {
 export const NewRequestActivitySelectionScreen = observer(
   function NewRequestActivitySelectionScreen() {
     const { newRequestStore } = useStores()
-    const { request } = newRequestStore
 
     const [selectedActivity, setSelectedActivity] = useState<RequestTypeEnum>(
-      (request?.type as RequestTypeEnum) || RequestTypeEnum.GROCERY,
+      (newRequestStore.type as RequestTypeEnum) || RequestTypeEnum.GROCERY,
     )
-    const [requestNotes, setRequestNotes] = useState<string>(request?.otherComments ?? "")
+    const [requestNotes, setRequestNotes] = useState<string>(newRequestStore.otherComments ?? "")
 
     const navigation = useNavigation()
     const navigateBack = () => navigation.goBack()
     const navigateNext = () => navigation.navigate("newRequest", { screen: "review" })
 
     const handlePressNext = () => {
-      newRequestStore.request.setActivity(selectedActivity)
-      newRequestStore.request.setNotes(requestNotes)
+      newRequestStore.setType(selectedActivity)
+      newRequestStore.setOtherComments(requestNotes)
       navigateNext()
     }
 
@@ -69,9 +69,10 @@ export const NewRequestActivitySelectionScreen = observer(
             inputStyle={ADDITIONAL_NOTES_INPUT_STYLE}
             onChangeText={(text) => setRequestNotes(text)}
           />
-
-          <Button tx="newRequestActivitySelectionScreen.nextButton" onPress={handlePressNext} />
         </Screen>
+        <NewRequestFooterArea step={4}>
+          <Button tx="newRequestActivitySelectionScreen.nextButton" onPress={handlePressNext} />
+        </NewRequestFooterArea>
       </View>
     )
   },

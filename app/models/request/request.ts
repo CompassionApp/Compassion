@@ -1,6 +1,10 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
 import { MAX_CHAPERONES_PER_REQUEST } from "../../constants/match"
 import { RequestStatusEnum, RequestTypeEnum } from "../../types"
+import {
+  UserProfilePreview,
+  UserProfilePreviewModel,
+} from "../user-profile-preview/user-profile-preview"
 
 /**
  * A Request represents an individual request by requesters to be fulfilled by chaperones. Created
@@ -11,63 +15,48 @@ export const RequestModel = types
   .model("Request")
   .props({
     id: types.identifier,
-    requestedBy: types.string,
+    /** User key of the requester */
+    requestedBy: UserProfilePreviewModel,
+    /** When the request was created */
     createdAt: types.string,
+    /** Requested time for the chaperone session */
     requestedAt: types.maybe(types.string),
     updatedAt: types.maybe(types.string),
     meetAddress: types.maybe(types.string),
     destinationAddress: types.maybe(types.string),
+    /** Other comments text field */
     otherComments: types.maybe(types.string),
     requestStatusReason: types.maybe(types.string),
-    chaperones: types.optional(types.array(types.string), []),
-    status: types.maybe(types.string),
-    type: types.maybe(types.string),
+    chaperones: types.optional(types.array(UserProfilePreviewModel), []),
+    /** Status of the request */
+    status: types.maybe(types.enumeration<RequestStatusEnum>(Object.values(RequestStatusEnum))),
+    /** Type of request */
+    type: types.maybe(types.enumeration<RequestTypeEnum>(Object.values(RequestTypeEnum))),
   })
   .views((self) => ({
-    containsUserAsChaperone: (userId: string) => {
-      return self.chaperones.includes(userId)
+    containsUserAsChaperone: (email: string) => {
+      return self.chaperones.find((chaperone) => chaperone.email === email)
     },
   }))
   .actions((self) => ({
     touchUpdatedDate: () => {
       self.updatedAt = new Date().toUTCString()
     },
-    addChaperone: (userId: string) => {
+    addChaperone: (previewProfile: UserProfilePreview) => {
       if (self.chaperones.length + 1 > MAX_CHAPERONES_PER_REQUEST) {
         throw new Error("Too many chaperones")
       }
-      self.chaperones.push(userId)
+      self.chaperones.push(previewProfile)
     },
-    removeChaperone: (userId: string) => {
-      self.chaperones.remove(userId)
+    removeChaperone: (email: string) => {
+      const index = self.chaperones.findIndex((chaperone) => chaperone.email === email)
+      if (!index) return
+      self.chaperones.remove(self.chaperones[index])
     },
     setStatus: (status: RequestStatusEnum) => {
       self.status = status
     },
-    setRequestDateTime: (dateStr: string) => {
-      self.requestedAt = dateStr
-    },
-    setMeetLocation: (meetAddress: string) => {
-      self.meetAddress = meetAddress
-    },
-    setDestinationLocation: (destinationAddress: string) => {
-      self.destinationAddress = destinationAddress
-    },
-    setActivity: (activity: RequestTypeEnum) => {
-      self.type = activity
-    },
-    setNotes: (notes: string) => {
-      self.otherComments = notes
-    },
   }))
-
-/**
- * Un-comment the following to omit model attributes from your snapshots (and from async storage).
- * Useful for sensitive data like passwords, or transitive state like whether a modal is open.
-
- * Note that you'll need to import `omit` from ramda, which is already included in the project!
- *  .postProcessSnapshot(omit(["password", "socialSecurityNumber", "creditCardNumber"]))
- */
 
 type RequestType = Instance<typeof RequestModel>
 export interface Request extends RequestType {}

@@ -1,11 +1,16 @@
 import { applyPatch, flow, getSnapshot, Instance, SnapshotOut, types } from "mobx-state-tree"
 import R from "ramda"
 import { MAX_CHAPERONES_PER_REQUEST } from "../../constants/match"
-// import { async } from "validate.js"
-import { RequestApi } from "../../services/firebase-api/request-api"
 import { RequestStatusEnum } from "../../types"
+import {
+  createNewRequestNotification,
+  createRequestAcceptedNotification,
+  createRequestCanceledByChaperoneNotification,
+  createRequestCanceledByRequesterNotification,
+} from "../../utils/notification-factory"
 import { withAuthContext } from "../extensions/with-auth-context"
 import { withEnvironment } from "../extensions/with-environment"
+import { NotificationModel } from "../notification/notification"
 import { RequestModel, RequestSnapshot } from "../request/request"
 
 /**
@@ -17,16 +22,16 @@ export const RequestStoreModel = types
     requests: types.optional(types.array(RequestModel), []),
     availableRequests: types.optional(types.array(RequestModel), []),
     isLoading: types.optional(types.boolean, false),
-    currentRequest: types.safeReference(RequestModel),
+    currentRequest: types.maybe(types.safeReference(RequestModel)),
   })
   .extend(withEnvironment)
   .extend(withAuthContext)
   .views((self) => ({
     get sortUserRequestsByCreated() {
-      return sortByCreatedAt(self.requests)
+      return self.requests.slice().sort(sortByCreatedAt)
     },
     get sortAvailableRequestsByCreated() {
-      return sortByCreatedAt(self.availableRequests)
+      return self.availableRequests.slice().sort(sortByCreatedAt)
     },
   }))
   .actions((self) => ({
@@ -38,30 +43,31 @@ export const RequestStoreModel = types
     markLoading: () => {
       self.isLoading = true
     },
-    updateAvailableRequests: (requests: RequestSnapshot[]) => {
+    _updateAvailableRequests: (requests: RequestSnapshot[]) => {
       applyPatch(self, { op: "replace", path: "/availableRequests", value: requests })
       self.isLoading = false
     },
-    updateRequests: (requests: RequestSnapshot[]) => {
+    _updateRequests: (requests: RequestSnapshot[]) => {
+      console.log("[request-store] Updating requests", requests)
       applyPatch(self, { op: "replace", path: "/requests", value: requests })
       self.isLoading = false
     },
-    saveRequest: (requestSnapshot: RequestSnapshot) => {
+    _saveRequest: (requestSnapshot: RequestSnapshot) => {
       if (!self.requests.find((request) => request.id === requestSnapshot.id)) {
         self.requests.push(requestSnapshot)
       }
     },
-    saveAvailableRequest: (requestSnapshot: RequestSnapshot) => {
+    _saveAvailableRequest: (requestSnapshot: RequestSnapshot) => {
       if (!self.availableRequests.find((request) => request.id === requestSnapshot.id)) {
         self.availableRequests.push(requestSnapshot)
       }
     },
-    deleteRequest: (requestId: string) => {
+    _deleteRequest: (requestId: string) => {
       // Deleting an element from the local store using `splice` (mutates array)
       const index = self.requests.findIndex((request) => request.id === requestId)
       self.requests.splice(index, 1)
     },
-    deleteAvailableRequest: (requestId: string) => {
+    _deleteAvailableRequest: (requestId: string) => {
       const index = self.requests.findIndex((request) => request.id === requestId)
       self.availableRequests.splice(index, 1)
     },
@@ -89,23 +95,30 @@ export const RequestStoreModel = types
 
     /** Sets the current request that is being viewed in the detail screen */
     selectCurrentRequest: (requestId: string) => {
+      console.log("[request-store] Selecting request", requestId)
       const fromUserRequests = self.requests.find((r) => r.id === requestId)
       const fromAvailableRequests = self.availableRequests.find((r) => r.id === requestId)
       self.currentRequest = fromUserRequests ?? fromAvailableRequests
+      console.log("[request-store] Set to", self.currentRequest?.id)
     },
   }))
   .actions((self) => ({
     /**
-     * Sends the request to the server
+     * Creates a new request in Firestore and sends a notification to all chaperones
      */
     createRequest: flow(function* (request: RequestSnapshot) {
-      const requestApi = new RequestApi(self.environment.firebaseApi)
-      const result = yield requestApi.createRequest(request, self.authContext)
+      const result = yield self.environment.requestApi.createRequest(request, self.authContext)
       if (result.kind === "ok") {
-        self.saveRequest(request)
+        self._saveRequest(request)
       } else {
         __DEV__ && console.tron.log(result.kind)
       }
+
+      // Notify the chaperones
+      const notification = NotificationModel.create(
+        createNewRequestNotification(self.authContext.profile, request),
+      )
+      yield self.environment.notificationApi.notifyAllChaperones(notification)
     }),
 
     /**
@@ -113,16 +126,16 @@ export const RequestStoreModel = types
      */
     getRequests: flow(function* () {
       self.markLoading()
-      const requestApi = new RequestApi(self.environment.firebaseApi)
       const {
         kind,
         requests,
-      }: { kind: string; requests: RequestSnapshot[] } = yield requestApi.getUserRequests(
-        self.authContext,
-      )
+      }: {
+        kind: string
+        requests: RequestSnapshot[]
+      } = yield self.environment.requestApi.getUserRequests(self.authContext)
 
       if (kind === "ok") {
-        self.updateRequests(requests)
+        self._updateRequests(requests)
       } else {
         __DEV__ && console.log(kind)
       }
@@ -133,14 +146,16 @@ export const RequestStoreModel = types
      */
     getAvailableRequests: flow(function* () {
       self.markLoading()
-      const requestApi = new RequestApi(self.environment.firebaseApi)
       const {
         kind,
         requests,
-      }: { kind: string; requests: RequestSnapshot[] } = yield requestApi.getAvailableRequests()
+      }: {
+        kind: string
+        requests: RequestSnapshot[]
+      } = yield self.environment.requestApi.getAvailableRequests()
 
       if (kind === "ok") {
-        self.updateAvailableRequests(requests)
+        self._updateAvailableRequests(requests)
       } else {
         __DEV__ && console.log(kind)
       }
@@ -151,7 +166,6 @@ export const RequestStoreModel = types
      */
     acceptRequest: flow(function* (requestId: string) {
       console.log("[request-store] Accepting request", requestId)
-      const requestApi = new RequestApi(self.environment.firebaseApi)
       const request = self.availableRequests.find((r) => r.id === requestId)
       if (!request) {
         throw new Error("Request cannot be found")
@@ -167,22 +181,27 @@ export const RequestStoreModel = types
       }
 
       // Start mutating our copy to the "accepted" state
-      requestModel.addChaperone(self.authContext.email)
+      requestModel.addChaperone(self.authContext.profile.preview)
       requestModel.setStatus(RequestStatusEnum.SCHEDULED)
       requestModel.touchUpdatedDate()
 
       const mutatedRequest = getSnapshot(requestModel)
       // Update the request record for the requester and in the general request pool
-      const result = yield requestApi.acceptUserRequest(
+      const result = yield self.environment.requestApi.acceptUserRequest(
         requestId,
         mutatedRequest,
-        mutatedRequest.requestedBy,
+        mutatedRequest.requestedBy.email,
         self.authContext,
       )
 
       if (result.kind === "ok") {
         // self.saveRequest(mutatedRequest)
         // self.deleteAvailableRequest(mutatedRequest.id)
+        // Notify the chaperones
+        const notification = NotificationModel.create(
+          createRequestAcceptedNotification(self.authContext.profile, request),
+        )
+        yield self.environment.notificationApi.notifyUser(request.requestedBy.email, notification)
       } else {
         __DEV__ && console.tron.log(result.kind)
       }
@@ -193,45 +212,95 @@ export const RequestStoreModel = types
      */
     releaseRequest: flow(function* (requestId: string) {
       console.log("[request-store] Releasing request", requestId)
-      const requestApi = new RequestApi(self.environment.firebaseApi)
       const request = self.requests.find((r) => r.id === requestId)
       if (!request) {
         throw new Error("Request cannot be found")
       }
+      // Create a mutable copy of the request
       const requestModel = RequestModel.create(getSnapshot(request))
-
       // Start mutating our copy to the "released" state
       requestModel.removeChaperone(self.authContext.email)
       requestModel.setStatus(RequestStatusEnum.REQUESTED)
       requestModel.touchUpdatedDate()
-
       const mutatedRequest = getSnapshot(requestModel)
       // Update the request record for the requester and in the general request pool
-      const result = yield requestApi.releaseUserRequest(
+      const result = yield self.environment.requestApi.releaseUserRequest(
         requestId,
         mutatedRequest,
-        mutatedRequest.requestedBy,
+        mutatedRequest.requestedBy.email,
         self.authContext,
       )
 
       if (result.kind === "ok") {
-        // self.deleteRequest(mutatedRequest.id)
-        // self.saveAvailableRequest(mutatedRequest)
+        // Notify the chaperones
+        const notification = NotificationModel.create(
+          createRequestCanceledByChaperoneNotification(self.authContext.profile, request),
+        )
+        yield self.environment.notificationApi.notifyUser(request.requestedBy.email, notification)
       } else {
         __DEV__ && console.tron.log(result.kind)
       }
     }),
 
     /**
-     * Reschedule a request (currently deletes the request)
+     * Reschedule a request
      */
-    rescheduleRequest: flow(function* (requestId: string) {
-      console.log("[request-store] Rescheduling (deleting)", requestId)
-      const requestApi = new RequestApi(self.environment.firebaseApi)
-      const result = yield requestApi.deleteRequest(requestId, self.authContext)
+    rescheduleRequest: flow(function* (request: RequestSnapshot) {
+      console.log("[request-store] Rescheduling", request.id)
+      const result = yield self.environment.requestApi.updateRequest(
+        request.id,
+        { status: RequestStatusEnum.CANCELED_BY_REQUESTER },
+        self.authContext,
+      )
 
       if (result.kind === "ok") {
-        self.deleteRequest(requestId)
+        self.updateRequest(request.id, { status: RequestStatusEnum.CANCELED_BY_REQUESTER })
+
+        const notification = NotificationModel.create(
+          createRequestCanceledByRequesterNotification(self.authContext.profile, request),
+        )
+        request.chaperones.forEach((chaperone) => {
+          self.environment.notificationApi.notifyUser(chaperone.email, notification)
+        })
+      } else {
+        __DEV__ && console.tron.log(result.kind)
+      }
+    }),
+
+    /**
+     * Delete a request
+     */
+    deleteRequest: flow(function* (requestId: string) {
+      console.log("[request-store] Deleting", requestId)
+      const result = yield self.environment.requestApi.deleteRequest(requestId, self.authContext)
+
+      if (result.kind === "ok") {
+        self._deleteRequest(requestId)
+      } else {
+        __DEV__ && console.tron.log(result.kind)
+      }
+    }),
+
+    /**
+     * Cancel a request as a requester and notifies any chaperones associated with the request
+     */
+    cancelRequestAsRequester: flow(function* (request: RequestSnapshot) {
+      console.log("[request-store] Canceling as requester", request.id)
+      const result = yield self.environment.requestApi.updateRequest(
+        request.id,
+        { status: RequestStatusEnum.CANCELED_BY_REQUESTER },
+        self.authContext,
+      )
+
+      if (result.kind === "ok") {
+        self.updateRequest(request.id, { status: RequestStatusEnum.CANCELED_BY_REQUESTER })
+
+        const notification = NotificationModel.create(
+          createRequestCanceledByRequesterNotification(self.authContext.profile, request),
+        )
+        request.chaperones.forEach((chaperone) => {
+          self.environment.notificationApi.notifyUser(chaperone.email, notification)
+        })
       } else {
         __DEV__ && console.tron.log(result.kind)
       }
@@ -242,8 +311,11 @@ export const RequestStoreModel = types
      */
     changeRequestStatus: flow(function* (requestId: string, status: RequestStatusEnum) {
       console.log("[request-store] Changing status", requestId, status)
-      const requestApi = new RequestApi(self.environment.firebaseApi)
-      const result = yield requestApi.updateRequest(requestId, { status }, self.authContext)
+      const result = yield self.environment.requestApi.updateRequest(
+        requestId,
+        { status },
+        self.authContext,
+      )
 
       if (result.kind === "ok") {
         self.updateRequest(requestId, { status })
@@ -279,15 +351,14 @@ export const RequestStoreModel = types
        * Returns unsubscribe functions that must be called upon unmount.
        */
       subscribeAsRequester: () => {
-        const requestApi = new RequestApi(self.environment.firebaseApi)
-        const unsubscribeUserRequests = requestApi.subscribeToUserRequests(
+        const unsubscribeUserRequests = self.environment.requestApi.subscribeToUserRequests(
           self.authContext,
           (requests) => {
             console.log(
               "[request-store] User's requests from subscription:",
               requests.map((r) => r.id),
             )
-            self.updateRequests(requests)
+            self._updateRequests(requests)
           },
         )
         unsubscribeHandlers.push(unsubscribeUserRequests)
@@ -300,22 +371,23 @@ export const RequestStoreModel = types
        * Returns unsubscribe functions that must be called upon unmount.
        */
       subscribeAsChaperone: () => {
-        const requestApi = new RequestApi(self.environment.firebaseApi)
-        const unsubscribeAvailableRequests = requestApi.subscribeToAvailableRequests((requests) => {
-          console.log(
-            "[request-store] New requests from subscription:",
-            requests.map((r) => r.id),
-          )
-          self.updateAvailableRequests(requests)
-        })
-        const unsubscribeUserRequests = requestApi.subscribeToUserRequests(
+        const unsubscribeAvailableRequests = self.environment.requestApi.subscribeToAvailableRequests(
+          (requests) => {
+            console.log(
+              "[request-store] New requests from subscription:",
+              requests.map((r) => r.id),
+            )
+            self._updateAvailableRequests(requests)
+          },
+        )
+        const unsubscribeUserRequests = self.environment.requestApi.subscribeToUserRequests(
           self.authContext,
           (requests) => {
             console.log(
               "[request-store] User's requests from subscription:",
               requests.map((r) => r.id),
             )
-            self.updateRequests(requests)
+            self._updateRequests(requests)
           },
         )
 
@@ -343,6 +415,14 @@ type RequestStoreSnapshotType = SnapshotOut<typeof RequestStoreModel>
 export interface RequestStoreSnapshot extends RequestStoreSnapshotType {}
 export const createRequestStoreDefaultModel = () => types.optional(RequestStoreModel, {})
 
-function sortByCreatedAt(requests) {
-  return requests.slice().sort((a, b) => a.createdAt < b.createdAt)
+function sortByCreatedAt(a: RequestSnapshot, b: RequestSnapshot) {
+  const aTime = new Date(a.createdAt).getTime()
+  const bTime = new Date(b.createdAt).getTime()
+  if (aTime < bTime) {
+    return 1
+  }
+  if (aTime > bTime) {
+    return -1
+  }
+  return 0
 }

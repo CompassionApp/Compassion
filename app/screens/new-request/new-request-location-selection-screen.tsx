@@ -10,6 +10,7 @@ import { START_REGION } from "../../constants/map"
 import { useStores } from "../../models"
 import styled from "styled-components/native"
 import PickupDropoff from "../../components/pickup-dropoff/pickupDropoff"
+import { NewRequestFooterArea } from "./common"
 
 const ROOT: ViewStyle = {
   backgroundColor: color.background,
@@ -51,8 +52,8 @@ export const NewRequestLocationSelectionScreen = observer(
     const navigateNext = () => navigation.navigate("newRequest", { screen: "notesSelect" })
 
     const handlePressNext = () => {
-      newRequestStore.request.setDestinationLocation("123 Test St")
-      newRequestStore.request.setMeetLocation("234 Main Blvd")
+      newRequestStore.setDestinationAddress("123 Test St")
+      newRequestStore.setMeetAddress("234 Main Blvd")
       navigateNext()
     }
 
@@ -115,9 +116,11 @@ export const NewRequestLocationSelectionScreen = observer(
             <View style={PICKUP_DROPOFF_WRAPPER}>
               <PickupDropoff totalSteps={2} />
             </View>
-            <Button tx="newRequestLocationSelectionScreen.nextButton" onPress={handlePressNext} />
           </FlexView>
         </Screen>
+        <NewRequestFooterArea step={3}>
+          <Button tx="newRequestLocationSelectionScreen.nextButton" onPress={handlePressNext} />
+        </NewRequestFooterArea>
       </View>
     )
   },

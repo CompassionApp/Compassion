@@ -1,13 +1,15 @@
 import React from "react"
 import { View, ViewStyle } from "react-native"
 
-import { color } from "../../theme"
+import { color, spacing } from "../../theme"
 import { ProgressIndicatorItemViewProps, ProgressIndicatorProps } from "./progress-indicator.props"
 
 const PROGRESS_AREA_WRAPPER: ViewStyle = {
   justifyContent: "space-between",
   flexDirection: "row",
   alignItems: "center",
+  marginTop: spacing[2],
+  marginBottom: spacing[2],
 }
 const PROGRESS_BAR_STYLES_NOT_COMPLETED: ViewStyle = {
   flex: 1,

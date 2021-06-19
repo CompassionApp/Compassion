@@ -1,5 +1,5 @@
-import { FirebaseApi } from "./firebase-api"
 import firebase, { FirebaseError } from "firebase"
+import { FirebaseCoreApiAdapter } from "./firebase-core-api"
 import { CreateUserResult, SignInResult, SignOutResult, UpdateUserResult } from "./api.types"
 import { getFirebaseAuthApiProblem } from "./api-problem"
 
@@ -8,9 +8,9 @@ import { getFirebaseAuthApiProblem } from "./api-problem"
  * creation.
  */
 export class AuthApi {
-  private firebase: FirebaseApi
+  private firebase: FirebaseCoreApiAdapter
 
-  constructor(firebase: FirebaseApi) {
+  constructor(firebase: FirebaseCoreApiAdapter) {
     this.firebase = firebase
   }
 
@@ -78,7 +78,7 @@ export class AuthApi {
   /**
    * Updates the current user's Firebase auth profile
    */
-  async updateUser(user: firebase.User): Promise<UpdateUserResult> {
+  async updateFirebaseUser(user: firebase.User): Promise<UpdateUserResult> {
     try {
       console.log("[auth-api] Updating Firebase user")
       await this.firebase.authentication.updateCurrentUser(user)

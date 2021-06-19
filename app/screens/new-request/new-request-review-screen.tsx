@@ -9,6 +9,7 @@ import { Break } from "../../components/break/break"
 import { format } from "date-fns"
 import { TIME_RANGE_FORMAT, TITLE_DATE_FORMAT } from "../../constants/date-formats"
 import { TxKeyPath } from "../../i18n"
+import { NewRequestFooterArea } from "./common"
 
 const ROOT: ViewStyle = {
   backgroundColor: color.background,
@@ -21,23 +22,24 @@ const ADDRESS_TEXT_OVERRIDE = {
 
 export const NewRequestReviewScreen = observer(function NewRequestReviewScreen() {
   const { newRequestStore, requestStore } = useStores()
-  const { request } = newRequestStore
   const navigation = useNavigation()
   const navigateBack = () => navigation.goBack()
   const navigateNext = () => navigation.navigate("home")
 
   const handlePressSubmit = () => {
-    newRequestStore.free(request)
+    // Create an empty request object
+    const request = newRequestStore.convertToRequest()
     requestStore.createRequest(request)
+    newRequestStore.reset()
     navigateNext()
   }
 
-  let requestDate
-  let requestTime
-  if (request) {
-    requestDate = format(new Date(request?.requestedAt), TITLE_DATE_FORMAT)
-    requestTime = format(new Date(request?.requestedAt), TIME_RANGE_FORMAT)
-  }
+  const requestDate = newRequestStore.requestedAt
+    ? format(new Date(newRequestStore.requestedAt), TITLE_DATE_FORMAT)
+    : "Unknown"
+  const requestTime = newRequestStore.requestedAt
+    ? format(new Date(newRequestStore.requestedAt), TIME_RANGE_FORMAT)
+    : "Unknown"
 
   return (
     <View testID="NewRequestReviewScreen" style={globalStyles.full}>
@@ -48,25 +50,33 @@ export const NewRequestReviewScreen = observer(function NewRequestReviewScreen()
           onLeftPress={navigateBack}
           style={globalStyles.header}
         />
-        <Text preset={["header", "center"]} tx={`enumRequestType.${request?.type}` as TxKeyPath} />
+        <Text
+          preset={["header", "center"]}
+          tx={`enumRequestType.${newRequestStore.type}` as TxKeyPath}
+        />
         <Break size={3} />
         <Text preset={["header", "center", "bold"]} text={requestDate} />
         <Text preset={["header", "center"]} text={requestTime} />
         <Break size={3} />
         <Text preset={["center", "bold"]} style={ADDRESS_TEXT_OVERRIDE}>
-          {request?.meetAddress}
+          {newRequestStore.meetAddress}
         </Text>
         <Text preset={["center"]}>to</Text>
         <Text preset={["center", "bold"]} style={ADDRESS_TEXT_OVERRIDE}>
-          {request?.destinationAddress}
+          {newRequestStore.destinationAddress}
         </Text>
         <Break size={2} />
-        <Text>{request?.otherComments}</Text>
+        <Text>{newRequestStore.otherComments}</Text>
 
-        <Button tx="newRequestReviewScreen.nextButton" onPress={handlePressSubmit} />
-
-        {/* <Text>{request?.id}</Text> */}
+        {/* <Text>{newRequestStore.id}</Text> */}
       </Screen>
+      <NewRequestFooterArea step={5}>
+        <Button
+          tx="newRequestReviewScreen.nextButton"
+          disabled={!newRequestStore.isComplete}
+          onPress={handlePressSubmit}
+        />
+      </NewRequestFooterArea>
     </View>
   )
 })

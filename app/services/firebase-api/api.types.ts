@@ -1,10 +1,16 @@
 import firebase from "firebase"
-import { RequestSnapshot, User, UserProfileSnapshot } from "../../models"
+import type { NotificationSnapshot, RequestSnapshot, User, UserProfileSnapshot } from "../../models"
 import { FirebaseAuthApiProblem, GeneralApiProblem } from "./api-problem"
 
 export interface AuthContext extends User {}
 export type GetUserProfileResult = { kind: "ok"; profile: UserProfileSnapshot } | GeneralApiProblem
 export type SaveUserProfileResult = { kind: "ok" } | GeneralApiProblem
+export type NotifyAllChaperonesResult = { kind: "ok" } | GeneralApiProblem
+export type ClearAllNotificationsResult = { kind: "ok" } | GeneralApiProblem
+export type NotifyUserResult = { kind: "ok" } | GeneralApiProblem
+export type GetUserNotificationsResult =
+  | { kind: "ok"; notifications: NotificationSnapshot[] }
+  | GeneralApiProblem
 export type CreateRequestResult = { kind: "ok" } | GeneralApiProblem
 export type GetRequestsResult = { kind: "ok"; requests: RequestSnapshot[] } | GeneralApiProblem
 export type DeleteRequestResult = { kind: "ok" } | GeneralApiProblem

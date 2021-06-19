@@ -61,7 +61,7 @@ const LINK_BUTTON_OVERRIDE = {
 }
 
 export const RequestDetailScreen = observer(function RequestDetailScreen() {
-  const { requestStore } = useStores()
+  const { requestStore, newRequestStore } = useStores()
   const { currentRequest } = requestStore
 
   const isRequestCanceled =
@@ -73,19 +73,25 @@ export const RequestDetailScreen = observer(function RequestDetailScreen() {
 
   const handlePressReschedule = () => {
     console.log("Rescheduling...")
+    requestStore.rescheduleRequest(currentRequest)
+    newRequestStore.replaceFromRequest(currentRequest)
+    navigation.navigate("newRequest", { params: { screen: "dateSelect" } })
   }
+
   const handlePressOk = () => {
     navigateBack()
   }
+
   // Toggles the canceled status
   const handlePressCancel = () => {
-    requestStore.changeRequestStatus(
-      currentRequest.id,
-      !isRequestCanceled ? RequestStatusEnum.CANCELED_BY_REQUESTER : RequestStatusEnum.REQUESTED,
-    )
+    if (!isRequestCanceled) {
+      requestStore.cancelRequestAsRequester(currentRequest)
+    } else {
+      requestStore.changeRequestStatus(currentRequest.id, RequestStatusEnum.REQUESTED)
+    }
   }
   const handlePressDelete = () => {
-    requestStore.rescheduleRequest(currentRequest.id)
+    requestStore.deleteRequest(currentRequest.id)
     navigateBack()
   }
 
@@ -155,8 +161,8 @@ export const RequestDetailScreen = observer(function RequestDetailScreen() {
                 <ContentRow>
                   {currentRequest.chaperones.map((chaperone) => (
                     <RequestDetailProfilePhoto
-                      key={chaperone}
-                      name={chaperone}
+                      key={chaperone.id}
+                      previewProfile={chaperone}
                       style={MATCHED_TEXT_STYLE}
                     />
                   ))}

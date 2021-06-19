@@ -6,7 +6,11 @@ import { Button, Header, Screen, Text, TextField } from "../../components"
 import { color, globalStyles, spacing, typography } from "../../theme"
 import { useStores } from "../../models"
 import { roleTypeToScreenMap } from "../../utils/navigation"
+import { UserRoleEnum } from "../../types"
+import styled from "styled-components/native"
 export const logo = require("./logo-text.png")
+
+const SHOW_DEV_BUTTONS = true
 
 const ROOT: ViewStyle = {
   flex: 1,
@@ -46,6 +50,12 @@ const ROW: ViewStyle = {
   justifyContent: "space-between",
 }
 
+const Row = styled.View`
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+`
+
 /** Remove these later when not launching */
 const DEFAULT_USERNAME = "app@compassioninoakland.org"
 const DEFAULT_PASSWORD = "testing"
@@ -62,8 +72,9 @@ export const WelcomeScreen = observer(function WelcomeScreen() {
   /** Prevents the user from spamming log in while a request is pending */
   const [loginInProgress, setLoginInProgress] = useState<boolean>(false)
 
-  const handleLogin = async () => {
+  const handleLogin = async (userEmail: string, userPassword: string) => {
     try {
+      console.log("Logging in with", userEmail, userPassword)
       setLoginInProgress(true)
       await authStore.signIn(userEmail, userPassword)
 
@@ -82,6 +93,29 @@ export const WelcomeScreen = observer(function WelcomeScreen() {
     clearStorage()
   }
 
+  const handleDevLoginAs = (role: UserRoleEnum) => () => {
+    let userEmail
+    let userPassword
+
+    switch (role) {
+      case UserRoleEnum.REQUESTER:
+        userEmail = "app@compassioninoakland.org"
+        userPassword = "testing"
+        break
+      case UserRoleEnum.CHAPERONE:
+        userEmail = "app2@compassioninoakland.org"
+        userPassword = "testing"
+        break
+      case UserRoleEnum.ADMIN:
+        userEmail = "app3@compassioninoakland.org"
+        userPassword = "testing"
+        break
+    }
+    setUserEmail(userEmail)
+    setUserPassword(userPassword)
+    handleLogin(userEmail, userPassword)
+  }
+
   return (
     <View testID="WelcomeScreen" style={globalStyles.full}>
       <Screen style={{ ...globalStyles.root, ...ROOT }}>
@@ -92,6 +126,21 @@ export const WelcomeScreen = observer(function WelcomeScreen() {
       <SafeAreaView style={FOOTER}>
         <View style={FOOTER_CONTENT}>
           {!!loginErrorMessage && <Text preset="error" text={loginErrorMessage} />}
+          {SHOW_DEV_BUTTONS && (
+            <Row>
+              <Button
+                text="Requester"
+                preset="ghost"
+                onPress={handleDevLoginAs(UserRoleEnum.REQUESTER)}
+              />
+              <Button
+                text="Chaperone"
+                preset="ghost"
+                onPress={handleDevLoginAs(UserRoleEnum.CHAPERONE)}
+              />
+              <Button text="Admin" preset="ghost" onPress={handleDevLoginAs(UserRoleEnum.ADMIN)} />
+            </Row>
+          )}
           <TextField
             preset="header"
             onChangeText={(text) => setUserEmail(text)}
@@ -112,7 +161,7 @@ export const WelcomeScreen = observer(function WelcomeScreen() {
           <Button
             testID="next-screen-button"
             tx="welcomeScreen.login"
-            onPress={handleLogin}
+            onPress={() => handleLogin(userEmail, userPassword)}
             disabled={loginInProgress || !userEmail || !userPassword}
           />
           <Button

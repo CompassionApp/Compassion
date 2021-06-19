@@ -1,10 +1,12 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
+import { observer } from "mobx-react-lite"
 import { MenuScreen, NotificationsScreen } from "../../screens"
 import { NewRequestStackNavigator } from "./new-request-stack-navigator"
 import { TabBarIcon } from "../../components"
 import { color } from "../../theme"
 import { RequesterHomeStackNavigator } from "./requester-home-stack-navigator"
+import { useStores } from "../../models"
 
 export type RequesterTabNavigatorParamList = {
   home: undefined
@@ -18,7 +20,19 @@ export type RequesterTabNavigatorParamList = {
 
 const Tab = createBottomTabNavigator<RequesterTabNavigatorParamList>()
 
-export function RequesterMainTabNavigator() {
+export const RequesterMainTabNavigator = observer(function RequesterMainTabNavigator() {
+  const { notificationStore, requestStore } = useStores()
+
+  useEffect(() => {
+    requestStore.subscribeAsRequester()
+    notificationStore.subscribe()
+
+    return () => {
+      requestStore.unsubscribeAll()
+      notificationStore.unsubscribeAll()
+    }
+  }, [])
+
   return (
     <Tab.Navigator
       initialRouteName="home"
@@ -45,7 +59,10 @@ export function RequesterMainTabNavigator() {
         options={{
           tabBarLabel: "Notifications",
           tabBarIcon: () => <TabBarIcon icon="notification" />,
-          tabBarBadge: 3,
+          tabBarBadge:
+            notificationStore.notificationCount !== 0
+              ? notificationStore.notificationCount
+              : undefined,
         }}
       />
       <Tab.Screen
@@ -55,4 +72,4 @@ export function RequesterMainTabNavigator() {
       />
     </Tab.Navigator>
   )
-}
+})

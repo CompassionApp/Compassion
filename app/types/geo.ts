@@ -13,3 +13,10 @@ export interface LatLng {
    */
   lng: number
 }
+
+export enum GeoAreaEnum {
+  /** Chinatown - Oakland, CA */
+  OAK1 = "OAK1",
+  /** Sunset - San Francisco */
+  SFO1 = "SFO1",
+}

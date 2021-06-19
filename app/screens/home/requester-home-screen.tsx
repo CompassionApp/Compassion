@@ -1,39 +1,34 @@
-import React, { useEffect } from "react"
+import React from "react"
 import { observer } from "mobx-react-lite"
 import { RefreshControl, ScrollView, View, ViewStyle } from "react-native"
 import styled from "styled-components/native"
-import { Break, Header, Screen, Text } from "../../components"
+import { Break, Button, FlexContainer, Header, Screen, Text } from "../../components"
 import { useNavigation } from "@react-navigation/native"
 import { color, globalStyles, typography } from "../../theme"
 import { RequestCard } from "./request-card"
 import { useStores } from "../../models/root-store/root-store-context"
 import { RequestStatusEnum, RequestTypeEnum } from "../../types"
 import { NoRequestsNotice } from "./no-requests-notice"
-import { RequestSnapshot } from "../../models"
+import { NotificationModel, RequestSnapshot } from "../../models"
+import { createNewRequestNotification } from "../../utils/notification-factory"
 
 const ROOT: ViewStyle = {
   backgroundColor: color.background,
   flex: 1,
 }
 
-const TitleView = styled.View`
-  display: flex;
-  flex-flow: row nowrap;
-  justify-content: center;
-`
 const Title = styled(Text)`
   font-family: ${typography.secondary};
   font-size: 24px;
 `
 
 export const RequesterHomeScreen = observer(function HomeScreen() {
-  const { authStore, requestStore } = useStores()
+  const { authStore, requestStore, notificationStore } = useStores()
   const profile = authStore.user?.profile
   const navigation = useNavigation()
 
   const [refreshing, setRefreshing] = React.useState(false)
 
-  const navigateBack = () => navigation.goBack()
   const handlePressRequestDetail = (requestId: string) => () => {
     requestStore.selectCurrentRequest(requestId)
     navigation.navigate("requestDetail")
@@ -44,32 +39,31 @@ export const RequesterHomeScreen = observer(function HomeScreen() {
     requestStore.getRequests().then(() => setRefreshing(false))
   }, [])
 
-  useEffect(() => {
-    requestStore.subscribeAsRequester()
-
-    return () => {
-      requestStore.unsubscribeAll()
-    }
-  }, [])
+  const handlePressNotify = () => {
+    const notification = NotificationModel.create(
+      createNewRequestNotification(authStore.user.profile, ({
+        id: "request-test-id",
+        requestedAt: new Date().toUTCString(),
+      } as unknown) as RequestSnapshot),
+    )
+    notificationStore.notifyChaperonesNewRequest(notification)
+  }
 
   return (
     <View testID="HomeScreen" style={globalStyles.full}>
       <Screen style={{ ...globalStyles.root, ...ROOT }} preset="fixed">
-        <Header
-          headerTx="homeScreen.title"
-          leftIcon="back"
-          onLeftPress={navigateBack}
-          style={globalStyles.header}
-        />
-        <TitleView>
+        <Header headerTx="homeScreen.title" style={globalStyles.header} />
+        <FlexContainer justifyCenter>
           <Title tx="homeScreen.welcome" />
           <Title text={`, ${profile?.firstName ?? "Unknown"}`} />
-        </TitleView>
+        </FlexContainer>
         <Break />
-        <Text preset={["center", "bold"]} text="Your pending requests" />
+        <Button text="Notify chaperones" onPress={handlePressNotify} />
         <ScrollView
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         >
+          <Text preset={["center", "bold"]} text="Your pending requests" />
+
           {requestStore.sortUserRequestsByCreated.length === 0 && (
             <>
               <Text preset={["bold", "center"]} tx="homeScreen.noneScheduledNoticeBold" />

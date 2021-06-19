@@ -31,7 +31,7 @@ export const SignUpScreen = observer(function SignUpScreen() {
   const [userFirstName, setUserFirstName] = useState<string>(DEFAULT_FIRST_NAME)
   const [userLastName, setUserLastName] = useState<string>(DEFAULT_LAST_NAME)
   const [userRole, setUserRole] = useState<UserRoleEnum>(UserRoleEnum.REQUESTER)
-  const [errorMessage, setErrorMessage] = useState<string>()
+  const [errorMessage, setErrorMessage] = useState<string | undefined>()
 
   const navigation = useNavigation()
   const navigateBack = () => navigation.goBack()
@@ -41,6 +41,7 @@ export const SignUpScreen = observer(function SignUpScreen() {
   }
 
   const handleSubmit = async () => {
+    setErrorMessage(undefined)
     try {
       await authStore.createUser(userEmail, userPassword, userFirstName, userLastName, userRole)
       const screen = roleTypeToScreenMap.get(authStore.user.profile.role)

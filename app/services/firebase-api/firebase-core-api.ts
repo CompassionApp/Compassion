@@ -5,9 +5,9 @@ import "firebase/firestore"
 import { FirebaseConfig, DEFAULT_FIREBASE_CONFIG } from "./firebase-config"
 
 /**
- * Manages all requests to the API.
+ * Manages the core interfaces to the Firebase API
  */
-export class FirebaseApi {
+export class FirebaseCoreApiAdapter {
   /**
    * Firebase App instance
    */
