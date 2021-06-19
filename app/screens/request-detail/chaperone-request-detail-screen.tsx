@@ -50,12 +50,10 @@ export const ChaperoneRequestDetailScreen = observer(function ChaperoneRequestDe
   const navigateBack = () => navigation.goBack()
 
   const handlePressAcceptRequest = () => {
-    console.log("Accepting...")
     requestStore.acceptRequest(currentRequest.id)
     navigateBack()
   }
   const handlePressReleaseRequest = () => {
-    console.log("Releasing...")
     requestStore.releaseRequest(currentRequest.id)
     navigateBack()
   }
@@ -63,7 +61,7 @@ export const ChaperoneRequestDetailScreen = observer(function ChaperoneRequestDe
     navigateBack()
   }
   const handlePressDelete = () => {
-    requestStore.rescheduleRequest(currentRequest.id)
+    requestStore.deleteRequest(currentRequest.id)
     navigateBack()
   }
 
@@ -123,7 +121,7 @@ export const ChaperoneRequestDetailScreen = observer(function ChaperoneRequestDe
             {currentRequest.status === RequestStatusEnum.REQUESTED && (
               <MatchProfilePhotos>
                 <ContentRow>
-                  <RequestDetailProfilePhoto name={currentRequest.requestedBy} />
+                  <RequestDetailProfilePhoto previewProfile={currentRequest.requestedBy} />
                 </ContentRow>
               </MatchProfilePhotos>
             )}
@@ -132,7 +130,7 @@ export const ChaperoneRequestDetailScreen = observer(function ChaperoneRequestDe
               <MatchProfilePhotos color={color.palette.blue}>
                 <ContentRow>
                   <RequestDetailProfilePhoto
-                    name={currentRequest.requestedBy}
+                    previewProfile={currentRequest.requestedBy}
                     style={MATCHED_TEXT_STYLE}
                   />
                 </ContentRow>

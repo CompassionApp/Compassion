@@ -1,11 +1,9 @@
 import firebase from "firebase"
 import { destroy, flow, getSnapshot, Instance, SnapshotOut, types } from "mobx-state-tree"
 import { withEnvironment } from "../extensions/with-environment"
-import { AuthApi } from "../../services/firebase-api/auth-api"
 import { UserModel } from "../user/user"
-import { UserRoleEnum, UserStatus } from "../../types"
-import { UserProfileModel, UserProfileSnapshot } from "../user-profile/user-profile"
-import { UserApi } from "../../services/firebase-api/user-api"
+import { UserRoleEnum, UserStatusEnum } from "../../types"
+import { UserProfileModel } from "../user-profile/user-profile"
 
 /**
  * Authentication store - use this store for any actions related to authentication, e.g.
@@ -14,6 +12,9 @@ import { UserApi } from "../../services/firebase-api/user-api"
 export const AuthStoreModel = types
   .model("AuthStore")
   .props({
+    /**
+     * User model of the logged in user containing key identifiers
+     */
     user: types.maybe(UserModel),
   })
   .extend(withEnvironment)
@@ -23,26 +24,19 @@ export const AuthStoreModel = types
   }))
   .actions((self) => ({
     /**
-     * Sets the local auth store user details from the UserCredential returned from the sign in
-     * process
+     * Populates the local auth store `user` from the UserCredential returned from the sign in/sign
+     * up process
      */
-    updateUserDetailsFromFirebase: flow(function* (
-      user: firebase.User,
-      profile?: UserProfileSnapshot,
-    ) {
-      // Delete the old user node
+    updateLocalUserDetailsFromFirebase: flow(function* (user: firebase.User) {
+      // Delete the old user node if it exists
       if (self.user) destroy(self.user)
+
+      // Append a notification token, if applicable
       const { uid, email } = user
       self.user = UserModel.create({
         id: uid,
         email,
-        profile: profile,
       })
-
-      if (!profile) {
-        console.log(`[setUserFromCredential] No profile provided, so calling fetchUserProfile`)
-        yield self.user.fetchUserProfile()
-      }
     }),
   }))
   .actions((self) => ({
@@ -58,8 +52,6 @@ export const AuthStoreModel = types
       lastName: string,
       role: UserRoleEnum,
     ) {
-      const authApi = new AuthApi(self.environment.firebaseApi)
-      const userApi = new UserApi(self.environment.firebaseApi)
       console.log("[auth-store] Creating user with", {
         userEmail,
         userPassword,
@@ -69,21 +61,23 @@ export const AuthStoreModel = types
       const {
         kind,
         userCredential,
-      }: { kind: string; userCredential: firebase.auth.UserCredential } = yield authApi.createUser(
-        userEmail,
-        userPassword,
-      )
+      }: {
+        kind: string
+        userCredential: firebase.auth.UserCredential
+      } = yield self.environment.authApi.createUser(userEmail, userPassword)
+      if (kind === "bad") {
+        throw new Error(kind)
+      }
 
       const user = userCredential.user
-
-      yield authApi.updateUser({
+      // Update the Firebase Auth profile with the name
+      yield self.environment.authApi.updateFirebaseUser({
         ...user,
         displayName: `${firstName} ${lastName}`,
       })
+      // Populate app's /auth/user
+      yield self.updateLocalUserDetailsFromFirebase(user)
 
-      if (kind !== "ok") {
-        throw new Error(kind)
-      }
       // Creating a new user profile with defaults to save to Firestore
       const profile = UserProfileModel.create({
         id: user.uid,
@@ -91,31 +85,36 @@ export const AuthStoreModel = types
         lastName,
         role,
         email: userEmail,
-        status: UserStatus.ACTIVE,
+        status: UserStatusEnum.ACTIVE,
         phoneNumber: user.phoneNumber,
         createdAt: user.metadata.creationTime,
+        // Register a notification token upon sign-up
+        notificationToken: self.environment.notifications.deviceNotificationToken,
       })
-      yield userApi.saveUserProfile(userEmail, getSnapshot(profile))
-      console.log("[auth-store] New user profile created in Firestore", getSnapshot(profile))
-
-      yield self.updateUserDetailsFromFirebase(user, profile)
+      self.user.setUserProfile(getSnapshot(profile))
+      yield self.user.save()
+      console.log(
+        "[auth-store] New user profile successfully created in Firestore",
+        getSnapshot(profile),
+      )
     }),
 
     /**
      * Signs in a user
      */
     signIn: flow(function* (userEmail: string, userPassword: string) {
-      const authApi = new AuthApi(self.environment.firebaseApi)
       const {
         kind,
         userCredential,
-      }: { kind: string; userCredential: firebase.auth.UserCredential } = yield authApi.signIn(
-        userEmail,
-        userPassword,
-      )
+      }: {
+        kind: string
+        userCredential: firebase.auth.UserCredential
+      } = yield self.environment.authApi.signIn(userEmail, userPassword)
       if (kind === "ok") {
         const { user } = userCredential
-        yield self.updateUserDetailsFromFirebase(user)
+        yield self.updateLocalUserDetailsFromFirebase(user)
+        // Update the user profile's notification token and fetch the updated profile
+        yield self.user.fetchUserProfile(self.environment.notifications.deviceNotificationToken)
       } else {
         throw new Error(kind)
       }
@@ -126,11 +125,10 @@ export const AuthStoreModel = types
      */
     signOut: flow(function* () {
       console.log("[auth-store] Signing out user", self.user?.email)
-      const authApi = new AuthApi(self.environment.firebaseApi)
       if (!self.environment.firebaseApi.authentication.currentUser) {
         console.log("[signOut] No current user, ignoring Firebase auth signout")
       } else {
-        yield authApi.signOut()
+        yield self.environment.authApi.signOut()
       }
       if (self.user) destroy(self.user)
       const store = self.environment.getStore()
@@ -138,19 +136,18 @@ export const AuthStoreModel = types
     }),
 
     /**
-     * Updates the Firebase user details. Unused.
+     * [UNUSED] Updates the Firebase user details
      */
     updateFirebaseUser: flow(function* (displayName: string, phoneNumber: string) {
       console.log("[auth-store] Updating user", self.user?.email)
-      const authApi = new AuthApi(self.environment.firebaseApi)
-      const user = authApi.currentUser
+      const user = self.environment.authApi.currentUser
       user.displayName = displayName
       user.phoneNumber = phoneNumber
       console.log("[auth-store] updating to...", user)
 
-      const { kind }: { kind: string } = yield authApi.updateUser(user)
+      const { kind }: { kind: string } = yield self.environment.authApi.updateFirebaseUser(user)
       if (kind === "ok") {
-        yield self.updateUserDetailsFromFirebase(user)
+        yield self.updateLocalUserDetailsFromFirebase(user)
       } else {
         throw new Error(kind)
       }

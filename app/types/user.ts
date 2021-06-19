@@ -1,7 +1,7 @@
 /**
  * User statuses
  */
-export enum UserStatus {
+export enum UserStatusEnum {
   /** Active user */
   ACTIVE = "ACTIVE",
   /** Inactive user */
@@ -89,7 +89,7 @@ export interface User {
   /**
    * User status
    */
-  status: UserStatus
+  status: UserStatusEnum
 
   /**
    * Last known verified COVID test

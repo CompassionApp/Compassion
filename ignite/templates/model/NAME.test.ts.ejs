@@ -1,7 +1,9 @@
 import { <%= props.pascalCaseName %>Model } from "./<%= props.kebabCaseName %>"
 
-test("can be created", () => {
-  const instance = <%= props.pascalCaseName %>Model.create({})
+describe("<%= props.pascalCaseName %>Model", () => {
+  it("can be created", () => {
+    const instance = <%= props.pascalCaseName %>Model.create({})
 
-  expect(instance).toBeTruthy()
+    expect(instance).toBeTruthy()
+  })
 })

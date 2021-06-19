@@ -1,7 +1,7 @@
 import React from "react"
 import { observer } from "mobx-react-lite"
 import { View, ViewStyle } from "react-native"
-import { Break, Button, Header, Icon, Screen, Text } from "../../components"
+import { Break, Button, Header, Screen, Text } from "../../components"
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../models"
 import { color, globalStyles, spacing } from "../../theme"
@@ -18,22 +18,24 @@ const MenuList = styled.View`
   justify-content: flex-start;
 `
 
-const MenuListItem = styled.TouchableOpacity`
+const MenuListItem = styled.TouchableOpacity<{ disabled?: boolean }>`
   margin: ${spacing[4]}px auto;
   display: flex;
   flex-flow: row nowrap;
   justify-content: flex-start;
   width: 150px;
+  ${({ disabled }) => !!disabled === true && "opacity: 0.2;"}
 `
 
-const ICON_SIZE = {
-  width: 30,
-  height: 30,
-  marginRight: spacing[4],
-}
+// const ICON_SIZE = {
+//   width: 30,
+//   height: 30,
+//   marginRight: spacing[4],
+// }
 
 export const MenuScreen = observer(function MenuScreen() {
   const { authStore } = useStores()
+
   const profile = authStore.user?.profile
   const navigation = useNavigation()
   const navigateBack = () => navigation.goBack()
@@ -65,27 +67,34 @@ export const MenuScreen = observer(function MenuScreen() {
         />
         <MenuList>
           <MenuListItem disabled>
-            <Icon icon="home" style={ICON_SIZE} />
-            <Text preset={[]} tx="menuScreen.menuButtonRequesterInfo" />
+            {/* <Icon icon="home" style={ICON_SIZE} /> */}
+            <Text
+              preset={[]}
+              tx={
+                authStore?.user?.isChaperoneRole
+                  ? "menuScreen.menuButtonChaperoneInfo"
+                  : "menuScreen.menuButtonRequesterInfo"
+              }
+            />
           </MenuListItem>
           <MenuListItem disabled>
-            <Icon icon="home" style={ICON_SIZE} />
+            {/* <Icon icon="home" style={ICON_SIZE} /> */}
             <Text preset={[]} tx="menuScreen.menuButtonAboutUs" />
           </MenuListItem>
           <MenuListItem onPress={() => navigation.navigate("userAgreement")}>
-            <Icon icon="home" style={ICON_SIZE} />
+            {/* <Icon icon="home" style={ICON_SIZE} /> */}
             <Text preset={[]} tx="menuScreen.menuButtonUserAgreement" />
           </MenuListItem>
           <MenuListItem disabled>
-            <Icon icon="home" style={ICON_SIZE} />
+            {/* <Icon icon="home" style={ICON_SIZE} /> */}
             <Text preset={[]} tx="menuScreen.menuButtonResetPassword" />
           </MenuListItem>
           <MenuListItem disabled>
-            <Icon icon="home" style={ICON_SIZE} />
+            {/* <Icon icon="home" style={ICON_SIZE} /> */}
             <Text preset={[]} tx="menuScreen.menuButtonAskQuestion" />
           </MenuListItem>
           <MenuListItem onPress={handlePressSignOut}>
-            <Icon icon="home" style={ICON_SIZE} />
+            {/* <Icon icon="home" style={ICON_SIZE} /> */}
             <Text preset={[]} tx="menuScreen.menuButtonSignOut" />
           </MenuListItem>
         </MenuList>

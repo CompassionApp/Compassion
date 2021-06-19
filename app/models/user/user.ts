@@ -1,7 +1,7 @@
-import { flow, Instance, SnapshotOut, types, getSnapshot } from "mobx-state-tree"
-import { UserApi } from "../../services/firebase-api/user-api"
+import { flow, Instance, SnapshotOut, types, applyPatch } from "mobx-state-tree"
+import { UserRoleEnum } from "../../types"
 import { withEnvironment } from "../extensions/with-environment"
-import { UserProfileModel } from "../user-profile/user-profile"
+import { UserProfileModel, UserProfileSnapshot } from "../user-profile/user-profile"
 
 /**
  * Represents a user with attributes picked from Firebase Auth's user profile. Also includes a
@@ -15,26 +15,45 @@ export const UserModel = types
     profile: types.maybe(UserProfileModel),
   })
   .extend(withEnvironment)
+  .views((self) => ({
+    get isChaperoneRole() {
+      return self.profile.role === UserRoleEnum.CHAPERONE
+    },
+    get isAdminRole() {
+      return self.profile.role === UserRoleEnum.ADMIN
+    },
+    get isRequesterRole() {
+      return self.profile.role === UserRoleEnum.REQUESTER
+    },
+  }))
   .actions((self) => ({
+    /**
+     * Sets the user profile locally
+     */
+    setUserProfile: (userProfile: UserProfileSnapshot) => {
+      applyPatch(self, { op: "replace", path: "/profile", value: userProfile })
+    },
+
     /**
      * Saves the user profile document on Firestore with the data from the local store
      */
     save: flow(function* () {
-      const userApi = new UserApi(self.environment.firebaseApi)
-      console.log("[user] Updating user profile...")
-      self.profile.updatedAt = new Date().toUTCString()
-      yield userApi.saveUserProfile(self.email, getSnapshot(self.profile))
+      if (self.profile) {
+        self.profile.save()
+      }
     }),
 
     /**
      * Fetches the user profile document from Firestore and attaches it to the user model
      */
-    fetchUserProfile: flow(function* () {
-      const userApi = new UserApi(self.environment.firebaseApi)
+    fetchUserProfile: flow(function* (notificationToken?: string) {
       console.log(`[user] Fetching user profile for ${self.email}...`)
 
       // Check if the user profile document exists
-      const { profile } = yield userApi.getUserProfile(self.email)
+      const { profile } = yield self.environment.userApi.getUserProfile(
+        self.email,
+        notificationToken,
+      )
 
       console.log("[user] Fetched profile:", profile)
       self.profile = UserProfileModel.create(profile)
@@ -43,6 +62,11 @@ export const UserModel = types
   .actions((self) => ({
     acceptUserAgreement: () => {
       self.profile.acceptUserAgreement()
+      self.save()
+    },
+
+    setToken: (token: string | null) => {
+      self.profile.setNotificationToken(token)
       self.save()
     },
   }))

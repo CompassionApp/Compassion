@@ -2,8 +2,9 @@ import React from "react"
 import { TextStyle } from "react-native"
 import styled from "styled-components/native"
 import { Text } from "../../components"
+import { UserProfilePreview } from "../../models"
 import { spacing } from "../../theme"
-const profile = require("./profile.png")
+const profileImage = require("./profile.png")
 
 const SIZE = 70
 const Container = styled.View`
@@ -41,24 +42,24 @@ const ProfileImage = styled.Image`
 `
 
 export interface RequestDetailProfilePhotoProps {
-  name?: string
+  previewProfile?: UserProfilePreview
   style?: TextStyle
 }
 
 export const RequestDetailProfilePhoto: React.FC<RequestDetailProfilePhotoProps> = ({
-  name,
+  previewProfile,
   style,
 }) => (
   <Container>
     <PhotoContainer>
       <PhotoInnerContainer>
-        <ProfileImage source={profile} />
+        <ProfileImage source={profileImage} />
       </PhotoInnerContainer>
     </PhotoContainer>
-    {name && (
+    {previewProfile && (
       <NameContainer>
         <Text preset="bold" style={style}>
-          {name}
+          {previewProfile.fullName}
         </Text>
       </NameContainer>
     )}

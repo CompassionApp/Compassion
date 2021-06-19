@@ -5,11 +5,12 @@ import { Calendar, DateObject, DotMarking } from "react-native-calendars"
 import { useNavigation } from "@react-navigation/native"
 import { format, addMonths, parse } from "date-fns"
 import R from "ramda"
-import { Button, Header, Screen, Text } from "../../components"
+import { Button, Header, Screen } from "../../components"
 import { color, globalStyles } from "../../theme"
 import { useStores } from "../../models"
 import { CALENDAR_DATE_FORMAT, REQUEST_MAX_MONTHS_FORWARD } from "../../constants"
 import { Break } from "../../components/break/break"
+import { NewRequestFooterArea } from "./common"
 
 const ROOT: ViewStyle = {
   backgroundColor: color.background,
@@ -25,6 +26,7 @@ const CALENDAR_THEME = {
   backgroundColor: color.background,
   calendarBackground: color.background,
 }
+
 export const NewRequestDateSelectionScreen = observer(function NewRequestDateSelectionScreen() {
   const { newRequestStore } = useStores()
   const [selectedDate, setSelectedDate] = useState<string>()
@@ -40,7 +42,7 @@ export const NewRequestDateSelectionScreen = observer(function NewRequestDateSel
     }
 
     const date = parse(selectedDate, CALENDAR_DATE_FORMAT, new Date()).toUTCString()
-    newRequestStore.request.setRequestDateTime(date)
+    newRequestStore.setRequestedAt(date)
     navigateNext()
   }
 
@@ -80,16 +82,18 @@ export const NewRequestDateSelectionScreen = observer(function NewRequestDateSel
           maxDate={format(addMonths(new Date(), REQUEST_MAX_MONTHS_FORWARD), CALENDAR_DATE_FORMAT)}
         />
         <Break />
-        {selectedDate && (
+        {/* {selectedDate && (
           <Text preset={["center", "bold"]} text="12 volunteers available on this date" />
-        )}
+        )} */}
         <Break />
+      </Screen>
+      <NewRequestFooterArea step={1}>
         <Button
           tx="newRequestDateSelectionScreen.nextButton"
           disabled={!!selectedDate === false}
           onPress={handlePressNext}
         />
-      </Screen>
+      </NewRequestFooterArea>
     </View>
   )
 })

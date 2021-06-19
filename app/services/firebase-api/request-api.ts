@@ -1,21 +1,20 @@
-import { FirebaseApi } from "./firebase-api"
+import { FirebaseCoreApiAdapter } from "./firebase-core-api"
 import firebase, { FirebaseError } from "firebase"
-import {
+import type {
   AuthContext,
   CreateRequestResult,
   DeleteRequestResult,
   GetRequestsResult,
   UpdateRequestResult,
 } from "./api.types"
-// import { User } from "../api/api.types"
-// import { typeConverter } from "./utils"
-import { RequestSnapshot } from "../../models"
+import type { RequestSnapshot } from "../../models"
 import { createBatchModifyRequest, typeConverter } from "./utils"
+// import { typeConverter } from "./utils"
 
 export class RequestApi {
-  private firebase: FirebaseApi
+  private firebase: FirebaseCoreApiAdapter
 
-  constructor(firebase: FirebaseApi) {
+  constructor(firebase: FirebaseCoreApiAdapter) {
     this.firebase = firebase
   }
 
@@ -106,6 +105,7 @@ export class RequestApi {
         .get()
 
       const requests = snapshot.docs.map((doc) => (doc.data() as unknown) as RequestSnapshot)
+      console.log(`[request-api] Found ${requests.length}`)
       return { kind: "ok", requests }
     } catch (e) {
       const error = <FirebaseError>e
@@ -165,7 +165,7 @@ export class RequestApi {
           const chaperoneRequestRefs = chaperones.map((chaperone) => {
             return this.firebase.firestore
               .collection("users")
-              .doc(chaperone)
+              .doc(chaperone.email)
               .collection("requests")
               .doc(requestId)
           })
@@ -273,40 +273,43 @@ export class RequestApi {
         .doc(requestId)
 
       this.firebase.firestore.runTransaction((transaction) => {
-        return transaction.get(requestsByIdRef).then((request) => {
-          if (!request.exists) {
-            throw new Error("Request does not exist")
-          }
+        return transaction
+          .get(requestsByIdRef)
+          .then((request) => {
+            if (!request.exists) {
+              throw new Error("Request does not exist")
+            }
 
-          // Delete all the associated chaperones' docs
-          const { requestedBy, chaperones } = request.data() as RequestSnapshot
-          const chaperoneRequestRefs = chaperones.map((chaperone) => {
-            return this.firebase.firestore
+            // Delete all the associated chaperones' docs
+            const { requestedBy, chaperones } = request.data() as RequestSnapshot
+            const chaperoneRequestRefs = chaperones.map((chaperone) => {
+              return this.firebase.firestore
+                .collection("users")
+                .doc(chaperone.email)
+                .collection("requests")
+                .doc(requestId)
+            })
+
+            const requestsByRequesterRef = this.firebase.firestore
               .collection("users")
-              .doc(chaperone)
+              .doc(requestedBy.email)
               .collection("requests")
               .doc(requestId)
+
+            chaperoneRequestRefs.forEach((chaperoneRequestRef) =>
+              transaction.delete(chaperoneRequestRef),
+            )
+
+            transaction.get(requestsByRequesterRef).then((request) => {
+              if (request.exists) {
+                transaction.delete(requestsByRequesterRef)
+              }
+            })
+
+            transaction.delete(requestsByIdRef)
+            transaction.delete(requestsByUserRef)
           })
-
-          const requestsByRequesterRef = this.firebase.firestore
-            .collection("users")
-            .doc(requestedBy)
-            .collection("requests")
-            .doc(requestId)
-
-          chaperoneRequestRefs.forEach((chaperoneRequestRef) =>
-            transaction.delete(chaperoneRequestRef),
-          )
-
-          transaction.get(requestsByRequesterRef).then((request) => {
-            if (request.exists) {
-              transaction.delete(requestsByRequesterRef)
-            }
-          })
-
-          transaction.delete(requestsByIdRef)
-          transaction.delete(requestsByUserRef)
-        })
+          .catch((e) => console.log("Error:", e.message))
       })
 
       return { kind: "ok" }

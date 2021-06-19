@@ -10,6 +10,7 @@ import styled from "styled-components/native"
 import { Break } from "../../components/break/break"
 import { TIME_RANGE_FORMAT, TITLE_DATE_FORMAT } from "../../constants/date-formats"
 import { isInOperatingHours, TimeAmPmEnum } from "./utils"
+import { NewRequestFooterArea } from "./common"
 
 const ROOT: ViewStyle = {
   backgroundColor: color.background,
@@ -70,12 +71,13 @@ const OPERATING_HOURS: [string, string] = ["7:00 AM", "8:00 PM"]
 
 export const NewRequestTimeSelectionScreen = observer(function NewRequestTimeSelectionScreen() {
   const { newRequestStore } = useStores()
-  const { request } = newRequestStore
   const navigation = useNavigation()
   const [selectedTime, setSelectedTime] = useState<string>()
   const [selectedAmPm, setSelectedAmPm] = useState<string>(TimeAmPmEnum.AM)
 
-  const requestDate = request?.requestedAt ? new Date(request.requestedAt) : new Date()
+  const requestDate = newRequestStore?.requestedAt
+    ? new Date(newRequestStore.requestedAt)
+    : new Date()
   const requestDateString = format(requestDate, TITLE_DATE_FORMAT)
 
   const navigateBack = () => navigation.goBack()
@@ -87,7 +89,7 @@ export const NewRequestTimeSelectionScreen = observer(function NewRequestTimeSel
     }
     // Construct a date using the request date from the previous page
     const parsedTime = parse(`${selectedTime} ${selectedAmPm}`, TIME_RANGE_FORMAT, requestDate)
-    newRequestStore.request.setRequestDateTime(parsedTime.toUTCString())
+    newRequestStore.setRequestedAt(parsedTime.toUTCString())
     navigateNext()
   }
 
@@ -137,13 +139,14 @@ export const NewRequestTimeSelectionScreen = observer(function NewRequestTimeSel
             />
           ))}
         </TimeSelectionContainer>
-
+      </Screen>
+      <NewRequestFooterArea step={2}>
         <Button
           tx="newRequestTimeSelectionScreen.nextButton"
           disabled={!!selectedAmPm === false || !!selectedTime === false}
           onPress={handlePressNext}
         />
-      </Screen>
+      </NewRequestFooterArea>
     </View>
   )
 })
