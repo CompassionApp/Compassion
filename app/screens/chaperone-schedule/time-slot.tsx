@@ -1,22 +1,14 @@
 import React from "react"
-import { Text } from "../../components"
+import { FlexContainer, FlexItem, Text } from "../../components"
 import styled from "styled-components/native"
 import { color, spacing } from "../../theme"
 
-const Container = styled.View`
+const Container = styled(FlexContainer)`
   width: 210px;
-  display: flex;
-  flex-flow: row nowrap;
-  justify-content: center;
   margin: ${spacing[1]}px auto;
 `
 
-const Spacer = styled.View`
-  flex-grow: 1;
-  display: flex;
-  flex-flow: row nowrap;
-  justify-content: center;
-`
+const Spacer = styled(FlexItem)``
 
 const Action = styled.TouchableOpacity<{ color: string }>`
   margin-left: ${spacing[2]}px;
@@ -54,9 +46,9 @@ export const TimeSlot: React.FC<TimeSlotProps> = ({ state, text }) => {
       break
   }
   return (
-    <Container>
+    <Container justifyCenter>
       <Text preset={["center"]} text={text} />
-      <Spacer>
+      <Spacer justifyCenter grow={1}>
         <Action color={pillColor}>
           <ActionText>{actionText}</ActionText>
         </Action>

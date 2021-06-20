@@ -42,6 +42,16 @@ export const UserProfileModel = types
       })
       return profilePreview
     },
+
+    get isChaperone() {
+      return self.role === UserRoleEnum.CHAPERONE
+    },
+    get isAdmin() {
+      return self.role === UserRoleEnum.ADMIN
+    },
+    get isRequester() {
+      return self.role === UserRoleEnum.REQUESTER
+    },
   }))
   .actions((self) => ({
     updateLocal: (profile: UserProfileSnapshot) => {

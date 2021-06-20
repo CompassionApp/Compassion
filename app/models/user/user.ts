@@ -1,5 +1,4 @@
 import { flow, Instance, SnapshotOut, types, applyPatch } from "mobx-state-tree"
-import { UserRoleEnum } from "../../types"
 import { withEnvironment } from "../extensions/with-environment"
 import { UserProfileModel, UserProfileSnapshot } from "../user-profile/user-profile"
 
@@ -15,17 +14,6 @@ export const UserModel = types
     profile: types.maybe(UserProfileModel),
   })
   .extend(withEnvironment)
-  .views((self) => ({
-    get isChaperoneRole() {
-      return self?.profile.role === UserRoleEnum.CHAPERONE
-    },
-    get isAdminRole() {
-      return self?.profile.role === UserRoleEnum.ADMIN
-    },
-    get isRequesterRole() {
-      return self?.profile.role === UserRoleEnum.REQUESTER
-    },
-  }))
   .actions((self) => ({
     /**
      * Sets the user profile locally

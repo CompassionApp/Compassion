@@ -16,7 +16,7 @@ const ROOT: ViewStyle = {
 
 export const UserAgreementScreen = observer(function UserAgreementScreen() {
   const { authStore } = useStores()
-  const { user } = authStore
+  const user = authStore.user
 
   const navigation = useNavigation()
   const navigateBack = () => navigation.goBack()
@@ -25,10 +25,9 @@ export const UserAgreementScreen = observer(function UserAgreementScreen() {
     navigateBack()
   }
 
-  const acceptedOnDate = format(
-    new Date(user?.profile.acceptedUserAgreementAt),
-    DEFAULT_DATE_FORMAT,
-  )
+  const acceptedOnDate = user
+    ? format(new Date(user?.profile.acceptedUserAgreementAt), DEFAULT_DATE_FORMAT)
+    : ""
 
   return (
     <View testID="UserAgreementScreen" style={globalStyles.full}>

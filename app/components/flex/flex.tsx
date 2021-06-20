@@ -6,6 +6,8 @@ export interface FlexContainerProps {
   justifyCenter?: boolean
   justifyStart?: boolean
   justifyEnd?: boolean
+  justifyBetween?: boolean
+  justifyAround?: boolean
   marginHorizontal?: string
   marginVertical?: string
   marginTop?: string
@@ -24,6 +26,8 @@ export const FlexContainer = styled.View<FlexContainerProps>`
   ${({ justifyCenter }) => (justifyCenter ? "justify-content: center;" : "")}
   ${({ justifyStart }) => (justifyStart ? "justify-content: flex-start;" : "")}
   ${({ justifyEnd }) => (justifyEnd ? "justify-content: flex-end;" : "")}
+  ${({ justifyBetween }) => (justifyBetween ? "justify-content: space-between;" : "")}
+  ${({ justifyAround }) => (justifyAround ? "justify-content: space-around;" : "")}
   ${({ marginHorizontal }) =>
     marginHorizontal ? `margin-left: ${marginHorizontal}; margin-right: ${marginHorizontal};` : ""}
   ${({ marginVertical }) =>
@@ -31,7 +35,7 @@ export const FlexContainer = styled.View<FlexContainerProps>`
     ${({ marginTop }) => (marginTop ? `margin-top: ${marginTop};` : "")}
   ${({ marginRight }) => (marginRight ? `margin-right: ${marginRight};` : "")}
   ${({ marginBottom }) => (marginBottom ? `margin-bottom: ${marginBottom};` : "")}
-    ${({ marginLeft }) => (marginLeft ? `margin-left: ${marginLeft};` : "")}
+  ${({ marginLeft }) => (marginLeft ? `margin-left: ${marginLeft};` : "")}
 `
 
 export interface FlexItemProps {
@@ -40,6 +44,11 @@ export interface FlexItemProps {
   shrink?: number
   basis?: string
   width?: string
+  justifyCenter?: boolean
+  justifyStart?: boolean
+  justifyEnd?: boolean
+  justifyBetween?: boolean
+  justifyAround?: boolean
   alignCenter?: boolean
   alignStart?: boolean
   alignEnd?: boolean
@@ -53,6 +62,11 @@ export const FlexItem = styled.View<FlexItemProps>`
   ${({ basis }) => (basis ? `flex-basis: ${basis};` : "")}
   ${({ grow }) => (grow ? `flex-grow: ${grow};` : "")}
   ${({ shrink }) => (shrink ? `flex-shrink: ${shrink};` : "")}
+  ${({ justifyCenter }) => (justifyCenter ? "justify-content: center;" : "")}
+  ${({ justifyStart }) => (justifyStart ? "justify-content: flex-start;" : "")}
+  ${({ justifyEnd }) => (justifyEnd ? "justify-content: flex-end;" : "")}
+  ${({ justifyBetween }) => (justifyBetween ? "justify-content: space-between;" : "")}
+  ${({ justifyAround }) => (justifyAround ? "justify-content: space-around;" : "")}
   ${({ alignCenter }) => (alignCenter ? "align-self: center;" : "")}
   ${({ alignStart }) => (alignStart ? "align-self: flex-start;" : "")}
   ${({ alignEnd }) => (alignEnd ? "align-self: flex-end;" : "")}

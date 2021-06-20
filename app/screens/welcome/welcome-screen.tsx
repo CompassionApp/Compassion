@@ -1,13 +1,11 @@
 import React, { useState } from "react"
-import { View, ViewStyle, TextStyle, SafeAreaView, Image, ImageStyle } from "react-native"
+import { View, ViewStyle, TextStyle, SafeAreaView, Image, ImageStyle, Alert } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 import { observer } from "mobx-react-lite"
-import { Button, Header, Screen, Text, TextField } from "../../components"
+import { Button, FlexContainer, Header, Screen, Text, TextField } from "../../components"
 import { color, globalStyles, spacing, typography } from "../../theme"
 import { useStores } from "../../models"
-import { roleTypeToScreenMap } from "../../utils/navigation"
 import { UserRoleEnum } from "../../types"
-import styled from "styled-components/native"
 export const logo = require("./logo-text.png")
 
 const SHOW_DEV_BUTTONS = true
@@ -45,17 +43,6 @@ const FOOTER_CONTENT: ViewStyle = {
   paddingHorizontal: spacing[4],
 }
 
-const ROW: ViewStyle = {
-  flexDirection: "row",
-  justifyContent: "space-between",
-}
-
-const Row = styled.View`
-  display: flex;
-  justify-content: center;
-  flex-direction: row;
-`
-
 /** Remove these later when not launching */
 const DEFAULT_USERNAME = "app@compassioninoakland.org"
 const DEFAULT_PASSWORD = "testing"
@@ -78,9 +65,7 @@ export const WelcomeScreen = observer(function WelcomeScreen() {
       setLoginInProgress(true)
       await authStore.signIn(userEmail, userPassword)
 
-      const { profile } = authStore.user
-      const screen = roleTypeToScreenMap.get(profile.role)
-      navigation.navigate(screen)
+      navigation.navigate("mainStack")
       setLoginErrorMessage("")
       setLoginInProgress(false)
     } catch (ex) {
@@ -90,7 +75,17 @@ export const WelcomeScreen = observer(function WelcomeScreen() {
   }
 
   const handleClear = () => {
-    clearStorage()
+    Alert.alert(
+      "Reset store",
+      "Are you sure you want to clear storage? This should only be used for debugging purposes.",
+      [
+        { text: "Yes", onPress: () => clearStorage() },
+        {
+          text: "No",
+          style: "cancel",
+        },
+      ],
+    )
   }
 
   const handleDevLoginAs = (role: UserRoleEnum) => () => {
@@ -127,7 +122,7 @@ export const WelcomeScreen = observer(function WelcomeScreen() {
         <View style={FOOTER_CONTENT}>
           {!!loginErrorMessage && <Text preset="error" text={loginErrorMessage} />}
           {SHOW_DEV_BUTTONS && (
-            <Row>
+            <FlexContainer justifyBetween>
               <Button
                 text="Requester"
                 preset="ghost"
@@ -139,7 +134,7 @@ export const WelcomeScreen = observer(function WelcomeScreen() {
                 onPress={handleDevLoginAs(UserRoleEnum.CHAPERONE)}
               />
               <Button text="Admin" preset="ghost" onPress={handleDevLoginAs(UserRoleEnum.ADMIN)} />
-            </Row>
+            </FlexContainer>
           )}
           <TextField
             preset="header"
@@ -159,25 +154,27 @@ export const WelcomeScreen = observer(function WelcomeScreen() {
             labelTx="welcomeScreen.loginPassword"
           />
           <Button
-            testID="next-screen-button"
+            testID="login-button"
             tx="welcomeScreen.login"
             onPress={() => handleLogin(userEmail, userPassword)}
             disabled={loginInProgress || !userEmail || !userPassword}
           />
           <Button
-            testID="next-screen-button"
+            testID="register-button"
             tx="welcomeScreen.signUpVolunteer"
             onPress={navigateSignUp}
+            disabled={loginInProgress}
+            preset="ghost"
           />
-          <View style={ROW}>
+          <FlexContainer justifyBetween>
             <Button
               preset="link"
               testID="next-screen-button"
               text="Permissions"
               onPress={navigatePermissions}
             />
-            <Button preset="link" text="Reset Storage" onPress={handleClear} />
-          </View>
+            <Button preset="link" text="Reset" onPress={handleClear} />
+          </FlexContainer>
         </View>
       </SafeAreaView>
     </View>

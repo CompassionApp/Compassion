@@ -1,6 +1,6 @@
 import React from "react"
 import { observer } from "mobx-react-lite"
-import { View, ViewStyle } from "react-native"
+import { View, ViewStyle, Alert } from "react-native"
 import { Break, Button, FlexContainer, Header, Screen, Text } from "../../components"
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../models"
@@ -11,7 +11,7 @@ import { TxKeyPath } from "../../i18n"
 import { TITLE_DATE_FORMAT, TIME_RANGE_FORMAT } from "../../constants/date-formats"
 import { RequestStatusEnum } from "../../types"
 import { RequestDetailProfilePhoto } from "./profile-photo"
-import { ContentRow, MATCHED_TEXT_STYLE, MatchProfilePhotos } from ".."
+import { MATCHED_TEXT_STYLE, MatchProfilePhotos } from ".."
 
 const ROOT: ViewStyle = {
   backgroundColor: color.background,
@@ -51,15 +51,41 @@ export const ChaperoneRequestDetailScreen = observer(function ChaperoneRequestDe
     navigateBack()
   }
   const handlePressReleaseRequest = () => {
-    requestStore.releaseRequest(currentRequest.id)
-    navigateBack()
+    Alert.alert("Cancel", "Are you sure you want to cancel?", [
+      {
+        text: "Yes",
+        onPress: () => {
+          requestStore.releaseRequest(currentRequest.id)
+          navigateBack()
+        },
+      },
+      {
+        text: "No",
+        style: "cancel",
+      },
+    ])
   }
   const handlePressOk = () => {
     navigateBack()
   }
   const handlePressDelete = () => {
-    requestStore.deleteRequest(currentRequest.id)
-    navigateBack()
+    Alert.alert(
+      "Delete Request",
+      "Are you sure you want to delete this request? This cannot be undone.",
+      [
+        {
+          text: "Yes",
+          onPress: () => {
+            requestStore.deleteRequest(currentRequest.id)
+            navigateBack()
+          },
+        },
+        {
+          text: "No",
+          style: "cancel",
+        },
+      ],
+    )
   }
 
   let requestDate
@@ -117,20 +143,20 @@ export const ChaperoneRequestDetailScreen = observer(function ChaperoneRequestDe
 
             {currentRequest.status === RequestStatusEnum.REQUESTED && (
               <MatchProfilePhotos>
-                <ContentRow>
+                <FlexContainer justifyCenter>
                   <RequestDetailProfilePhoto previewProfile={currentRequest.requestedBy} />
-                </ContentRow>
+                </FlexContainer>
               </MatchProfilePhotos>
             )}
 
             {currentRequest.status === RequestStatusEnum.SCHEDULED && (
               <MatchProfilePhotos color={color.palette.blue}>
-                <ContentRow>
+                <FlexContainer justifyCenter>
                   <RequestDetailProfilePhoto
                     previewProfile={currentRequest.requestedBy}
                     style={MATCHED_TEXT_STYLE}
                   />
-                </ContentRow>
+                </FlexContainer>
               </MatchProfilePhotos>
             )}
             <Text preset={["bold", "center"]}>{currentRequest.destinationAddress}</Text>
