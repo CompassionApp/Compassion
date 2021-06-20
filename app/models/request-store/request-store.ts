@@ -99,7 +99,7 @@ export const RequestStoreModel = types
       const fromUserRequests = self.requests.find((r) => r.id === requestId)
       const fromAvailableRequests = self.availableRequests.find((r) => r.id === requestId)
       self.currentRequest = fromUserRequests ?? fromAvailableRequests
-      console.log("[request-store] Set to", self.currentRequest?.id)
+      console.log("[request-store] Request found, setting current id to", self.currentRequest?.id)
     },
   }))
   .actions((self) => ({

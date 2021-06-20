@@ -1,10 +1,11 @@
 import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
 import { View, ViewStyle } from "react-native"
+import { Ionicons } from "@expo/vector-icons"
 import { useNavigation } from "@react-navigation/native"
-import { Break, Button, Header, Screen, Text, TextField } from "../../components"
+import { Break, Button, FlexContainer, Header, Screen, Text, TextField } from "../../components"
 import { useStores } from "../../models"
-import { color, globalStyles } from "../../theme"
+import { color, globalStyles, spacing } from "../../theme"
 
 const ROOT: ViewStyle = {
   backgroundColor: color.background,
@@ -76,7 +77,14 @@ export const EditUserProfileScreen = observer(function EditUserProfileScreen() {
           maxLength={12}
         />
         <Break />
-        {saved && <Text preset={["center", "bold"]} tx="editUserProfileScreen.savedNotice" />}
+        {saved && (
+          <FlexContainer justifyCenter>
+            <Ionicons name="md-checkmark-circle" size={20} color={color.palette.green} />
+            <FlexContainer marginLeft={`${spacing[2]}px`}>
+              <Text preset={["center"]} tx="editUserProfileScreen.savedNotice" />
+            </FlexContainer>
+          </FlexContainer>
+        )}
         <Button tx="editUserProfileScreen.saveButton" onPress={handlePressSave} />
       </Screen>
     </View>

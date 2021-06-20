@@ -6,6 +6,12 @@ export interface FlexContainerProps {
   justifyCenter?: boolean
   justifyStart?: boolean
   justifyEnd?: boolean
+  marginHorizontal?: string
+  marginVertical?: string
+  marginTop?: string
+  marginBottom?: string
+  marginLeft?: string
+  marginRight?: string
 }
 
 /**
@@ -18,6 +24,14 @@ export const FlexContainer = styled.View<FlexContainerProps>`
   ${({ justifyCenter }) => (justifyCenter ? "justify-content: center;" : "")}
   ${({ justifyStart }) => (justifyStart ? "justify-content: flex-start;" : "")}
   ${({ justifyEnd }) => (justifyEnd ? "justify-content: flex-end;" : "")}
+  ${({ marginHorizontal }) =>
+    marginHorizontal ? `margin-left: ${marginHorizontal}; margin-right: ${marginHorizontal};` : ""}
+  ${({ marginVertical }) =>
+    marginVertical ? `margin-top: ${marginVertical}; margin-bottom: ${marginVertical};` : ""}
+    ${({ marginTop }) => (marginTop ? `margin-top: ${marginTop};` : "")}
+  ${({ marginRight }) => (marginRight ? `margin-right: ${marginRight};` : "")}
+  ${({ marginBottom }) => (marginBottom ? `margin-bottom: ${marginBottom};` : "")}
+    ${({ marginLeft }) => (marginLeft ? `margin-left: ${marginLeft};` : "")}
 `
 
 export interface FlexItemProps {

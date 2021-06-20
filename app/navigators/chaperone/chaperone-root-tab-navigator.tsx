@@ -1,12 +1,13 @@
 import React, { useEffect } from "react"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { observer } from "mobx-react-lite"
+import { Ionicons, MaterialIcons } from "@expo/vector-icons"
 import { MenuScreen, NotificationsScreen } from "../../screens"
-import { TabBarIcon } from "../../components"
 import { color } from "../../theme"
 import { ChaperoneHomeStackNavigator } from "./chaperone-home-stack-navigator"
 import { useStores } from "../../models"
 
+const ICON_SIZE = 28
 export type ChaperoneTabNavigatorParamList = {
   home: undefined
   chaperone: undefined
@@ -44,7 +45,12 @@ export const ChaperoneMainTabNavigator = observer(function ChaperoneMainTabNavig
       <Tab.Screen
         name="home"
         component={ChaperoneHomeStackNavigator}
-        options={{ tabBarLabel: "Home", tabBarIcon: () => <TabBarIcon icon="home" /> }}
+        options={{
+          tabBarLabel: "Home",
+          tabBarIcon: ({ color }) => (
+            <Ionicons name="md-home-sharp" size={ICON_SIZE} color={color} />
+          ),
+        }}
       />
       {/* <Tab.Screen
         name="schedule"
@@ -56,7 +62,9 @@ export const ChaperoneMainTabNavigator = observer(function ChaperoneMainTabNavig
         component={NotificationsScreen}
         options={{
           tabBarLabel: "Notifications",
-          tabBarIcon: () => <TabBarIcon icon="notification" />,
+          tabBarIcon: ({ color }) => (
+            <MaterialIcons name="notification-important" size={ICON_SIZE} color={color} />
+          ),
           tabBarBadge:
             notificationStore.notificationCount !== 0
               ? notificationStore.notificationCount
@@ -66,7 +74,10 @@ export const ChaperoneMainTabNavigator = observer(function ChaperoneMainTabNavig
       <Tab.Screen
         name="menu"
         component={MenuScreen}
-        options={{ tabBarLabel: "", tabBarIcon: () => <TabBarIcon icon="menu" /> }}
+        options={{
+          tabBarLabel: "",
+          tabBarIcon: ({ color }) => <Ionicons name="menu" size={ICON_SIZE + 6} color={color} />,
+        }}
       />
     </Tab.Navigator>
   )
