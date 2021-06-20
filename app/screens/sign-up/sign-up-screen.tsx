@@ -44,7 +44,7 @@ export const SignUpScreen = observer(function SignUpScreen() {
     setErrorMessage(undefined)
     try {
       await authStore.createUser(userEmail, userPassword, userFirstName, userLastName, userRole)
-      const screen = roleTypeToScreenMap.get(authStore.user.profile.role)
+      const screen = roleTypeToScreenMap.get(authStore?.user.profile.role)
       navigation.navigate(screen)
     } catch (err) {
       if (err.message) setErrorMessage(err.message)

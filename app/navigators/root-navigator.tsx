@@ -8,6 +8,9 @@ import React from "react"
 import { NavigationContainer, NavigationContainerRef } from "@react-navigation/native"
 import { createStackNavigator } from "@react-navigation/stack"
 import { MainNavigator } from "./main-navigator"
+import { observer } from "mobx-react-lite"
+import { useStores } from "../models"
+import { PermissionsScreen, SignUpScreen, WelcomeScreen } from "../screens"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -21,27 +24,36 @@ import { MainNavigator } from "./main-navigator"
  */
 export type RootParamList = {
   mainStack: undefined
+  welcome: undefined
+  signup: undefined
+  permissions: undefined
 }
 
 const Stack = createStackNavigator<RootParamList>()
 
-const RootStack = () => {
+const RootStack = observer(() => {
+  const { authStore } = useStores()
   return (
     <Stack.Navigator
       screenOptions={{
         headerShown: false,
       }}
     >
+      {authStore.isLoggedIn && (
+        <>
+          <Stack.Screen name="mainStack" component={MainNavigator} />
+        </>
+      )}
       <Stack.Screen
-        name="mainStack"
-        component={MainNavigator}
-        options={{
-          headerShown: false,
-        }}
+        name="welcome"
+        component={WelcomeScreen}
+        options={{ animationTypeForReplace: !authStore.isLoggedIn ? "pop" : "push" }}
       />
+      <Stack.Screen name="signup" component={SignUpScreen} />
+      <Stack.Screen name="permissions" component={PermissionsScreen} />
     </Stack.Navigator>
   )
-}
+})
 
 export const RootNavigator = React.forwardRef<
   NavigationContainerRef,

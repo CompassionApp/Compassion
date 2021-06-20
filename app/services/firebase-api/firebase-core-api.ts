@@ -57,6 +57,7 @@ export class FirebaseCoreApiAdapter {
     this.authentication.languageCode = "en"
     this.authentication.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
     firebase.auth().onAuthStateChanged((user: firebase.User) => {
+      // if (!user) alert("User has been logged out")
       console.log(
         `[firebase-api] Auth state changed: user logged ${user ? "in" : "out"}. ${
           user?.email

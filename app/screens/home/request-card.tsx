@@ -1,8 +1,8 @@
 import React from "react"
 import { observer } from "mobx-react-lite"
 import styled from "styled-components/native"
-import { Button, Text } from "../../components"
-import { color, typography } from "../../theme"
+import { Button, FlexContainer, Text } from "../../components"
+import { color, spacing, typography } from "../../theme"
 import { RequestStatusEnum, RequestTypeEnum } from "../../types"
 import * as datefns from "date-fns"
 import { Break } from "../../components/break/break"
@@ -15,34 +15,26 @@ const BORDER_RADIUS = 5
 const Container = styled.TouchableOpacity`
   background-color: ${color.palette.white};
   border-radius: ${BORDER_RADIUS}px;
-  margin-vertical: 5px;
+  margin-vertical: ${spacing[2]};
   border: 1px solid ${color.palette.grey2};
 `
 
-const Content = styled.View`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding-vertical: 3px;
+const Content = styled(FlexContainer)`
+  padding-vertical: ${spacing[1]}px;
 `
 
 const Title = styled(Text)`
   font-size: 22px;
   font-family: ${typography.secondary};
   text-align: center;
-  padding-vertical: 5px;
+  padding-vertical: ${spacing[2]}px;
 `
 
 const Description = styled(Text)`
   text-align: center;
 `
 
-const ButtonRow = styled.View`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  width: 100%;
-`
+const ButtonRow = styled(FlexContainer)``
 
 const StatusButton = styled(Button)<{ color?: string }>`
   margin-vertical: 0;
@@ -75,7 +67,7 @@ export const RequestCard = observer(function Card({
 
   return (
     <Container onPress={onPress}>
-      <Content>
+      <Content column justifyCenter>
         <Title>{titleDate}</Title>
         <Description tx={`enumRequestType.${type}` as TxKeyPath} />
         <Description>
@@ -83,7 +75,7 @@ export const RequestCard = observer(function Card({
         </Description>
         <Break size={1} />
       </Content>
-      <ButtonRow>
+      <ButtonRow justifyCenter width="100%">
         <StatusButton
           tx={`enumRequestStatus.${status}` as TxKeyPath}
           color={statusColorMap.get(status)}

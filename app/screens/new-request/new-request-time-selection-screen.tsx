@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
 import { View, ViewStyle } from "react-native"
-import { Button, Header, Screen, Text } from "../../components"
+import { Button, FlexContainer, Header, Screen, Text } from "../../components"
 import { useNavigation } from "@react-navigation/native"
 import { color, globalStyles, spacing } from "../../theme"
 import { format, parse } from "date-fns"
@@ -17,17 +17,10 @@ const ROOT: ViewStyle = {
   flex: 1,
 }
 
-const AmPmSelectionContainer = styled.View`
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: center;
-  width: 100%;
-`
+const AmPmSelectionContainer = styled(FlexContainer)``
 
-const TimeSelectionContainer = styled.View`
-  display: flex;
+const TimeSelectionContainer = styled(FlexContainer)`
   flex-flow: row wrap;
-  width: 100%;
   margin-left: ${spacing[1]}px;
 `
 
@@ -113,7 +106,7 @@ export const NewRequestTimeSelectionScreen = observer(function NewRequestTimeSel
         />
 
         <Text preset={["header", "bold", "center"]}>{requestDateString}</Text>
-        <AmPmSelectionContainer>
+        <AmPmSelectionContainer justifyCenter width="100%">
           <PillButton
             text={TimeAmPmEnum.AM}
             selected={selectedAmPm === TimeAmPmEnum.AM}
@@ -128,7 +121,7 @@ export const NewRequestTimeSelectionScreen = observer(function NewRequestTimeSel
 
         <Break />
 
-        <TimeSelectionContainer>
+        <TimeSelectionContainer width="100%">
           {TIME_ARRAY.map((time) => (
             <PillButton
               key={time}

@@ -1,10 +1,10 @@
 import React from "react"
 import { observer } from "mobx-react-lite"
-import { View, ViewStyle } from "react-native"
+import { Alert, View, ViewStyle } from "react-native"
 import { FontAwesome, Ionicons, MaterialIcons } from "@expo/vector-icons"
 import { useNavigation } from "@react-navigation/native"
 import styled from "styled-components/native"
-import { Break, Button, Header, Screen, Text } from "../../components"
+import { Break, Button, FlexContainer, Header, Screen, Text } from "../../components"
 import { useStores } from "../../models"
 import { color, globalStyles, spacing } from "../../theme"
 
@@ -13,11 +13,7 @@ const ROOT: ViewStyle = {
   flex: 1,
 }
 
-const MenuList = styled.View`
-  display: flex;
-  flex-flow: column nowrap;
-  justify-content: flex-start;
-`
+const MenuList = styled(FlexContainer)``
 
 const MenuListItem = styled.TouchableOpacity<{ disabled?: boolean }>`
   margin: ${spacing[4]}px auto;
@@ -40,11 +36,15 @@ export const MenuScreen = observer(function MenuScreen() {
   const profile = authStore.user?.profile
   const navigation = useNavigation()
   const navigateBack = () => navigation.goBack()
-  const navigateLogin = () => navigation.navigate("welcome")
 
   const handlePressSignOut = async () => {
-    await authStore.signOut()
-    navigateLogin()
+    Alert.alert("Sign Out", "Are you sure you would like to log out of your account?", [
+      { text: "Yes", onPress: () => authStore.signOut() },
+      {
+        text: "No",
+        style: "cancel",
+      },
+    ])
   }
 
   return (
@@ -66,13 +66,13 @@ export const MenuScreen = observer(function MenuScreen() {
           text="Edit profile"
           onPress={() => navigation.navigate("editUserProfile")}
         />
-        <MenuList>
+        <MenuList column justifyStart>
           <MenuListItem disabled>
             <FontAwesome name="user-circle" size={ICON_SIZE} color={color.palette.blue} />
             <MenuItemText
               preset={[]}
               tx={
-                authStore?.user?.isChaperoneRole
+                authStore?.user?.profile?.isChaperone
                   ? "menuScreen.menuButtonChaperoneInfo"
                   : "menuScreen.menuButtonRequesterInfo"
               }

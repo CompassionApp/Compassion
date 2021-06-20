@@ -1,7 +1,7 @@
 import React from "react"
 import { observer } from "mobx-react-lite"
-import { View, ViewStyle } from "react-native"
-import { Break, Button, Header, Screen, Text } from "../../components"
+import { Alert, View, ViewStyle } from "react-native"
+import { Break, Button, FlexContainer, Header, Screen, Text } from "../../components"
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../models"
 import { color, globalStyles, spacing } from "../../theme"
@@ -34,21 +34,12 @@ export const MATCHED_TEXT_STYLE = {
   color: color.palette.white,
 }
 
-const ButtonRow = styled.View`
-  display: flex;
-  flex-flow: row nowrap;
-  justify-content: center;
+const ButtonRow = styled(FlexContainer)`
   margin: ${spacing[4]}px 0;
 `
 
 const LinkButton = styled(Button)`
   margin: ${spacing[2]}px auto;
-`
-
-export const ContentRow = styled.View`
-  display: flex;
-  flex-flow: row nowrap;
-  justify-content: center;
 `
 
 const BUTTON_OVERRIDE = {
@@ -90,9 +81,25 @@ export const RequestDetailScreen = observer(function RequestDetailScreen() {
       requestStore.changeRequestStatus(currentRequest.id, RequestStatusEnum.REQUESTED)
     }
   }
+
   const handlePressDelete = () => {
-    requestStore.deleteRequest(currentRequest.id)
-    navigateBack()
+    Alert.alert(
+      "Delete Request",
+      "Are you sure you want to delete this request? This cannot be undone.",
+      [
+        {
+          text: "Yes",
+          onPress: () => {
+            requestStore.deleteRequest(currentRequest.id)
+            navigateBack()
+          },
+        },
+        {
+          text: "No",
+          style: "cancel",
+        },
+      ],
+    )
   }
 
   let requestDate
@@ -137,10 +144,10 @@ export const RequestDetailScreen = observer(function RequestDetailScreen() {
                   style={UNMATCHED_TEXT_STYLE}
                 />
                 <Break />
-                <ContentRow>
+                <FlexContainer justifyCenter>
                   <RequestDetailProfilePhoto />
                   <RequestDetailProfilePhoto />
-                </ContentRow>
+                </FlexContainer>
                 <Break />
                 <Text
                   preset={["bold", "center"]}
@@ -158,7 +165,7 @@ export const RequestDetailScreen = observer(function RequestDetailScreen() {
                   style={MATCHED_TEXT_STYLE}
                 />
                 <Break />
-                <ContentRow>
+                <FlexContainer justifyCenter>
                   {currentRequest.chaperones.map((chaperone) => (
                     <RequestDetailProfilePhoto
                       key={chaperone.id}
@@ -166,14 +173,14 @@ export const RequestDetailScreen = observer(function RequestDetailScreen() {
                       style={MATCHED_TEXT_STYLE}
                     />
                   ))}
-                </ContentRow>
+                </FlexContainer>
               </MatchProfilePhotos>
             )}
 
             <Text preset={["bold", "center"]}>{currentRequest.destinationAddress}</Text>
             <Text preset="center">to</Text>
             <Text preset={["bold", "center"]}>{currentRequest.meetAddress}</Text>
-            <ButtonRow>
+            <ButtonRow justifyCenter>
               <Button
                 preset="ghost"
                 tx="requestDetailScreen.rescheduleButton"

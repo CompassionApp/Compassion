@@ -6,16 +6,13 @@
  */
 import React from "react"
 import { createStackNavigator } from "@react-navigation/stack"
-import {
-  SignUpScreen,
-  RoleSelectScreen,
-  PermissionsScreen,
-  WelcomeScreen,
-  UserAgreementScreen,
-} from "../screens"
+import { RoleSelectScreen, UserAgreementScreen } from "../screens"
 import { RequesterMainTabNavigator } from "./requester/requester-root-tab-navigator"
 import { ChaperoneMainTabNavigator } from "./chaperone/chaperone-root-tab-navigator"
 import { EditUserProfileScreen } from "../screens/edit-user-profile/edit-user-profile-screen"
+import { observer } from "mobx-react-lite"
+import { useStores } from "../models"
+import { UserRoleEnum } from "../types"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -30,39 +27,50 @@ import { EditUserProfileScreen } from "../screens/edit-user-profile/edit-user-pr
  *   https://reactnavigation.org/docs/typescript#type-checking-the-navigator
  */
 export type MainNavigatorParamList = {
-  chaperone: undefined
+  chaperoneMain: undefined
+  requesterMain: undefined
+  adminMain: undefined
   editUserProfile: undefined
-  home: undefined
-  permissions: undefined
-  requester: undefined
   roleSelect: undefined
-  signup: undefined
   userAgreement: undefined
-  welcome: undefined
 }
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
 const Stack = createStackNavigator<MainNavigatorParamList>()
 
-export function MainNavigator() {
+export const MainNavigator = observer(function MainNavigator() {
+  const { authStore } = useStores()
+
+  let initialRouteName: keyof MainNavigatorParamList
+  switch (authStore?.user?.profile.role) {
+    case UserRoleEnum.CHAPERONE:
+      initialRouteName = "chaperoneMain"
+      break
+    case UserRoleEnum.REQUESTER:
+      initialRouteName = "requesterMain"
+      break
+    case UserRoleEnum.ADMIN:
+      initialRouteName = "adminMain"
+      break
+    default:
+      initialRouteName = "roleSelect"
+  }
+
   return (
     <Stack.Navigator
-      initialRouteName="permissions"
+      initialRouteName={initialRouteName}
       screenOptions={{
         headerShown: false,
       }}
     >
-      <Stack.Screen name="permissions" component={PermissionsScreen} />
-      <Stack.Screen name="welcome" component={WelcomeScreen} />
-      <Stack.Screen name="signup" component={SignUpScreen} />
       <Stack.Screen name="roleSelect" component={RoleSelectScreen} />
-      <Stack.Screen name="chaperone" component={ChaperoneMainTabNavigator} />
-      <Stack.Screen name="requester" component={RequesterMainTabNavigator} />
+      <Stack.Screen name="chaperoneMain" component={ChaperoneMainTabNavigator} />
+      <Stack.Screen name="requesterMain" component={RequesterMainTabNavigator} />
       <Stack.Screen name="userAgreement" component={UserAgreementScreen} />
       <Stack.Screen name="editUserProfile" component={EditUserProfileScreen} />
     </Stack.Navigator>
   )
-}
+})
 
 /**
  * A list of routes from which we're allowed to leave the app when
@@ -73,5 +81,5 @@ export function MainNavigator() {
  *
  * `canExit` is used in ./app/app.tsx in the `useBackButtonHandler` hook.
  */
-const exitRoutes = ["welcome"]
+const exitRoutes = ["chaperoneMain", "requesterMain"]
 export const canExit = (routeName: string) => exitRoutes.includes(routeName)

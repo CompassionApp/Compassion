@@ -20,7 +20,9 @@ export const AuthStoreModel = types
   .extend(withEnvironment)
   .views((self) => ({
     /** Returns true if the user logged in */
-    isLoggedIn: () => !!self.user,
+    get isLoggedIn() {
+      return !!self.user
+    },
   }))
   .actions((self) => ({
     /**
