@@ -28,7 +28,7 @@ export const ChaperoneHomeScreen = observer(function HomeScreen() {
   const { authStore, requestStore } = useStores()
   const navigation = useNavigation()
   const [enableNotifications, setEnableNotifications] = useState<boolean>(
-    authStore.user?.profile.enableNotifications,
+    authStore.user?.profile?.enableNotifications ?? false,
   )
   const [refreshing, setRefreshing] = React.useState(false)
 

@@ -15,7 +15,7 @@ export const NewRequestFooterArea: React.FC<{ step: number; children?: React.Rea
   children,
 }) => (
   <NewRequestActionSafeArea>
-    <ProgressIndicator currentStep={step} totalSteps={NEW_REQUEST_TOTAL_STEPS} />
     {children}
+    <ProgressIndicator currentStep={step} totalSteps={NEW_REQUEST_TOTAL_STEPS} />
   </NewRequestActionSafeArea>
 )

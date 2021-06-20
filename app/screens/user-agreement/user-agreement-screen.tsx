@@ -1,12 +1,13 @@
 import React from "react"
 import { observer } from "mobx-react-lite"
 import { SafeAreaView, View, ViewStyle } from "react-native"
-import { Button, Header, Screen, Text } from "../../components"
+import { Ionicons } from "@expo/vector-icons"
+import { Button, FlexContainer, Header, Screen, Text } from "../../components"
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../models"
-import { color, globalStyles } from "../../theme"
+import { color, globalStyles, spacing } from "../../theme"
 import { format } from "date-fns"
-import { CALENDAR_DATE_FORMAT } from "../../constants"
+import { DEFAULT_DATE_FORMAT } from "../../constants"
 
 const ROOT: ViewStyle = {
   backgroundColor: color.background,
@@ -26,7 +27,7 @@ export const UserAgreementScreen = observer(function UserAgreementScreen() {
 
   const acceptedOnDate = format(
     new Date(user?.profile.acceptedUserAgreementAt),
-    CALENDAR_DATE_FORMAT,
+    DEFAULT_DATE_FORMAT,
   )
 
   return (
@@ -43,10 +44,13 @@ export const UserAgreementScreen = observer(function UserAgreementScreen() {
         </Screen>
         <SafeAreaView>
           {user.profile.acceptedUserAgreementAt && (
-            <>
-              <Text preset="center" tx="userAgreementScreen.acceptedOn" />
-              <Text preset="center" text={acceptedOnDate} />
-            </>
+            <FlexContainer justifyCenter>
+              <Ionicons name="md-checkmark-circle" size={20} color={color.palette.green} />
+              <FlexContainer marginLeft={`${spacing[2]}px`}>
+                <Text preset="center" tx="userAgreementScreen.acceptedOn" />
+                <Text preset="center" text={` ${acceptedOnDate}`} />
+              </FlexContainer>
+            </FlexContainer>
           )}
           <Button tx="userAgreementScreen.userAgreementAcceptButton" onPress={handlePressAccept} />
         </SafeAreaView>

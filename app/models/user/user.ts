@@ -17,13 +17,13 @@ export const UserModel = types
   .extend(withEnvironment)
   .views((self) => ({
     get isChaperoneRole() {
-      return self.profile.role === UserRoleEnum.CHAPERONE
+      return self?.profile.role === UserRoleEnum.CHAPERONE
     },
     get isAdminRole() {
-      return self.profile.role === UserRoleEnum.ADMIN
+      return self?.profile.role === UserRoleEnum.ADMIN
     },
     get isRequesterRole() {
-      return self.profile.role === UserRoleEnum.REQUESTER
+      return self?.profile.role === UserRoleEnum.REQUESTER
     },
   }))
   .actions((self) => ({

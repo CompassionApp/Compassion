@@ -1,11 +1,12 @@
 import React from "react"
 import { observer } from "mobx-react-lite"
 import { View, ViewStyle } from "react-native"
-import { Break, Button, Header, Screen, Text } from "../../components"
+import { FontAwesome, Ionicons, MaterialIcons } from "@expo/vector-icons"
 import { useNavigation } from "@react-navigation/native"
+import styled from "styled-components/native"
+import { Break, Button, Header, Screen, Text } from "../../components"
 import { useStores } from "../../models"
 import { color, globalStyles, spacing } from "../../theme"
-import styled from "styled-components/native"
 
 const ROOT: ViewStyle = {
   backgroundColor: color.background,
@@ -23,15 +24,15 @@ const MenuListItem = styled.TouchableOpacity<{ disabled?: boolean }>`
   display: flex;
   flex-flow: row nowrap;
   justify-content: flex-start;
-  width: 150px;
+  width: 180px;
   ${({ disabled }) => !!disabled === true && "opacity: 0.2;"}
 `
 
-// const ICON_SIZE = {
-//   width: 30,
-//   height: 30,
-//   marginRight: spacing[4],
-// }
+const MenuItemText = styled(Text)`
+  margin-left: ${spacing[5]}px;
+  font-size: ${spacing[4]}px;
+`
+const ICON_SIZE = 30
 
 export const MenuScreen = observer(function MenuScreen() {
   const { authStore } = useStores()
@@ -67,8 +68,8 @@ export const MenuScreen = observer(function MenuScreen() {
         />
         <MenuList>
           <MenuListItem disabled>
-            {/* <Icon icon="home" style={ICON_SIZE} /> */}
-            <Text
+            <FontAwesome name="user-circle" size={ICON_SIZE} color={color.palette.blue} />
+            <MenuItemText
               preset={[]}
               tx={
                 authStore?.user?.isChaperoneRole
@@ -78,24 +79,24 @@ export const MenuScreen = observer(function MenuScreen() {
             />
           </MenuListItem>
           <MenuListItem disabled>
-            {/* <Icon icon="home" style={ICON_SIZE} /> */}
-            <Text preset={[]} tx="menuScreen.menuButtonAboutUs" />
+            <MaterialIcons name="location-city" size={ICON_SIZE} color={color.palette.blue} />
+            <MenuItemText preset={[]} tx="menuScreen.menuButtonAboutUs" />
           </MenuListItem>
           <MenuListItem onPress={() => navigation.navigate("userAgreement")}>
-            {/* <Icon icon="home" style={ICON_SIZE} /> */}
-            <Text preset={[]} tx="menuScreen.menuButtonUserAgreement" />
+            <MaterialIcons name="menu-book" size={ICON_SIZE} color={color.palette.blue} />
+            <MenuItemText preset={[]} tx="menuScreen.menuButtonUserAgreement" />
           </MenuListItem>
           <MenuListItem disabled>
-            {/* <Icon icon="home" style={ICON_SIZE} /> */}
-            <Text preset={[]} tx="menuScreen.menuButtonResetPassword" />
+            <MaterialIcons name="vpn-key" size={ICON_SIZE} color={color.palette.blue} />
+            <MenuItemText preset={[]} tx="menuScreen.menuButtonResetPassword" />
           </MenuListItem>
           <MenuListItem disabled>
-            {/* <Icon icon="home" style={ICON_SIZE} /> */}
-            <Text preset={[]} tx="menuScreen.menuButtonAskQuestion" />
+            <MaterialIcons name="question-answer" size={ICON_SIZE} color={color.palette.blue} />
+            <MenuItemText preset={[]} tx="menuScreen.menuButtonAskQuestion" />
           </MenuListItem>
           <MenuListItem onPress={handlePressSignOut}>
-            {/* <Icon icon="home" style={ICON_SIZE} /> */}
-            <Text preset={[]} tx="menuScreen.menuButtonSignOut" />
+            <Ionicons name="md-log-out-outline" size={ICON_SIZE} color={color.palette.blue} />
+            <MenuItemText preset={[]} tx="menuScreen.menuButtonSignOut" />
           </MenuListItem>
         </MenuList>
       </Screen>

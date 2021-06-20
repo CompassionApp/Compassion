@@ -1,7 +1,7 @@
 import React from "react"
 import { observer } from "mobx-react-lite"
 import { View, ViewStyle } from "react-native"
-import { Break, Button, Header, Screen, Text } from "../../components"
+import { Break, Button, FlexContainer, Header, Screen, Text } from "../../components"
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../models"
 import { color, globalStyles, spacing } from "../../theme"
@@ -22,10 +22,7 @@ const Content = styled.View`
   text-align: center;
 `
 
-const ButtonRow = styled.View`
-  display: flex;
-  flex-flow: row nowrap;
-  justify-content: center;
+const ButtonRow = styled(FlexContainer)`
   margin: ${spacing[4]}px 0;
 `
 
@@ -136,11 +133,10 @@ export const ChaperoneRequestDetailScreen = observer(function ChaperoneRequestDe
                 </ContentRow>
               </MatchProfilePhotos>
             )}
-
             <Text preset={["bold", "center"]}>{currentRequest.destinationAddress}</Text>
             <Text preset="center">to</Text>
             <Text preset={["bold", "center"]}>{currentRequest.meetAddress}</Text>
-            <ButtonRow>
+            <ButtonRow justifyCenter>
               {currentRequest.status === RequestStatusEnum.REQUESTED && (
                 <Button
                   tx="chaperoneRequestDetailScreen.acceptRequestButton"
@@ -172,10 +168,7 @@ export const ChaperoneRequestDetailScreen = observer(function ChaperoneRequestDe
               onPress={handlePressDelete}
             />
             <Break />
-            <Text>ID: {currentRequest.id}</Text>
-            <Text>
-              Status: <Text tx={`enumRequestStatus.${currentRequest.status}` as TxKeyPath} />
-            </Text>
+            <Text>{currentRequest.id}</Text>
           </Content>
         )}
       </Screen>
