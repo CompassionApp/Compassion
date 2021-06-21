@@ -1,15 +1,15 @@
 import React, { useEffect, useRef, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { Dimensions, View, ViewStyle } from "react-native"
-import { Button, Header, Screen } from "../../components"
+import styled from "styled-components/native"
 import { useNavigation } from "@react-navigation/native"
 import * as Location from "expo-location"
-import { color, globalStyles, spacing } from "../../theme"
 import MapView, { LatLng, Marker } from "react-native-maps"
+import { Button, FlexContainer, FlexItem, Header, Screen } from "../../components"
+import { color, globalStyles, spacing } from "../../theme"
 import { START_REGION } from "../../constants/map"
 import { useStores } from "../../models"
-import styled from "styled-components/native"
-import PickupDropoff from "../../components/pickup-dropoff/pickupDropoff"
+import PickupDropoff from "../../components/pickup-dropoff/pickup-dropoff"
 import { NewRequestFooterArea } from "./common"
 
 const ROOT: ViewStyle = {
@@ -18,14 +18,13 @@ const ROOT: ViewStyle = {
 }
 
 const MAP: ViewStyle = {
-  width: Dimensions.get("window").width,
+  width: Dimensions.get("window").width - spacing[4] * 2,
   minHeight: 200,
   flex: 1,
 }
 
-const FlexView = styled.View`
-  display:flex;
-  flex-flow: column; nowrap; 
+const FlexView = styled(FlexContainer)`
+  flex-wrap: nowrap;
 `
 
 /**
@@ -63,6 +62,7 @@ export const NewRequestLocationSelectionScreen = observer(
     }
 
     useEffect(() => {
+      // eslint-disable-next-line
       ;(async () => {
         const { status } = await Location.requestPermissionsAsync()
         if (status !== "granted") {
@@ -93,29 +93,32 @@ export const NewRequestLocationSelectionScreen = observer(
             style={globalStyles.header}
           />
 
-          <FlexView>
-            <MapView initialRegion={START_REGION} ref={mapViewRef} style={MAP}>
-              {pickupLocation && (
-                <Marker
-                  ref={pickupMarkerRef}
-                  coordinate={pickupLocation}
-                  title="Pickup"
-                  description="Meet my chaperone from here"
-                />
-              )}
-              {dropoffLocation && (
-                <Marker
-                  ref={dropoffMarkerRef}
-                  title="Dropoff"
-                  coordinate={dropoffLocation}
-                  description="Part ways with my chaperone here"
-                />
-              )}
-            </MapView>
-
-            <View style={PICKUP_DROPOFF_WRAPPER}>
-              <PickupDropoff totalSteps={2} />
-            </View>
+          <FlexView column height="100%">
+            <FlexItem>
+              <View style={PICKUP_DROPOFF_WRAPPER}>
+                <PickupDropoff totalSteps={2} />
+              </View>
+            </FlexItem>
+            <FlexItem grow={1}>
+              <MapView initialRegion={START_REGION} ref={mapViewRef} style={MAP}>
+                {pickupLocation && (
+                  <Marker
+                    ref={pickupMarkerRef}
+                    coordinate={pickupLocation}
+                    title="Pickup"
+                    description="Meet my chaperone from here"
+                  />
+                )}
+                {dropoffLocation && (
+                  <Marker
+                    ref={dropoffMarkerRef}
+                    title="Dropoff"
+                    coordinate={dropoffLocation}
+                    description="Part ways with my chaperone here"
+                  />
+                )}
+              </MapView>
+            </FlexItem>
           </FlexView>
         </Screen>
         <NewRequestFooterArea step={3}>

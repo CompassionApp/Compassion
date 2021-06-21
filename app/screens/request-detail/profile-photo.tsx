@@ -3,7 +3,7 @@ import { TextStyle } from "react-native"
 import styled from "styled-components/native"
 import { FlexContainer, Text } from "../../components"
 import { UserProfilePreview } from "../../models"
-import { spacing } from "../../theme"
+import { color, spacing } from "../../theme"
 const profileImage = require("./profile.png")
 
 const SIZE = 70
@@ -13,7 +13,7 @@ const Container = styled(FlexContainer)`
 
 const PhotoContainer = styled(FlexContainer)`
   border-radius: 100px;
-  background-color: #c4c4c4;
+  background-color: ${color.palette.grey2};
   width: ${SIZE}px;
   height: ${SIZE}px;
   align-self: center;

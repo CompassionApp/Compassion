@@ -30,6 +30,10 @@ const LinkButton = styled(Button)`
   margin: ${spacing[2]}px auto;
 `
 
+const OtherCommentsArea = styled(FlexContainer)`
+  padding: ${spacing[3]}px ${spacing[2]}px;
+`
+
 const BUTTON_OVERRIDE = {
   marginHorizontal: spacing[1],
   minWidth: 150,
@@ -162,6 +166,18 @@ export const ChaperoneRequestDetailScreen = observer(function ChaperoneRequestDe
             <Text preset={["bold", "center"]}>{currentRequest.destinationAddress}</Text>
             <Text preset="center">to</Text>
             <Text preset={["bold", "center"]}>{currentRequest.meetAddress}</Text>
+            <Break />
+            <Text
+              preset={["center", "smallHeader"]}
+              tx="chaperoneRequestDetailScreen.commentsFromRequester"
+            />
+            <Break size={1} />
+            <OtherCommentsArea column>
+              <Text preset={["center"]}>
+                {currentRequest.otherComments ? currentRequest.otherComments : "None"}
+              </Text>
+            </OtherCommentsArea>
+            <Break />
             <ButtonRow justifyCenter>
               {currentRequest.status === RequestStatusEnum.REQUESTED && (
                 <Button

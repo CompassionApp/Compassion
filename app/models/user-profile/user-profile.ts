@@ -12,6 +12,7 @@ export const UserProfileModel = types
     id: types.string,
     createdAt: types.optional(types.string, new Date().toUTCString()),
     updatedAt: types.optional(types.string, new Date().toUTCString()),
+    lastLoginAt: types.maybeNull(types.string),
     role: types.enumeration<UserRoleEnum>(Object.values(UserRoleEnum)),
     firstName: types.string,
     lastName: types.string,

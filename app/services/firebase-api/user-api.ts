@@ -1,5 +1,9 @@
 import { FirebaseCoreApiAdapter } from "./firebase-core-api"
-import type { GetUserProfileResult, SaveUserProfileResult } from "./api.types"
+import type {
+  GetAllUserProfilesResult,
+  GetUserProfileResult,
+  SaveUserProfileResult,
+} from "./api.types"
 import type { UserProfileSnapshot } from "../../models"
 // import { typeConverter } from "./utils"
 
@@ -36,6 +40,7 @@ export class UserApi {
   async getUserProfile(
     key: string,
     updateNotificationToken?: string,
+    updateLastLoginAt?: string,
   ): Promise<GetUserProfileResult> {
     console.log("[user-api] Fetching user profile...")
     try {
@@ -46,11 +51,15 @@ export class UserApi {
         .runTransaction((transaction) => {
           return transaction.get(userProfileDocRef).then((userProfileDoc) => {
             const updatedUserProfile = userProfileDoc.data()
+            if (updateLastLoginAt) {
+              console.log("[user-api] Updating lastLoginAt token to", updateLastLoginAt)
+              updatedUserProfile.lastLoginAt = updateLastLoginAt
+            }
             if (updateNotificationToken) {
               console.log("[user-api] Updating notification token to", updateNotificationToken)
               updatedUserProfile.notificationToken = updateNotificationToken
-              transaction.update(userProfileDocRef, updatedUserProfile)
             }
+            transaction.update(userProfileDocRef, updatedUserProfile)
             return updatedUserProfile
           })
         })
@@ -60,6 +69,26 @@ export class UserApi {
       return {
         kind: "ok",
         profile: userProfile as UserProfileSnapshot,
+      }
+    } catch (e) {
+      __DEV__ && console.tron.log(e.message)
+      return { kind: "bad-data" }
+    }
+  }
+
+  /**
+   * Fetches all user profile documents at `/users/[key]`
+   */
+  async getAllUserProfiles(): Promise<GetAllUserProfilesResult> {
+    console.log("[user-api] Fetching all user profiles...")
+    try {
+      const userProfileDocRef = await this.firebase.firestore.collection("users").get()
+      const userProfiles = userProfileDocRef.docs.map((doc) => doc.data() as UserProfileSnapshot)
+
+      console.log(`[user-api] Found ${userProfiles.length}...`, userProfiles)
+      return {
+        kind: "ok",
+        profiles: userProfiles as UserProfileSnapshot[],
       }
     } catch (e) {
       __DEV__ && console.tron.log(e.message)

@@ -1,7 +1,7 @@
 import React from "react"
 import { observer } from "mobx-react-lite"
 import styled from "styled-components/native"
-import { Button, FlexContainer, Text } from "../../components"
+import { FlexContainer, Text } from "../../components"
 import { color, spacing, typography } from "../../theme"
 import { RequestStatusEnum, RequestTypeEnum } from "../../types"
 import * as datefns from "date-fns"
@@ -15,7 +15,7 @@ const BORDER_RADIUS = 5
 const Container = styled.TouchableOpacity`
   background-color: ${color.palette.white};
   border-radius: ${BORDER_RADIUS}px;
-  margin-vertical: ${spacing[2]};
+  margin-vertical: ${spacing[2]}px;
   border: 1px solid ${color.palette.grey2};
 `
 
@@ -34,14 +34,16 @@ const Description = styled(Text)`
   text-align: center;
 `
 
-const ButtonRow = styled(FlexContainer)``
-
-const StatusButton = styled(Button)<{ color?: string }>`
-  margin-vertical: 0;
-  border-radius: 0;
-  padding-vertical: 9px;
-  flex: 1;
+const StatusArea = styled(FlexContainer)<{ color?: string }>`
   ${({ color }) => (color ? `background-color: ${color}` : "")};
+`
+
+const StatusTextField = styled(Text)`
+  padding-vertical: ${spacing[2]}px;
+  color: ${color.palette.white};
+  text-transform: uppercase;
+  font-size: 15px;
+  font-family: ${typography.secondary};
 `
 
 export interface CardProps {
@@ -75,12 +77,9 @@ export const RequestCard = observer(function Card({
         </Description>
         <Break size={1} />
       </Content>
-      <ButtonRow justifyCenter width="100%">
-        <StatusButton
-          tx={`enumRequestStatus.${status}` as TxKeyPath}
-          color={statusColorMap.get(status)}
-        />
-      </ButtonRow>
+      <StatusArea justifyCenter width="100%" color={statusColorMap.get(status)}>
+        <StatusTextField tx={`enumRequestStatus.${status}` as TxKeyPath} />
+      </StatusArea>
     </Container>
   )
 })

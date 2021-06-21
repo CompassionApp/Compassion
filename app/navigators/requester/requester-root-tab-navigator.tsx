@@ -1,14 +1,13 @@
 import React, { useEffect } from "react"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { observer } from "mobx-react-lite"
-import { Ionicons, MaterialIcons } from "@expo/vector-icons"
 import { MenuScreen, NotificationsScreen } from "../../screens"
 import { NewRequestStackNavigator } from "./new-request-stack-navigator"
 import { color } from "../../theme"
 import { RequesterHomeStackNavigator } from "./requester-home-stack-navigator"
 import { useStores } from "../../models"
+import { createTabIconForScreen } from "../tab-icon-utilities"
 
-const ICON_SIZE = 28
 export type RequesterTabNavigatorParamList = {
   home: undefined
   permissions: undefined
@@ -40,18 +39,13 @@ export const RequesterMainTabNavigator = observer(function RequesterMainTabNavig
       tabBarOptions={{
         activeTintColor: color.palette.darkBlue,
       }}
-      screenOptions={({ route }) => ({
-        // tabBarIcon: ({ color }) => <TabBarIcon icon="home" />,
-      })}
     >
       <Tab.Screen
         name="home"
         component={RequesterHomeStackNavigator}
         options={{
           tabBarLabel: "Home",
-          tabBarIcon: ({ color }) => (
-            <Ionicons name="md-home-sharp" size={ICON_SIZE} color={color} />
-          ),
+          tabBarIcon: createTabIconForScreen("home"),
         }}
       />
       <Tab.Screen
@@ -59,9 +53,7 @@ export const RequesterMainTabNavigator = observer(function RequesterMainTabNavig
         component={NewRequestStackNavigator}
         options={{
           tabBarLabel: "Request",
-          tabBarIcon: ({ color }) => (
-            <MaterialIcons name="alarm-add" size={ICON_SIZE} color={color} />
-          ),
+          tabBarIcon: createTabIconForScreen("newRequest"),
         }}
       />
       <Tab.Screen
@@ -69,9 +61,7 @@ export const RequesterMainTabNavigator = observer(function RequesterMainTabNavig
         component={NotificationsScreen}
         options={{
           tabBarLabel: "Notifications",
-          tabBarIcon: ({ color }) => (
-            <MaterialIcons name="notification-important" size={ICON_SIZE} color={color} />
-          ),
+          tabBarIcon: createTabIconForScreen("notifications"),
           tabBarBadge:
             notificationStore.notificationCount !== 0
               ? notificationStore.notificationCount
@@ -83,7 +73,7 @@ export const RequesterMainTabNavigator = observer(function RequesterMainTabNavig
         component={MenuScreen}
         options={{
           tabBarLabel: "",
-          tabBarIcon: ({ color }) => <Ionicons name="menu" size={ICON_SIZE + 6} color={color} />,
+          tabBarIcon: createTabIconForScreen("menu"),
         }}
       />
     </Tab.Navigator>

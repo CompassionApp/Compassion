@@ -41,6 +41,7 @@
     "apisauce": "2.0.0",
     "date-fns": "^2.21.2",
     "expo": "40.0.1",
+    "expo-linking": "~2.0.1",
     "expo-localization": "9.1.0",
     "expo-location": "~10.0.0",
     "expo-notifications": "~0.8.2",

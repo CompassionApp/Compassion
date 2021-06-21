@@ -3,7 +3,7 @@ export const palette = {
   lightRed: "#FF0307",
   red: "#B30104",
   darkRed: "#7F0103",
-  lightGreen: "##C3D871",
+  lightGreen: "#C3D871",
   green: "#A3C323",
   darkGreen: "#708813",
   lightBlue: "#DAEDF9",

@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { observer } from "mobx-react-lite"
 import { RefreshControl, ScrollView, View, ViewStyle } from "react-native"
 import styled from "styled-components/native"
@@ -8,11 +8,9 @@ import { color, globalStyles, typography } from "../../theme"
 import { RequestCard } from "./request-card"
 import { useStores } from "../../models/root-store/root-store-context"
 import { RequestStatusEnum, RequestTypeEnum } from "../../types"
-import { NoRequestsNotice } from "./no-requests-notice"
 import { NotificationModel, RequestSnapshot } from "../../models"
 import { createNewRequestNotification } from "../../utils/notification-factory"
 
-const DEBUG = false
 const ROOT: ViewStyle = {
   backgroundColor: color.background,
   flex: 1,
@@ -23,7 +21,7 @@ const Title = styled(Text)`
   font-size: 24px;
 `
 
-export const RequesterHomeScreen = observer(function RequesterHomeScreen() {
+export const AdminHomeScreen = observer(function AdminHomeScreen() {
   const { authStore, requestStore, notificationStore } = useStores()
   const profile = authStore.user?.profile
   const navigation = useNavigation()
@@ -37,7 +35,7 @@ export const RequesterHomeScreen = observer(function RequesterHomeScreen() {
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true)
-    requestStore.getRequests().then(() => setRefreshing(false))
+    requestStore.getAvailableRequests().then(() => setRefreshing(false))
   }, [])
 
   const handlePressNotify = () => {
@@ -50,8 +48,12 @@ export const RequesterHomeScreen = observer(function RequesterHomeScreen() {
     notificationStore.notifyChaperonesNewRequest(notification)
   }
 
+  useEffect(() => {
+    requestStore.getAvailableRequests()
+  }, [])
+
   return (
-    <View testID="HomeScreen" style={globalStyles.full}>
+    <View testID="AdminHomeScreen" style={globalStyles.full}>
       <Screen style={{ ...globalStyles.root, ...ROOT }} preset="fixed">
         <Header headerTx="homeScreen.title" style={globalStyles.header} />
         <FlexContainer justifyCenter>
@@ -59,19 +61,13 @@ export const RequesterHomeScreen = observer(function RequesterHomeScreen() {
           <Title text={`, ${profile?.firstName ?? "Unknown"}`} />
         </FlexContainer>
         <Break />
-        {DEBUG && <Button text="Notify chaperones" onPress={handlePressNotify} />}
+        <Button text="Notify chaperones" onPress={handlePressNotify} />
         <ScrollView
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         >
-          <Text preset={["center", "bold"]} text="Your pending requests" />
-
-          {requestStore.sortUserRequestsByCreated.length === 0 && (
-            <>
-              <Text preset={["bold", "center"]} tx="homeScreen.noneScheduledNoticeBold" />
-              <NoRequestsNotice />
-            </>
-          )}
-          {requestStore.sortUserRequestsByCreated.map((request: RequestSnapshot) => (
+          <Text preset={["center", "bold"]} tx="chaperoneHomeScreen.availableRequests" />
+          <Break />
+          {requestStore.sortAvailableRequestsByCreated.map((request: RequestSnapshot) => (
             <RequestCard
               key={request.id}
               status={request.status as RequestStatusEnum}

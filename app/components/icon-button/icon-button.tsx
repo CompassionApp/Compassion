@@ -1,16 +1,16 @@
 import * as React from "react"
 import { TouchableOpacityProps, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
+import { MaterialIcons } from "@expo/vector-icons"
 import { color, spacing } from "../../theme"
 import { Button, Text } from "../"
-import { icons, IconTypes } from "../icon/icons"
 import { Break } from "../break/break"
 import styled from "styled-components/native"
 import { TxKeyPath } from "../../i18n"
 
 const BaseButton = styled(Button)`
-  width: 220px;
-  height: 220px;
+  width: 190px;
+  height: 190px;
   margin: 0 auto;
   border-radius: 20px;
 `
@@ -21,8 +21,6 @@ const ButtonText = styled(Text)`
   font-size: 18px;
 `
 
-const Icon = styled.Image``
-
 const HUGE_BUTTON_STYLE: ViewStyle = {
   paddingHorizontal: spacing[2],
   paddingVertical: spacing[2],
@@ -30,9 +28,14 @@ const HUGE_BUTTON_STYLE: ViewStyle = {
 
 export interface IconButtonProps extends TouchableOpacityProps {
   /**
-   * The name of the icon
+   * Icon name
    */
-  icon: IconTypes
+  name: keyof typeof MaterialIcons.glyphMap
+
+  /**
+   * Color
+   */
+  color?: string
 
   /**
    * The text to display if not using `tx` or nested components.
@@ -51,15 +54,15 @@ export interface IconButtonProps extends TouchableOpacityProps {
 }
 
 /**
- * Describe your component here
+ * Button with an icon
  */
 export const IconButton = observer(function IconButton(props: IconButtonProps) {
-  const { icon, text, tx, style: styleOverrides, ...rest } = props
+  const { name, color, text, tx, style: styleOverrides, ...rest } = props
 
   return (
     <BaseButton {...rest} style={{ ...HUGE_BUTTON_STYLE, ...styleOverrides }}>
-      <Icon source={icons[icon]} />
-      <Break size={3} />
+      <MaterialIcons name={name} color={color} size={120} />
+      <Break size={1} />
       <ButtonText preset={["header", "bold"]} text={text} tx={tx} />
     </BaseButton>
   )

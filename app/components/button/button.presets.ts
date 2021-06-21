@@ -1,6 +1,7 @@
 import { ViewStyle, TextStyle } from "react-native"
 import { color, spacing, typography } from "../../theme"
 
+const BORDER_RADIUS = 25
 /**
  * All text will start off looking like this.
  */
@@ -11,6 +12,10 @@ const BASE_VIEW: ViewStyle = {
   borderRadius: 4,
   justifyContent: "center",
   alignItems: "center",
+  borderTopLeftRadius: BORDER_RADIUS,
+  borderTopRightRadius: BORDER_RADIUS,
+  borderBottomLeftRadius: BORDER_RADIUS,
+  borderBottomRightRadius: BORDER_RADIUS,
 }
 
 const BASE_TEXT: TextStyle = {

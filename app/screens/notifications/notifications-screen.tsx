@@ -2,15 +2,21 @@ import React, { useEffect } from "react"
 import { observer } from "mobx-react-lite"
 import { SectionList, SectionListData, View, ViewStyle } from "react-native"
 import { useNavigation } from "@react-navigation/native"
-import { Button, Header, Screen, Text } from "../../components"
+import styled from "styled-components/native"
+import { Button, FlexContainer, Header, Screen, Text } from "../../components"
 import { NotificationSnapshot, NotificationTypeEnum, useStores } from "../../models"
-import { color, globalStyles } from "../../theme"
+import { color, globalStyles, spacing } from "../../theme"
 import { NotificationItem } from "./notification-item"
 
 const ROOT: ViewStyle = {
   backgroundColor: color.background,
   flex: 1,
 }
+
+const ActionContainer = styled(FlexContainer)`
+  padding-horizontal: ${spacing[2]}px;
+  padding-vertical: ${spacing[2]}px;
+`
 
 export const SAMPLE_NOTIFICATIONS: NotificationSnapshot[] = [
   {
@@ -81,11 +87,13 @@ export const NotificationsScreen = observer(function NotificationsScreen() {
           refreshing={refreshing}
           onRefresh={onRefresh}
         />
-        <Button
-          tx="notificationsScreen.clearAllNotificationsButton"
-          onPress={handlePressClearAll}
-          disabled={notificationStore.notificationCount === 0}
-        />
+        <ActionContainer justifyCenter width="100%">
+          <Button
+            tx="notificationsScreen.clearAllNotificationsButton"
+            onPress={handlePressClearAll}
+            disabled={notificationStore.notificationCount === 0}
+          />
+        </ActionContainer>
       </Screen>
     </View>
   )

@@ -8,6 +8,7 @@ import {
 } from ".."
 import * as storage from "../../utils/storage"
 import { withEnvironment } from "../extensions/with-environment"
+import { UsersStoreModel } from "../users-store/users-store"
 
 /**
  * A RootStore model.
@@ -24,6 +25,8 @@ export const RootStoreModel = types
     newRequestStore: types.late(() => types.optional(NewRequestStoreModel, {} as any)),
     /** Tracks and stores all notifications for the user */
     notificationStore: types.late(() => types.optional(NotificationStoreModel, {} as any)),
+    /** Admins only: Collectiong of all user profiles */
+    usersStore: types.late(() => types.optional(UsersStoreModel, {} as any)),
   })
   .actions(() => ({
     /**

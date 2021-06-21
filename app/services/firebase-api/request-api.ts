@@ -128,6 +128,7 @@ export class RequestApi {
         .get()
 
       const requests = snapshot.docs.map((doc) => (doc.data() as unknown) as RequestSnapshot)
+      console.log(`[request-api] Getting available requests: found ${requests.length}`)
       return { kind: "ok", requests }
     } catch (e) {
       const error = <FirebaseError>e

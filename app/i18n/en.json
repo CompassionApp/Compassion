@@ -41,6 +41,10 @@
     "usernamePlaceholder": "Your username",
     "password": "Password",
     "passwordPlaceholder": "",
+    "geoArea": "Geographic Area",
+    "signUpAs": "Register as a...",
+    "signUpRequesterOption": "Requester - I would like to request help from chaperones",
+    "signUpChaperoneOption": "Chaperone - I want to help my community as a chaperone",
     "submit": "SUBMIT"
   },
   "roleSelectScreen": {
@@ -70,7 +74,8 @@
   },
   "chaperoneRequestDetailScreen": {
     "acceptRequestButton": "Accept Request",
-    "releaseRequestButton": "Cancel match"
+    "releaseRequestButton": "Cancel match",
+    "commentsFromRequester": "Additional details"
   },
   "requestDetailScreen": {
     "title": "Request Details",
@@ -179,11 +184,20 @@
     "title": "Review Your Request",
     "nextButton": "SEND REQUEST"
   },
+  "usersScreen": {
+    "title": "Users"
+  },
+  "enumUserRole": {
+    "undefined": "Unknown",
+    "CHAPERONE": "Chaperone",
+    "REQUESTER": "Requester",
+    "ADMIN": "Administrator"
+  },
   "enumRequestStatus": {
     "undefined": "Unknown",
     "REQUESTED": "Requested",
     "CANCELED_BY_REQUESTER": "Canceled",
-    "SCHEDULED": "Scheduled"
+    "SCHEDULED": "Matched"
   },
   "enumRequestType": {
     "undefined": "Unknown",
@@ -191,5 +205,11 @@
     "DOCTOR": "Doctor Visit",
     "GROCERY": "Grocery Shopping",
     "WALK": "Walk"
+  },
+  "enumGeoArea": {
+    "undefined": "Unknown",
+    "OAK1": "Oakland - Chinatown",
+    "SFO1": "San Francisco - Sunset District",
+    "SGV1": "San Gabriel Valley"
   }
 }

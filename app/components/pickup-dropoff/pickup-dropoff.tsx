@@ -1,9 +1,9 @@
 import React, { useState } from "react"
 import { View, ViewStyle, TextStyle } from "react-native"
-import { TextField } from "../../components"
+import { TextField } from ".."
 
 import { color } from "../../theme"
-import { PickupDropoffProps, PickupDropoffItemViewProps } from "./pickupDropoff.props"
+import { PickupDropoffProps, PickupDropoffItemViewProps } from "./pickup-dropoff.props"
 
 const LOCATION_AREA_WRAPPER: ViewStyle = { marginTop: 30 }
 const LOCATION_BAR_STYLES: ViewStyle = {
