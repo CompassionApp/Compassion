@@ -24,7 +24,7 @@ const AcceptDescription = styled.View`
   padding: 0 ${spacing[2]}px;
 `
 
-export const ChaperoneHomeScreen = observer(function HomeScreen() {
+export const ChaperoneHomeScreen = observer(function ChaperoneHomeScreen() {
   const { authStore, requestStore } = useStores()
   const navigation = useNavigation()
   const [enableNotifications, setEnableNotifications] = useState<boolean>(

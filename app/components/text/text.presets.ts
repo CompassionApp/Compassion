@@ -32,6 +32,16 @@ export const presets = {
   header: { fontSize: 24, fontWeight: "bold" } as TextStyle,
 
   /**
+   * Small all-caps headers
+   */
+  smallHeader: {
+    fontSize: 15,
+    fontFamily: typography.secondary,
+    textTransform: "uppercase",
+    letterSpacing: 0.1,
+  } as TextStyle,
+
+  /**
    * Centered
    */
   center: { textAlign: "center" } as TextStyle,
@@ -58,7 +68,7 @@ export const presets = {
   } as TextStyle,
 
   /**
-   * A smaller piece of secondard information.
+   * A smaller piece of secondary information.
    */
   secondary: { fontSize: 9, color: color.dim } as TextStyle,
 }

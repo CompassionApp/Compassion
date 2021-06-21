@@ -6,7 +6,7 @@ import { RequestStatusEnum } from "../types"
  */
 export const statusColorMap = new Map<RequestStatusEnum, string>([
   [RequestStatusEnum.CANCELED_BY_REQUESTER, color.palette.red],
-  [RequestStatusEnum.REQUESTED, color.palette.grey3],
-  [RequestStatusEnum.SCHEDULED, color.palette.green],
+  [RequestStatusEnum.REQUESTED, color.palette.grey2],
+  [RequestStatusEnum.SCHEDULED, color.palette.blue],
   [RequestStatusEnum.REJECTED, color.palette.red],
 ])

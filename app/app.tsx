@@ -14,6 +14,7 @@ import "./utils/ignore-warnings"
 import React, { useState, useEffect, useRef } from "react"
 import { NavigationContainerRef } from "@react-navigation/native"
 import { SafeAreaProvider, initialWindowMetrics } from "react-native-safe-area-context"
+import * as Linking from "expo-linking"
 // import * as Permissions from "expo-permissions"
 import { initFonts } from "./theme/fonts" // expo
 import * as storage from "./utils/storage"
@@ -36,6 +37,7 @@ import { ErrorBoundary } from "./error-boundary"
 enableScreens()
 
 export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
+const prefix = Linking.createURL("/")
 
 /**
  * This is the root component of our app.
@@ -43,6 +45,10 @@ export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
 function App() {
   const navigationRef = useRef<NavigationContainerRef>()
   const [rootStore, setRootStore] = useState<RootStore | undefined>(undefined)
+
+  const linking = {
+    prefixes: [prefix],
+  }
 
   setRootNavigation(navigationRef)
   useBackButtonHandler(navigationRef, canExit)
@@ -70,6 +76,7 @@ function App() {
 
   // Kick off initial async loading actions, like loading fonts and RootStore
   useEffect(() => {
+    // eslint-disable-next-line
     ;(async () => {
       await initFonts() // expo
       setupRootStore().then(setRootStore)
@@ -94,6 +101,7 @@ function App() {
             <RootNavigator
               ref={navigationRef}
               initialState={initialNavigationState}
+              linking={linking}
               onStateChange={onNavigationStateChange}
             />
           </ErrorBoundary>

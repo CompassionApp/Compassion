@@ -32,15 +32,17 @@ export const UserModel = types
     }),
 
     /**
-     * Fetches the user profile document from Firestore and attaches it to the user model
+     * Fetches the user profile document from Firestore and attaches it to the user model.
+     * Optionally, updates the notification token and lastLoginAt fields
      */
-    fetchUserProfile: flow(function* (notificationToken?: string) {
+    fetchUserProfile: flow(function* (notificationToken?: string, lastLoginAt?: string) {
       console.log(`[user] Fetching user profile for ${self.email}...`)
 
       // Check if the user profile document exists
       const { profile } = yield self.environment.userApi.getUserProfile(
         self.email,
         notificationToken,
+        lastLoginAt,
       )
 
       console.log("[user] Fetched profile:", profile)

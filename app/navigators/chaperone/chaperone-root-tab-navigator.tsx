@@ -1,13 +1,12 @@
 import React, { useEffect } from "react"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { observer } from "mobx-react-lite"
-import { Ionicons, MaterialIcons } from "@expo/vector-icons"
 import { MenuScreen, NotificationsScreen } from "../../screens"
 import { color } from "../../theme"
 import { ChaperoneHomeStackNavigator } from "./chaperone-home-stack-navigator"
 import { useStores } from "../../models"
+import { createTabIconForScreen } from "../tab-icon-utilities"
 
-const ICON_SIZE = 28
 export type ChaperoneTabNavigatorParamList = {
   home: undefined
   chaperone: undefined
@@ -38,33 +37,26 @@ export const ChaperoneMainTabNavigator = observer(function ChaperoneMainTabNavig
       tabBarOptions={{
         activeTintColor: color.palette.darkBlue,
       }}
-      screenOptions={() => ({
-        // tabBarIcon: () => <TabBarIcon icon="home" />,
-      })}
     >
       <Tab.Screen
         name="home"
         component={ChaperoneHomeStackNavigator}
         options={{
           tabBarLabel: "Home",
-          tabBarIcon: ({ color }) => (
-            <Ionicons name="md-home-sharp" size={ICON_SIZE} color={color} />
-          ),
+          tabBarIcon: createTabIconForScreen("home"),
         }}
       />
       {/* <Tab.Screen
         name="schedule"
         component={ChaperoneScheduleScreen}
-        options={{ tabBarLabel: "Schedule", tabBarIcon: () => <TabBarIcon icon="home" /> }}
+        options={{ tabBarLabel: "Schedule", tabBarIcon: createTabIconForScreen("schedule") }}
       /> */}
       <Tab.Screen
         name="notifications"
         component={NotificationsScreen}
         options={{
           tabBarLabel: "Notifications",
-          tabBarIcon: ({ color }) => (
-            <MaterialIcons name="notification-important" size={ICON_SIZE} color={color} />
-          ),
+          tabBarIcon: createTabIconForScreen("notifications"),
           tabBarBadge:
             notificationStore.notificationCount !== 0
               ? notificationStore.notificationCount
@@ -76,7 +68,7 @@ export const ChaperoneMainTabNavigator = observer(function ChaperoneMainTabNavig
         component={MenuScreen}
         options={{
           tabBarLabel: "",
-          tabBarIcon: ({ color }) => <Ionicons name="menu" size={ICON_SIZE + 6} color={color} />,
+          tabBarIcon: createTabIconForScreen("menu"),
         }}
       />
     </Tab.Navigator>

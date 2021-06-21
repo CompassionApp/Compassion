@@ -398,6 +398,28 @@ export const RequestStoreModel = types
           unsubscribeUserRequests,
         }
       },
+
+      /**
+       * Subscribes to changes to all available requests as an admin.
+       *
+       * Returns unsubscribe functions that must be called upon unmount.
+       */
+      subscribeAsAdmin: () => {
+        const unsubscribeAvailableRequests = self.environment.requestApi.subscribeToAvailableRequests(
+          (requests) => {
+            console.log(
+              "[request-store] Subscribing to new all available requests, inc.:",
+              requests.map((r) => r.id),
+            )
+            self._updateAvailableRequests(requests)
+          },
+        )
+
+        unsubscribeHandlers.push(unsubscribeAvailableRequests)
+        return {
+          unsubscribeAvailableRequests,
+        }
+      },
     }
   })
 

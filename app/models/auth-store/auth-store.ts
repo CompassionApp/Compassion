@@ -2,7 +2,7 @@ import firebase from "firebase"
 import { destroy, flow, getSnapshot, Instance, SnapshotOut, types } from "mobx-state-tree"
 import { withEnvironment } from "../extensions/with-environment"
 import { UserModel } from "../user/user"
-import { UserRoleEnum, UserStatusEnum } from "../../types"
+import { GeoAreaEnum, UserRoleEnum, UserStatusEnum } from "../../types"
 import { UserProfileModel } from "../user-profile/user-profile"
 
 /**
@@ -53,6 +53,7 @@ export const AuthStoreModel = types
       firstName: string,
       lastName: string,
       role: UserRoleEnum,
+      geoArea: GeoAreaEnum,
     ) {
       console.log("[auth-store] Creating user with", {
         userEmail,
@@ -92,6 +93,7 @@ export const AuthStoreModel = types
         createdAt: user.metadata.creationTime,
         // Register a notification token upon sign-up
         notificationToken: self.environment.notifications.deviceNotificationToken,
+        geoArea,
       })
       self.user.setUserProfile(getSnapshot(profile))
       yield self.user.save()
@@ -116,7 +118,10 @@ export const AuthStoreModel = types
         const { user } = userCredential
         yield self.updateLocalUserDetailsFromFirebase(user)
         // Update the user profile's notification token and fetch the updated profile
-        yield self.user.fetchUserProfile(self.environment.notifications.deviceNotificationToken)
+        yield self.user.fetchUserProfile(
+          self.environment.notifications.deviceNotificationToken,
+          new Date().toUTCString(),
+        )
       } else {
         throw new Error(kind)
       }

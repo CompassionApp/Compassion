@@ -1,12 +1,20 @@
 import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
 import { SafeAreaView, View, ViewStyle } from "react-native"
-import { Button, FormRow, Header, Screen, Text, TextField } from "../../components"
+import {
+  Break,
+  Button,
+  Checkbox,
+  FlexContainer,
+  Header,
+  Screen,
+  Text,
+  TextField,
+} from "../../components"
 import { useStores } from "../../models"
 import { color, globalStyles, spacing } from "../../theme"
 import { useNavigation } from "@react-navigation/core"
-import { Switch } from "react-native-gesture-handler"
-import { UserRoleEnum } from "../../types"
+import { GeoAreaEnum, UserRoleEnum } from "../../types"
 import { roleTypeToScreenMap } from "../../utils/navigation"
 
 const ROOT: ViewStyle = {
@@ -30,20 +38,40 @@ export const SignUpScreen = observer(function SignUpScreen() {
   const [userPassword, setUserPassword] = useState<string>(DEFAULT_PASSWORD)
   const [userFirstName, setUserFirstName] = useState<string>(DEFAULT_FIRST_NAME)
   const [userLastName, setUserLastName] = useState<string>(DEFAULT_LAST_NAME)
-  const [userRole, setUserRole] = useState<UserRoleEnum>(UserRoleEnum.REQUESTER)
+  const [userGeoArea, setUserGeoArea] = useState<GeoAreaEnum>(GeoAreaEnum.OAK1)
+  const [userRole, setUserRole] = useState<UserRoleEnum>()
   const [errorMessage, setErrorMessage] = useState<string | undefined>()
 
   const navigation = useNavigation()
   const navigateBack = () => navigation.goBack()
 
-  const handleUserRoleChange = (value) => {
-    setUserRole(value ? UserRoleEnum.REQUESTER : UserRoleEnum.CHAPERONE)
+  function isValid() {
+    return userEmail && userPassword && userRole && userFirstName && userLastName && userGeoArea
+  }
+
+  const handleUserRoleChange = (role: UserRoleEnum) => (value) => {
+    value ? setUserRole(role) : setUserRole(undefined)
+  }
+
+  const handleGeoAreaChange = (geoArea: GeoAreaEnum) => (value) => {
+    value ? setUserGeoArea(geoArea) : setUserGeoArea(undefined)
   }
 
   const handleSubmit = async () => {
+    if (!isValid()) {
+      setErrorMessage("All fields must be entered")
+      return
+    }
     setErrorMessage(undefined)
     try {
-      await authStore.createUser(userEmail, userPassword, userFirstName, userLastName, userRole)
+      await authStore.createUser(
+        userEmail,
+        userPassword,
+        userFirstName,
+        userLastName,
+        userRole,
+        userGeoArea,
+      )
       const screen = roleTypeToScreenMap.get(authStore?.user.profile.role)
       navigation.navigate(screen)
     } catch (err) {
@@ -60,59 +88,82 @@ export const SignUpScreen = observer(function SignUpScreen() {
           onLeftPress={navigateBack}
           style={globalStyles.header}
         />
-        <Text preset="default" tx="signUpScreen.description" />
-        <FormRow preset="bottom">
-          {errorMessage && <Text preset="error" text={errorMessage} />}
-          <TextField
-            preset="header"
-            labelTx="signUpScreen.email"
-            placeholderTx="signUpScreen.emailPlaceholder"
-            defaultValue={userEmail}
-            autoCompleteType="email"
-            autoCorrect={false}
-            autoCapitalize="none"
-            onChangeText={setUserEmail}
-          />
-          <TextField
-            preset="header"
-            labelTx="signUpScreen.password"
-            placeholderTx="signUpScreen.passwordPlaceholder"
-            defaultValue={userPassword}
-            autoCompleteType="password"
-            autoCorrect={false}
-            autoCapitalize="none"
-            secureTextEntry
-            onChangeText={setUserPassword}
-          />
-          <TextField
-            preset="header"
-            labelTx="signUpScreen.firstName"
-            placeholderTx="signUpScreen.firstNamePlaceholder"
-            defaultValue={userFirstName}
-            autoCompleteType="name"
-            onChangeText={setUserFirstName}
-          />
-          <TextField
-            preset="header"
-            labelTx="signUpScreen.lastName"
-            placeholderTx="signUpScreen.lastNamePlaceholder"
-            defaultValue={userLastName}
-            autoCompleteType="name"
-            onChangeText={setUserLastName}
-          />
-          <Text text="Sign up as requester?" />
-          <Switch
-            onValueChange={handleUserRoleChange}
+        {errorMessage && <Text preset="error" text={errorMessage} />}
+        <TextField
+          preset="header"
+          labelTx="signUpScreen.email"
+          placeholderTx="signUpScreen.emailPlaceholder"
+          defaultValue={userEmail}
+          autoCompleteType="email"
+          autoCorrect={false}
+          autoCapitalize="none"
+          onChangeText={setUserEmail}
+        />
+        <TextField
+          preset="header"
+          labelTx="signUpScreen.password"
+          placeholderTx="signUpScreen.passwordPlaceholder"
+          defaultValue={userPassword}
+          autoCompleteType="password"
+          autoCorrect={false}
+          autoCapitalize="none"
+          secureTextEntry
+          onChangeText={setUserPassword}
+        />
+        <TextField
+          preset="header"
+          labelTx="signUpScreen.firstName"
+          placeholderTx="signUpScreen.firstNamePlaceholder"
+          defaultValue={userFirstName}
+          autoCompleteType="name"
+          onChangeText={setUserFirstName}
+        />
+        <TextField
+          preset="header"
+          labelTx="signUpScreen.lastName"
+          placeholderTx="signUpScreen.lastNamePlaceholder"
+          defaultValue={userLastName}
+          autoCompleteType="name"
+          onChangeText={setUserLastName}
+        />
+        <Text preset="bold" tx="signUpScreen.geoArea" />
+        <FlexContainer column justifyAround>
+          <Checkbox
+            tx={`enumGeoArea.${GeoAreaEnum.OAK1}`}
+            value={userGeoArea === GeoAreaEnum.OAK1}
+            onToggle={handleGeoAreaChange(GeoAreaEnum.OAK1)}
+          ></Checkbox>
+          <Checkbox
+            tx={`enumGeoArea.${GeoAreaEnum.SFO1}`}
+            value={userGeoArea === GeoAreaEnum.SFO1}
+            onToggle={handleGeoAreaChange(GeoAreaEnum.SFO1)}
+          ></Checkbox>
+        </FlexContainer>
+
+        <Break />
+
+        <Text preset="bold" tx="signUpScreen.signUpAs" />
+        <FlexContainer column justifyAround>
+          <Checkbox
+            tx="signUpScreen.signUpRequesterOption"
+            multiline
             value={userRole === UserRoleEnum.REQUESTER}
-          />
-        </FormRow>
+            onToggle={handleUserRoleChange(UserRoleEnum.REQUESTER)}
+          ></Checkbox>
+          <Checkbox
+            tx="signUpScreen.signUpChaperoneOption"
+            multiline
+            value={userRole === UserRoleEnum.CHAPERONE}
+            onToggle={handleUserRoleChange(UserRoleEnum.CHAPERONE)}
+          ></Checkbox>
+        </FlexContainer>
       </Screen>
       <SafeAreaView style={FOOTER}>
         <View style={FOOTER_CONTENT}>
           <Button
             testID="submit-button"
             tx="signUpScreen.submit"
-            disabled={!userEmail || !userPassword}
+            disabled={!isValid()}
             onPress={handleSubmit}
           />
         </View>

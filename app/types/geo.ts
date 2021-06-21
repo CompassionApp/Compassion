@@ -15,8 +15,10 @@ export interface LatLng {
 }
 
 export enum GeoAreaEnum {
-  /** Chinatown - Oakland, CA */
+  /** Oakland, CA - Chinatown */
   OAK1 = "OAK1",
-  /** Sunset - San Francisco */
+  /** San Francisco - Sunset District */
   SFO1 = "SFO1",
+  /** San Gabriel Valley */
+  SGV1 = "SGV1",
 }

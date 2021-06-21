@@ -53,7 +53,8 @@ export const NoRequestsNotice = observer(function NoRequestsNotice({
         <Break size={4} />
       </NoticeContent>
       <IconButton
-        icon="requestWhite"
+        color={color.palette.white}
+        name="alarm-add"
         tx="homeScreen.requestButton"
         onPress={onPress || handlePressNewRequest}
       />

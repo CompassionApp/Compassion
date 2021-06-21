@@ -4,6 +4,9 @@ import { FirebaseAuthApiProblem, GeneralApiProblem } from "./api-problem"
 
 export interface AuthContext extends User {}
 export type GetUserProfileResult = { kind: "ok"; profile: UserProfileSnapshot } | GeneralApiProblem
+export type GetAllUserProfilesResult =
+  | { kind: "ok"; profiles: UserProfileSnapshot[] }
+  | GeneralApiProblem
 export type SaveUserProfileResult = { kind: "ok" } | GeneralApiProblem
 export type NotifyAllChaperonesResult = { kind: "ok" } | GeneralApiProblem
 export type ClearAllNotificationsResult = { kind: "ok" } | GeneralApiProblem

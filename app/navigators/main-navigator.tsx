@@ -9,6 +9,7 @@ import { createStackNavigator } from "@react-navigation/stack"
 import { RoleSelectScreen, UserAgreementScreen } from "../screens"
 import { RequesterMainTabNavigator } from "./requester/requester-root-tab-navigator"
 import { ChaperoneMainTabNavigator } from "./chaperone/chaperone-root-tab-navigator"
+import { AdminRootTabNavigator } from "./admin/admin-root-tab-navigator"
 import { EditUserProfileScreen } from "../screens/edit-user-profile/edit-user-profile-screen"
 import { observer } from "mobx-react-lite"
 import { useStores } from "../models"
@@ -64,6 +65,7 @@ export const MainNavigator = observer(function MainNavigator() {
       }}
     >
       <Stack.Screen name="roleSelect" component={RoleSelectScreen} />
+      <Stack.Screen name="adminMain" component={AdminRootTabNavigator} />
       <Stack.Screen name="chaperoneMain" component={ChaperoneMainTabNavigator} />
       <Stack.Screen name="requesterMain" component={RequesterMainTabNavigator} />
       <Stack.Screen name="userAgreement" component={UserAgreementScreen} />

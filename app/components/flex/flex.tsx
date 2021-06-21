@@ -3,6 +3,7 @@ import styled from "styled-components/native"
 export interface FlexContainerProps {
   column?: boolean
   width?: string
+  height?: string
   justifyCenter?: boolean
   justifyStart?: boolean
   justifyEnd?: boolean
@@ -23,6 +24,7 @@ export const FlexContainer = styled.View<FlexContainerProps>`
   display: flex;
   flex-direction: ${({ column }) => (column ? "column" : "row")};
   ${({ width }) => (width ? `width: ${width};` : "")}
+  ${({ height }) => (height ? `height: ${height};` : "")}
   ${({ justifyCenter }) => (justifyCenter ? "justify-content: center;" : "")}
   ${({ justifyStart }) => (justifyStart ? "justify-content: flex-start;" : "")}
   ${({ justifyEnd }) => (justifyEnd ? "justify-content: flex-end;" : "")}
@@ -44,6 +46,7 @@ export interface FlexItemProps {
   shrink?: number
   basis?: string
   width?: string
+  height?: string
   justifyCenter?: boolean
   justifyStart?: boolean
   justifyEnd?: boolean
@@ -58,7 +61,8 @@ export interface FlexItemProps {
  * Flexbox component
  */
 export const FlexItem = styled.View<FlexItemProps>`
-  ${({ width }) => width ?? ""};
+  ${({ width }) => (width ? `width: ${width};` : "")}
+  ${({ height }) => (height ? `height: ${height};` : "")}
   ${({ basis }) => (basis ? `flex-basis: ${basis};` : "")}
   ${({ grow }) => (grow ? `flex-grow: ${grow};` : "")}
   ${({ shrink }) => (shrink ? `flex-shrink: ${shrink};` : "")}
