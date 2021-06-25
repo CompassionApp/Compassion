@@ -187,11 +187,25 @@
   "usersScreen": {
     "title": "Users"
   },
+  "userDetailScreen": {
+    "title": "User Details",
+    "firstNameLabel": "First Name",
+    "lastNameLabel": "Last Name",
+    "emailLabel": "Email",
+    "phoneNumberLabel": "Phone Number",
+    "saveButton": "Save changes"
+  },
   "enumUserRole": {
     "undefined": "Unknown",
     "CHAPERONE": "Chaperone",
     "REQUESTER": "Requester",
     "ADMIN": "Administrator"
+  },
+  "enumUserStatus": {
+    "undefined": "Unknown",
+    "ACTIVE": "Active",
+    "INACTIVE": "Inactive",
+    "DISALLOW": "Disallowed"
   },
   "enumRequestStatus": {
     "undefined": "Unknown",

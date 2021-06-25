@@ -1,9 +1,9 @@
 import React, { useEffect } from "react"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { observer } from "mobx-react-lite"
-import { MenuScreen, UsersScreen } from "../../screens"
+import { MenuScreen } from "../../screens"
 import { color } from "../../theme"
-import { AdminHomeStackNavigator } from "./admin-home-stack-navigator"
+import { AdminHomeStackNavigator, AdminUsersStackNavigator } from ".."
 import { createTabIconForScreen } from "../tab-icon-utilities"
 import { useStores } from "../../models"
 
@@ -45,7 +45,7 @@ export const AdminRootTabNavigator = observer(function AdminRootTabNavigator() {
 
       <Tab.Screen
         name="users"
-        component={UsersScreen}
+        component={AdminUsersStackNavigator}
         options={{
           tabBarLabel: "Users",
           tabBarIcon: createTabIconForScreen("users"),

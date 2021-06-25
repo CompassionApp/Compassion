@@ -9,7 +9,7 @@ import { UserProfilePreviewModel } from "../user-profile-preview/user-profile-pr
 export const UserProfileModel = types
   .model("UserProfile")
   .props({
-    id: types.string,
+    id: types.identifier,
     createdAt: types.optional(types.string, new Date().toUTCString()),
     updatedAt: types.optional(types.string, new Date().toUTCString()),
     lastLoginAt: types.maybeNull(types.string),
