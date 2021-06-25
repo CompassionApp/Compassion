@@ -9,3 +9,7 @@ export * from "./chaperone/chaperone-home-stack-navigator"
 export * from "./requester/requester-root-tab-navigator"
 export * from "./requester/new-request-stack-navigator"
 export * from "./requester/requester-home-stack-navigator"
+
+export * from "./admin/admin-root-tab-navigator"
+export * from "./admin/admin-home-stack-navigator"
+export * from "./admin/admin-users-stack-navigator"

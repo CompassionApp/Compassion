@@ -65,6 +65,11 @@ export const UsersStoreModel = types
         __DEV__ && console.tron.log(kind)
       }
     }),
+
+    selectUser: (user: UserProfile) => {
+      console.log("[users-store] Selecting", user)
+      self.selectedUser = user
+    },
   }))
 
 type UsersStoreType = Instance<typeof UsersStoreModel>

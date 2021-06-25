@@ -15,7 +15,6 @@ import { useStores } from "../../models"
 import { color, globalStyles, spacing } from "../../theme"
 import { useNavigation } from "@react-navigation/core"
 import { GeoAreaEnum, UserRoleEnum } from "../../types"
-import { roleTypeToScreenMap } from "../../utils/navigation"
 
 const ROOT: ViewStyle = {
   flex: 1,
@@ -72,8 +71,9 @@ export const SignUpScreen = observer(function SignUpScreen() {
         userRole,
         userGeoArea,
       )
-      const screen = roleTypeToScreenMap.get(authStore?.user.profile.role)
-      navigation.navigate(screen)
+      // Navigate to the mainStack and based on the user's type, the navigator will show the
+      // appropriate home screen
+      navigation.navigate("mainStack")
     } catch (err) {
       if (err.message) setErrorMessage(err.message)
     }
