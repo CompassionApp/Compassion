@@ -24,7 +24,6 @@ describe("RootStoreModel", () => {
         "requestStore": Object {
           "availableRequests": Array [],
           "currentRequest": undefined,
-          "isLoading": false,
           "requests": Array [],
         },
       }

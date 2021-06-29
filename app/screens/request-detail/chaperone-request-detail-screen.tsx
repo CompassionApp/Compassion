@@ -1,17 +1,17 @@
 import React from "react"
 import { observer } from "mobx-react-lite"
 import { View, ViewStyle, Alert } from "react-native"
-import { Break, Button, FlexContainer, Header, Screen, Text } from "../../components"
 import { useNavigation } from "@react-navigation/native"
-import { useStores } from "../../models"
-import { color, globalStyles, spacing } from "../../theme"
 import styled from "styled-components/native"
 import { format } from "date-fns"
+import { Break, Button, FlexContainer, Header, Screen, Text } from "../../components"
+import { useStores } from "../../models"
+import { color, globalStyles, spacing } from "../../theme"
 import { TxKeyPath } from "../../i18n"
 import { TITLE_DATE_FORMAT, TIME_RANGE_FORMAT } from "../../constants/date-formats"
 import { RequestStatusEnum } from "../../types"
 import { RequestDetailProfilePhoto } from "./profile-photo"
-import { MATCHED_TEXT_STYLE, MatchProfilePhotos } from ".."
+import { MATCHED_TEXT_STYLE, MatchProfilePhotos } from "./request-detail-screen"
 
 const ROOT: ViewStyle = {
   backgroundColor: color.background,
@@ -51,7 +51,7 @@ export const ChaperoneRequestDetailScreen = observer(function ChaperoneRequestDe
   const navigateBack = () => navigation.goBack()
 
   const handlePressAcceptRequest = () => {
-    requestStore.acceptRequest(currentRequest.id)
+    requestStore.acceptRequest(currentRequest)
     navigateBack()
   }
   const handlePressReleaseRequest = () => {
@@ -59,7 +59,7 @@ export const ChaperoneRequestDetailScreen = observer(function ChaperoneRequestDe
       {
         text: "Yes",
         onPress: () => {
-          requestStore.releaseRequest(currentRequest.id)
+          requestStore.releaseRequest(currentRequest)
           navigateBack()
         },
       },

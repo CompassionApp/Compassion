@@ -2,11 +2,15 @@ import { Platform } from "react-native"
 import * as ExpoNotifications from "expo-notifications"
 import Constants from "expo-constants"
 import { NotificationSnapshot } from "../../models"
+import {
+  DEFAULT_PUSH_NOTIFICATIONS_CONFIG,
+  PushNotificationsConfig,
+} from "./push-notifications-config"
 
 /**
- * Notifications service
+ * Push notifications service
  */
-export class NotificationsService {
+export class PushNotificationsService {
   rootStore: any
   notifications: typeof ExpoNotifications
   private _token: string
@@ -16,10 +20,16 @@ export class NotificationsService {
   }
 
   /**
+   * Configurable options.
+   */
+  config: PushNotificationsConfig
+
+  /**
    * Create the Notification service
    */
-  constructor() {
+  constructor(config: PushNotificationsConfig = DEFAULT_PUSH_NOTIFICATIONS_CONFIG) {
     this.notifications = ExpoNotifications
+    this.config = config
   }
 
   /**
@@ -105,7 +115,16 @@ export class NotificationsService {
     }
     console.log("[notifications-service] Sending notification", JSON.stringify(message))
 
-    await fetch("https://exp.host/--/api/v2/push/send", {
+    if (!this.config.sendPushNotifications) {
+      return
+    }
+    if (!this.config.notificationServiceUrl) {
+      throw new Error(
+        "Could not send notification: `config.notificationServiceUrl` has not been configured.",
+      )
+    }
+
+    await fetch(this.config.notificationServiceUrl, {
       method: "POST",
       headers: {
         Accept: "application/json",

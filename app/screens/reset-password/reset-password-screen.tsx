@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
 import { Ionicons } from "@expo/vector-icons"
-import { SafeAreaView, View, ViewStyle } from "react-native"
+import { View, ViewStyle } from "react-native"
 import { Button, FormRow, Header, Screen, TextField, Text, FlexContainer } from "../../components"
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../models"
@@ -9,12 +9,6 @@ import { color, globalStyles, spacing } from "../../theme"
 
 const ROOT: ViewStyle = {
   flex: 1,
-}
-
-const FOOTER: ViewStyle = { backgroundColor: color.palette.grey }
-const FOOTER_CONTENT: ViewStyle = {
-  paddingVertical: spacing[4],
-  paddingHorizontal: spacing[4],
 }
 
 export const ResetPasswordScreen = observer(function ResetPasswordScreen() {

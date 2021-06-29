@@ -2,7 +2,7 @@ import { RootStore } from "."
 import { Api } from "../services/api"
 import { FirebaseCoreApiAdapter, AuthApi, RequestApi, UserApi } from "../services/firebase-api"
 import { NotificationApi } from "../services/firebase-api/notification-api"
-import { NotificationsService } from "../services/notifications"
+import { PushNotificationsService } from "../services/push-notifications"
 
 let ReactotronDev
 if (__DEV__) {
@@ -26,7 +26,7 @@ export class Environment {
     }
     this.api = new Api()
     this.firebaseApi = new FirebaseCoreApiAdapter()
-    this.notifications = new NotificationsService()
+    this.notifications = new PushNotificationsService()
 
     this.authApi = new AuthApi(this.firebaseApi)
     this.notificationApi = new NotificationApi(this.firebaseApi, this.notifications)
@@ -62,7 +62,7 @@ export class Environment {
   /**
    * Notifications service
    */
-  notifications: NotificationsService
+  notifications: PushNotificationsService
 
   /**
    * Auth API: CRUD operations for auth

@@ -116,7 +116,7 @@
   "chaperoneHomeScreen": {
     "noOpenRequests": "There are currently no open requests. Pull down to refresh.",
     "noScheduledRequests": "You currently have no scheduled requests",
-    "yourScheduledRequests": "Your Scheduled Requests",
+    "yourMatchedRequests": "Your Matched Requests",
     "availableRequests": "Available Requests",
     "acceptRequests": "Accept Requests?",
     "acceptRequestsDescription": "Allow notifications to be sent to you when new requests arrive"
@@ -223,9 +223,10 @@
   },
   "enumRequestType": {
     "undefined": "Unknown",
-    "UNKNOWN": "Unspecified",
+    "UNKNOWN": "Unknown",
     "DOCTOR": "Doctor Visit",
     "GROCERY": "Grocery Shopping",
+    "OTHER": "Other",
     "WALK": "Walk"
   },
   "enumGeoArea": {

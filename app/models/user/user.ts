@@ -1,4 +1,4 @@
-import { flow, Instance, SnapshotOut, types, applyPatch } from "mobx-state-tree"
+import { cast, flow, Instance, SnapshotOut, types } from "mobx-state-tree"
 import { withEnvironment } from "../extensions/with-environment"
 import { UserProfileModel, UserProfileSnapshot } from "../user-profile/user-profile"
 
@@ -18,8 +18,8 @@ export const UserModel = types
     /**
      * Sets the user profile locally
      */
-    setUserProfile: (userProfile: UserProfileSnapshot) => {
-      applyPatch(self, { op: "replace", path: "/profile", value: userProfile })
+    _replaceUserProfile: (userProfile: UserProfileSnapshot) => {
+      self.profile = cast(userProfile)
     },
 
     /**

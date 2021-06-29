@@ -7,6 +7,7 @@ import { color } from "../../theme"
 import { RequesterHomeStackNavigator } from "./requester-home-stack-navigator"
 import { useStores } from "../../models"
 import { createTabIconForScreen } from "../tab-icon-utilities"
+import { StackActions } from "@react-navigation/native"
 
 export type RequesterTabNavigatorParamList = {
   home: undefined
@@ -21,7 +22,7 @@ export type RequesterTabNavigatorParamList = {
 const Tab = createBottomTabNavigator<RequesterTabNavigatorParamList>()
 
 export const RequesterMainTabNavigator = observer(function RequesterMainTabNavigator() {
-  const { notificationStore, requestStore } = useStores()
+  const { newRequestStore, notificationStore, requestStore } = useStores()
 
   useEffect(() => {
     requestStore.subscribeAsRequester()
@@ -32,6 +33,30 @@ export const RequesterMainTabNavigator = observer(function RequesterMainTabNavig
       notificationStore.unsubscribeAll()
     }
   }, [])
+
+  /**
+   * This function ensures we force the user to the beginning of the new request workflow if they
+   * click on the tab button after sending a request.
+   */
+  const handleNewRequestOnFocus = (e, navigation) => {
+    // Don't do anything if a request hasn't been completed yet
+    if (!newRequestStore.isClean) {
+      return
+    }
+
+    const defaultRoute = "new"
+    const target = e.target
+    const state = navigation.dangerouslyGetState()
+    const route = state.routes.find((r) => r.key === target)
+    // If we are leaving a tab that has its own stack navigation, then clear it
+    if (
+      route.state?.type === "stack" &&
+      route.state.routes?.length > 1 &&
+      route.state.routes[route.state.routes.length - 1].name !== defaultRoute
+    ) {
+      navigation.dispatch(StackActions.replace(defaultRoute))
+    }
+  }
 
   return (
     <Tab.Navigator
@@ -55,6 +80,9 @@ export const RequesterMainTabNavigator = observer(function RequesterMainTabNavig
           tabBarLabel: "Request",
           tabBarIcon: createTabIconForScreen("newRequest"),
         }}
+        listeners={({ navigation }) => ({
+          focus: (e) => handleNewRequestOnFocus(e, navigation),
+        })}
       />
       <Tab.Screen
         name="notifications"

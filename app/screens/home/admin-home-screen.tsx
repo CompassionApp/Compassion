@@ -8,7 +8,7 @@ import { color, globalStyles, typography } from "../../theme"
 import { RequestCard } from "./request-card"
 import { useStores } from "../../models/root-store/root-store-context"
 import { RequestStatusEnum, RequestTypeEnum } from "../../types"
-import { NotificationModel, RequestSnapshot } from "../../models"
+import { NotificationModel, ChaperoneRequestSnapshot } from "../../models"
 import { createNewRequestNotification } from "../../utils/notification-factory"
 
 const ROOT: ViewStyle = {
@@ -43,7 +43,7 @@ export const AdminHomeScreen = observer(function AdminHomeScreen() {
       createNewRequestNotification(authStore.user.profile, ({
         id: "request-test-id",
         requestedAt: new Date().toUTCString(),
-      } as unknown) as RequestSnapshot),
+      } as unknown) as ChaperoneRequestSnapshot),
     )
     notificationStore.notifyChaperonesNewRequest(notification)
   }
@@ -67,7 +67,7 @@ export const AdminHomeScreen = observer(function AdminHomeScreen() {
         >
           <Text preset={["center", "bold"]} tx="chaperoneHomeScreen.availableRequests" />
           <Break />
-          {requestStore.sortAvailableRequestsByCreated.map((request: RequestSnapshot) => (
+          {requestStore.sortAvailableRequestsByCreated.map((request: ChaperoneRequestSnapshot) => (
             <RequestCard
               key={request.id}
               status={request.status as RequestStatusEnum}

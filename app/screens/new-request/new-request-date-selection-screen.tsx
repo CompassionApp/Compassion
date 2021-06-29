@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite"
 import { View, ViewStyle } from "react-native"
 import { Calendar, DateObject, DotMarking } from "react-native-calendars"
 import { useNavigation } from "@react-navigation/native"
-import { format, addMonths, parse } from "date-fns"
+import { format, addMonths } from "date-fns"
 import R from "ramda"
 import { Button, Header, Screen } from "../../components"
 import { color, globalStyles } from "../../theme"
@@ -41,8 +41,8 @@ export const NewRequestDateSelectionScreen = observer(function NewRequestDateSel
       return
     }
 
-    const date = parse(selectedDate, CALENDAR_DATE_FORMAT, new Date()).toUTCString()
-    newRequestStore.setRequestedAt(date)
+    // Date in the format of yyyy-mm-dd
+    newRequestStore.setRequestedDate(selectedDate)
     navigateNext()
   }
 

@@ -37,6 +37,8 @@ export const NewRequestActivitySelectionScreen = observer(
       newRequestStore.setOtherComments(requestNotes)
       navigateNext()
     }
+    // Request types to _not_ show
+    const filterRequestTypes: RequestTypeEnum[] = [RequestTypeEnum.UNKNOWN]
 
     return (
       <View testID="NewRequestActivitySelectionScreen" style={globalStyles.full}>
@@ -52,13 +54,15 @@ export const NewRequestActivitySelectionScreen = observer(
             selectedValue={selectedActivity}
             onValueChange={(itemValue) => setSelectedActivity(itemValue)}
           >
-            {Object.keys(RequestTypeEnum).map((requestType) => (
-              <Picker.Item
-                key={requestType}
-                label={translate(`enumRequestType.${requestType}` as TxKeyPath)}
-                value={requestType}
-              />
-            ))}
+            {Object.keys(RequestTypeEnum)
+              .filter((requestType) => !filterRequestTypes.includes(requestType as RequestTypeEnum))
+              .map((requestType) => (
+                <Picker.Item
+                  key={requestType}
+                  label={translate(`enumRequestType.${requestType}` as TxKeyPath)}
+                  value={requestType}
+                />
+              ))}
           </Picker>
 
           <TextField

@@ -9,7 +9,7 @@ import { RequestCard } from "./request-card"
 import { useStores } from "../../models/root-store/root-store-context"
 import { RequestStatusEnum, RequestTypeEnum } from "../../types"
 import { NoRequestsNotice } from "./no-requests-notice"
-import { NotificationModel, RequestSnapshot } from "../../models"
+import { NotificationModel, ChaperoneRequestSnapshot } from "../../models"
 import { createNewRequestNotification } from "../../utils/notification-factory"
 
 const DEBUG = false
@@ -45,7 +45,7 @@ export const RequesterHomeScreen = observer(function RequesterHomeScreen() {
       createNewRequestNotification(authStore.user.profile, ({
         id: "request-test-id",
         requestedAt: new Date().toUTCString(),
-      } as unknown) as RequestSnapshot),
+      } as unknown) as ChaperoneRequestSnapshot),
     )
     notificationStore.notifyChaperonesNewRequest(notification)
   }
@@ -71,7 +71,7 @@ export const RequesterHomeScreen = observer(function RequesterHomeScreen() {
               <NoRequestsNotice />
             </>
           )}
-          {requestStore.sortUserRequestsByCreated.map((request: RequestSnapshot) => (
+          {requestStore.sortUserRequestsByCreated.map((request: ChaperoneRequestSnapshot) => (
             <RequestCard
               key={request.id}
               status={request.status as RequestStatusEnum}

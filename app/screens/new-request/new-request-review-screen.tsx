@@ -6,8 +6,8 @@ import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../models"
 import { color, globalStyles } from "../../theme"
 import { Break } from "../../components/break/break"
-import { format } from "date-fns"
-import { TIME_RANGE_FORMAT, TITLE_DATE_FORMAT } from "../../constants/date-formats"
+import { format, parse } from "date-fns"
+import { CALENDAR_DATE_FORMAT, TITLE_DATE_FORMAT } from "../../constants/date-formats"
 import { TxKeyPath } from "../../i18n"
 import { NewRequestFooterArea } from "./common"
 
@@ -34,12 +34,13 @@ export const NewRequestReviewScreen = observer(function NewRequestReviewScreen()
     navigateNext()
   }
 
-  const requestDate = newRequestStore.requestedAt
-    ? format(new Date(newRequestStore.requestedAt), TITLE_DATE_FORMAT)
-    : "Unknown"
-  const requestTime = newRequestStore.requestedAt
-    ? format(new Date(newRequestStore.requestedAt), TIME_RANGE_FORMAT)
-    : "Unknown"
+  const requestDate = newRequestStore.requestedDate
+    ? format(
+        parse(newRequestStore.requestedDate, CALENDAR_DATE_FORMAT, new Date()),
+        TITLE_DATE_FORMAT,
+      )
+    : ""
+  const requestTime = newRequestStore.requestedTime ? newRequestStore.requestedTime : ""
 
   return (
     <View testID="NewRequestReviewScreen" style={globalStyles.full}>
