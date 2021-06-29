@@ -42,4 +42,9 @@ export interface HeaderProps {
    * Title style overrides.
    */
   titleStyle?: TextStyle
+
+  /**
+   * Logo that will appear instead of header text
+   */
+  logo?: IconTypes
 }

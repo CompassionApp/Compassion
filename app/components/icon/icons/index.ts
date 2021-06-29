@@ -6,6 +6,7 @@ export const icons = {
   notification: require("./notification.png"),
   request: require("./request.png"),
   requestWhite: require("./request-white.png"),
+  fullLogo: require("../../../screens/welcome/compassion.png"),
 }
 
 export type IconTypes = keyof typeof icons
