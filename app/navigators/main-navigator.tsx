@@ -4,9 +4,10 @@
  *
  * You'll likely spend most of your time in this file.
  */
+
 import React from "react"
 import { createStackNavigator } from "@react-navigation/stack"
-import { RoleSelectScreen, UserAgreementScreen } from "../screens"
+import { RoleSelectScreen, UserAgreementScreen, ResetPasswordScreen } from "../screens"
 import { RequesterMainTabNavigator } from "./requester/requester-root-tab-navigator"
 import { ChaperoneMainTabNavigator } from "./chaperone/chaperone-root-tab-navigator"
 import { AdminRootTabNavigator } from "./admin/admin-root-tab-navigator"
@@ -34,6 +35,9 @@ export type MainNavigatorParamList = {
   editUserProfile: undefined
   roleSelect: undefined
   userAgreement: undefined
+  resetPassword: undefined
+  passwordUpdated: undefined
+  welcome: undefined
 }
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
@@ -69,6 +73,7 @@ export const MainNavigator = observer(function MainNavigator() {
       <Stack.Screen name="chaperoneMain" component={ChaperoneMainTabNavigator} />
       <Stack.Screen name="requesterMain" component={RequesterMainTabNavigator} />
       <Stack.Screen name="userAgreement" component={UserAgreementScreen} />
+      <Stack.Screen name="resetPassword" component={ResetPasswordScreen} />
       <Stack.Screen name="editUserProfile" component={EditUserProfileScreen} />
     </Stack.Navigator>
   )

@@ -180,6 +180,14 @@
     "userAgreementAcceptButton": "Accept",
     "acceptedOn": "Accepted on"
   },
+  "resetPasswordScreen": {
+    "title": "Reset Password",
+    "submitButton": "Submit",
+    "oldPassword": "Old Password",
+    "newPassword": "New Password",
+    "verifyNewPassword": "Verify New Password",
+    "savedNotice": "Your new password has been saved!"
+  },
   "newRequestReviewScreen": {
     "title": "Review Your Request",
     "nextButton": "SEND REQUEST"

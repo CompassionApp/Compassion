@@ -1,5 +1,5 @@
 import React from "react"
-import { View, ViewStyle, TextStyle } from "react-native"
+import { View, ViewStyle, TextStyle, ImageStyle } from "react-native"
 import { HeaderProps } from "./header.props"
 import { Button } from "../button/button"
 import { Text } from "../text/text"
@@ -26,6 +26,7 @@ const TITLE: TextStyle = {
 const TITLE_MIDDLE: ViewStyle = { flex: 1, justifyContent: "center" }
 const LEFT: ViewStyle = { width: 32 }
 const RIGHT: ViewStyle = { width: 32 }
+const LOGO: ImageStyle = { width: "40%", alignItems: "center" }
 
 /**
  * Header that appears on many screens. Will hold navigation buttons and screen title.
@@ -40,6 +41,7 @@ export function Header(props: HeaderProps) {
     headerTx,
     style,
     titleStyle,
+    logo,
   } = props
   const header = headerText || (headerTx && translate(headerTx)) || ""
 
@@ -53,7 +55,11 @@ export function Header(props: HeaderProps) {
         <View style={LEFT} />
       )}
       <View style={TITLE_MIDDLE}>
-        <Text style={{ ...TITLE, ...titleStyle }} text={header} />
+        {logo ? (
+          <Icon style={LOGO} icon={logo} />
+        ) : (
+          <Text style={{ ...TITLE, ...titleStyle }} text={header} />
+        )}
       </View>
       {rightIcon ? (
         <Button preset="link" onPress={onRightPress}>
