@@ -88,7 +88,7 @@ export const MenuScreen = observer(function MenuScreen() {
           </MenuListItem>
           <MenuListItem onPress={() => navigation.navigate("resetPassword")}>
             <MaterialIcons name="vpn-key" size={ICON_SIZE} color={color.palette.blue} />
-            <Text preset={[]} tx="menuScreen.menuButtonResetPassword" />
+            <MenuItemText preset={[]} tx="menuScreen.menuButtonResetPassword" />
           </MenuListItem>
           <MenuListItem disabled>
             <MaterialIcons name="question-answer" size={ICON_SIZE} color={color.palette.blue} />

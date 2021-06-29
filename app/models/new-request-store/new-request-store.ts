@@ -1,8 +1,13 @@
+import { format, parse } from "date-fns"
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
+import { CALENDAR_DATE_FORMAT, TIME_RANGE_FORMAT } from "../../constants"
 import { RequestStatusEnum, RequestTypeEnum } from "../../types"
 import { generateUuid } from "../../utils/uuid"
 import { withAuthContext } from "../extensions/with-auth-context"
-import { RequestModel, RequestSnapshot } from "../request/request"
+import {
+  ChaperoneRequestModel,
+  ChaperoneRequestSnapshot,
+} from "../chaperone-request/chaperone-request"
 
 /**
  * Model for where elements of a new request is staged as the user goes through the wizard and
@@ -11,7 +16,10 @@ import { RequestModel, RequestSnapshot } from "../request/request"
 export const NewRequestStoreModel = types
   .model("NewRequestStore")
   .props({
-    requestedAt: types.maybe(types.string),
+    /** Time in format: h:mm a */
+    requestedTime: types.maybe(types.string),
+    /** Date in format: yyyy-mm-dd */
+    requestedDate: types.maybe(types.string),
     meetAddress: types.maybe(types.string),
     destinationAddress: types.maybe(types.string),
     otherComments: types.maybe(types.string),
@@ -22,7 +30,8 @@ export const NewRequestStoreModel = types
     /** Returns true if the new request is in its pristine state */
     get isClean() {
       return (
-        self.requestedAt === undefined &&
+        self.requestedTime === undefined &&
+        self.requestedDate === undefined &&
         self.meetAddress === undefined &&
         self.destinationAddress === undefined &&
         self.otherComments === undefined &&
@@ -33,7 +42,8 @@ export const NewRequestStoreModel = types
     /** Returns true if all steps have been completed */
     get isComplete() {
       return (
-        self.requestedAt !== undefined &&
+        self.requestedTime !== undefined &&
+        self.requestedDate !== undefined &&
         self.meetAddress !== undefined &&
         self.destinationAddress !== undefined &&
         self.otherComments !== undefined &&
@@ -41,9 +51,22 @@ export const NewRequestStoreModel = types
       )
     },
 
+    get requestedAt() {
+      try {
+        return parse(
+          `${self.requestedDate} ${self.requestedTime}`,
+          `${CALENDAR_DATE_FORMAT} ${TIME_RANGE_FORMAT}`,
+          new Date(),
+        ).toUTCString()
+      } catch (e) {
+        return undefined
+      }
+    },
+  }))
+  .views((self) => ({
     /** Converts the staged new request into a new RequestModel */
     convertToRequest: () => {
-      return RequestModel.create({
+      return ChaperoneRequestModel.create({
         id: generateUuid(),
         status: RequestStatusEnum.REQUESTED,
         requestedBy: self.authContext.profile.preview,
@@ -62,15 +85,20 @@ export const NewRequestStoreModel = types
   .actions((self) => ({
     /** Clears the new request. Call after converting to a Request */
     reset: () => {
-      self.requestedAt = undefined
+      self.requestedTime = undefined
+      self.requestedDate = undefined
       self.meetAddress = undefined
       self.destinationAddress = undefined
       self.otherComments = undefined
       self.type = undefined
     },
 
-    setRequestedAt: (value: string) => {
-      self.requestedAt = value
+    setRequestedTime: (value: string) => {
+      self.requestedTime = value
+    },
+
+    setRequestedDate: (value: string) => {
+      self.requestedDate = value
     },
 
     setMeetAddress: (value: string) => {
@@ -91,8 +119,9 @@ export const NewRequestStoreModel = types
 
     /** Overwrites the current new request with a RequestSnapshot as the seed. Useful for
      * rescheduling. */
-    replaceFromRequest: (request: RequestSnapshot) => {
-      self.requestedAt = request.requestedAt
+    replaceFromRequest: (request: ChaperoneRequestSnapshot) => {
+      self.requestedDate = format(new Date(request.requestedAt), CALENDAR_DATE_FORMAT)
+      self.requestedTime = format(new Date(request.requestedAt), TIME_RANGE_FORMAT)
       self.meetAddress = request.meetAddress
       self.destinationAddress = request.destinationAddress
       self.otherComments = request.otherComments

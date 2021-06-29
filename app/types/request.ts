@@ -30,6 +30,8 @@ export enum RequestTypeEnum {
   DOCTOR = "DOCTOR",
   /** Request for a walk */
   WALK = "WALK",
+  /** Other */
+  OTHER = "OTHER",
 }
 
 /**

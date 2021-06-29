@@ -1,8 +1,7 @@
 import React, { useState } from "react"
 import { View, ViewStyle, TextStyle } from "react-native"
-import { TextField } from ".."
-
 import { color } from "../../theme"
+import { TextField } from "../text-field/text-field"
 import { PickupDropoffProps, PickupDropoffItemViewProps } from "./pickup-dropoff.props"
 
 const LOCATION_AREA_WRAPPER: ViewStyle = { marginTop: 30 }
@@ -24,6 +23,15 @@ const ON_TEXT_INPUT_BORDER: TextStyle = {
   borderColor: color.palette.blue,
   borderWidth: 3,
   borderRadius: 8,
+}
+
+const PickupDropoffItemView = ({ isFirstItem }: PickupDropoffItemViewProps) => {
+  return (
+    <>
+      {!isFirstItem && <View style={LOCATION_BAR_STYLES} />}
+      <View style={LOCATION_DOT_STYLES} />
+    </>
+  )
 }
 
 const PickupDropoff = ({ totalSteps }: PickupDropoffProps): JSX.Element | null => {
@@ -48,15 +56,6 @@ const PickupDropoff = ({ totalSteps }: PickupDropoffProps): JSX.Element | null =
         />
       </View>
     </View>
-  )
-}
-
-const PickupDropoffItemView = ({ isFirstItem }: PickupDropoffItemViewProps) => {
-  return (
-    <>
-      {!isFirstItem && <View style={LOCATION_BAR_STYLES} />}
-      <View style={LOCATION_DOT_STYLES} />
-    </>
   )
 }
 

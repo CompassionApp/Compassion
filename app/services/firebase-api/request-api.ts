@@ -7,7 +7,7 @@ import type {
   GetRequestsResult,
   UpdateRequestResult,
 } from "./api.types"
-import type { RequestSnapshot } from "../../models"
+import type { ChaperoneRequestSnapshot } from "../../models"
 import { createBatchModifyRequest, typeConverter } from "./utils"
 // import { typeConverter } from "./utils"
 
@@ -23,7 +23,7 @@ export class RequestApi {
    */
   subscribeToUserRequests(
     authContext: AuthContext,
-    onSnapshot?: (requests: RequestSnapshot[]) => void,
+    onSnapshot?: (requests: ChaperoneRequestSnapshot[]) => void,
   ) {
     // TODO: Bug. App crashes here when the user loses auth context
     if (!authContext?.email) {
@@ -36,9 +36,9 @@ export class RequestApi {
       .doc(authContext.email)
       .collection("requests")
       .onSnapshot((querySnapshot: firebase.firestore.QuerySnapshot) => {
-        const requests: RequestSnapshot[] = []
+        const requests: ChaperoneRequestSnapshot[] = []
         querySnapshot.forEach((doc) => {
-          requests.push(doc.data() as RequestSnapshot)
+          requests.push(doc.data() as ChaperoneRequestSnapshot)
         })
         onSnapshot(requests)
       })
@@ -47,15 +47,15 @@ export class RequestApi {
   /**
    * Subscribes to available requests
    */
-  subscribeToAvailableRequests(onSnapshot?: (requests: RequestSnapshot[]) => void) {
+  subscribeToAvailableRequests(onSnapshot?: (requests: ChaperoneRequestSnapshot[]) => void) {
     console.log(`[request-api] Subscribing to available requests...`)
     return this.firebase.firestore
       .collection("requests")
       .where("status", "==", "REQUESTED")
       .onSnapshot((querySnapshot: firebase.firestore.QuerySnapshot) => {
-        const requests: RequestSnapshot[] = []
+        const requests: ChaperoneRequestSnapshot[] = []
         querySnapshot.forEach((doc) => {
-          requests.push(doc.data() as RequestSnapshot)
+          requests.push(doc.data() as ChaperoneRequestSnapshot)
         })
         onSnapshot(requests)
       })
@@ -65,7 +65,7 @@ export class RequestApi {
    * Creates a new request by storing it under the `/users/[user-id]/requests/[id]` and `/requests/[id]` paths
    */
   async createRequest(
-    request: RequestSnapshot,
+    request: ChaperoneRequestSnapshot,
     authContext: AuthContext,
   ): Promise<CreateRequestResult> {
     try {
@@ -101,10 +101,12 @@ export class RequestApi {
         .collection("users")
         .doc(authContext.email)
         .collection("requests")
-        .withConverter(typeConverter<RequestSnapshot>())
+        .withConverter(typeConverter<ChaperoneRequestSnapshot>())
         .get()
 
-      const requests = snapshot.docs.map((doc) => (doc.data() as unknown) as RequestSnapshot)
+      const requests = snapshot.docs.map(
+        (doc) => (doc.data() as unknown) as ChaperoneRequestSnapshot,
+      )
       console.log(`[request-api] Found ${requests.length}`)
       return { kind: "ok", requests }
     } catch (e) {
@@ -123,11 +125,13 @@ export class RequestApi {
       console.log(`[request-api] Getting available requests @ /requests/*`)
       const snapshot = await this.firebase.firestore
         .collection("requests")
-        .withConverter(typeConverter<RequestSnapshot>())
+        .withConverter(typeConverter<ChaperoneRequestSnapshot>())
         .where("status", "==", "REQUESTED")
         .get()
 
-      const requests = snapshot.docs.map((doc) => (doc.data() as unknown) as RequestSnapshot)
+      const requests = snapshot.docs.map(
+        (doc) => (doc.data() as unknown) as ChaperoneRequestSnapshot,
+      )
       console.log(`[request-api] Getting available requests: found ${requests.length}`)
       return { kind: "ok", requests }
     } catch (e) {
@@ -143,7 +147,7 @@ export class RequestApi {
    */
   async updateRequest(
     requestId: string,
-    partialRequestUpdate: Partial<RequestSnapshot>,
+    partialRequestUpdate: Partial<ChaperoneRequestSnapshot>,
     authContext: AuthContext,
   ): Promise<DeleteRequestResult> {
     try {
@@ -156,26 +160,31 @@ export class RequestApi {
         .doc(requestId)
 
       this.firebase.firestore.runTransaction((transaction) => {
-        return transaction.get(requestsByIdRef).then((request) => {
-          if (!request.exists) {
-            throw new Error("Request does not exist")
-          }
+        return transaction
+          .get(requestsByIdRef)
+          .then((request) => {
+            if (!request.exists) {
+              throw new Error("Request does not exist")
+            }
 
-          // Delete all the associated chaperones' docs
-          const { chaperones } = request.data() as RequestSnapshot
-          const chaperoneRequestRefs = chaperones.map((chaperone) => {
-            return this.firebase.firestore
-              .collection("users")
-              .doc(chaperone.email)
-              .collection("requests")
-              .doc(requestId)
+            // Delete all the associated chaperones' docs
+            const { chaperones } = request.data() as ChaperoneRequestSnapshot
+            const chaperoneRequestRefs = chaperones.map((chaperone) => {
+              return this.firebase.firestore
+                .collection("users")
+                .doc(chaperone.email)
+                .collection("requests")
+                .doc(requestId)
+            })
+            chaperoneRequestRefs.forEach((chaperoneRequestRefs) =>
+              transaction.update(chaperoneRequestRefs, partialRequestUpdate),
+            )
+            transaction.update(requestsByIdRef, partialRequestUpdate)
+            transaction.update(requestsByUserRef, partialRequestUpdate)
           })
-          chaperoneRequestRefs.forEach((chaperoneRequestRefs) =>
-            transaction.update(chaperoneRequestRefs, partialRequestUpdate),
-          )
-          transaction.update(requestsByIdRef, partialRequestUpdate)
-          transaction.update(requestsByUserRef, partialRequestUpdate)
-        })
+          .catch(() => {
+            console.log(`[request-api] Request does not exist @ /requests/${requestId}`)
+          })
       })
 
       return { kind: "ok" }
@@ -192,7 +201,7 @@ export class RequestApi {
    */
   async acceptUserRequest(
     requestId: string,
-    request: Partial<RequestSnapshot>,
+    request: Partial<ChaperoneRequestSnapshot>,
     requesterId: string,
     authContext: AuthContext,
   ): Promise<UpdateRequestResult> {
@@ -228,7 +237,7 @@ export class RequestApi {
    */
   async releaseUserRequest(
     requestId: string,
-    request: Partial<RequestSnapshot>,
+    request: Partial<ChaperoneRequestSnapshot>,
     requesterId: string,
     authContext: AuthContext,
   ): Promise<UpdateRequestResult> {
@@ -282,7 +291,7 @@ export class RequestApi {
             }
 
             // Delete all the associated chaperones' docs
-            const { requestedBy, chaperones } = request.data() as RequestSnapshot
+            const { requestedBy, chaperones } = request.data() as ChaperoneRequestSnapshot
             const chaperoneRequestRefs = chaperones.map((chaperone) => {
               return this.firebase.firestore
                 .collection("users")

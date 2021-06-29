@@ -1,4 +1,4 @@
-import { applyPatch, flow, getSnapshot, Instance, SnapshotOut, types } from "mobx-state-tree"
+import { cast, flow, getSnapshot, Instance, SnapshotOut, types } from "mobx-state-tree"
 import R from "ramda"
 import { MAX_CHAPERONES_PER_REQUEST } from "../../constants/match"
 import { RequestStatusEnum } from "../../types"
@@ -11,7 +11,11 @@ import {
 import { withAuthContext } from "../extensions/with-auth-context"
 import { withEnvironment } from "../extensions/with-environment"
 import { NotificationModel } from "../notification/notification"
-import { RequestModel, RequestSnapshot } from "../request/request"
+import {
+  ChaperoneRequest,
+  ChaperoneRequestModel,
+  ChaperoneRequestSnapshot,
+} from "../chaperone-request/chaperone-request"
 
 /**
  * Stores the active requests for the user and its loading state
@@ -19,10 +23,9 @@ import { RequestModel, RequestSnapshot } from "../request/request"
 export const RequestStoreModel = types
   .model("RequestStore")
   .props({
-    requests: types.optional(types.array(RequestModel), []),
-    availableRequests: types.optional(types.array(RequestModel), []),
-    isLoading: types.optional(types.boolean, false),
-    currentRequest: types.maybe(types.safeReference(RequestModel)),
+    requests: types.optional(types.array(ChaperoneRequestModel), []),
+    availableRequests: types.optional(types.array(ChaperoneRequestModel), []),
+    currentRequest: types.maybe(types.safeReference(ChaperoneRequestModel)),
   })
   .extend(withEnvironment)
   .extend(withAuthContext)
@@ -35,31 +38,22 @@ export const RequestStoreModel = types
     },
   }))
   .actions((self) => ({
+    /** Clears the store */
     clear: () => {
       self.requests.clear()
       self.availableRequests.clear()
       self.currentRequest = undefined
     },
-    markLoading: () => {
-      self.isLoading = true
+    _replaceAvailableRequests: (requests: ChaperoneRequestSnapshot[]) => {
+      self.availableRequests = cast(requests)
     },
-    _updateAvailableRequests: (requests: RequestSnapshot[]) => {
-      applyPatch(self, { op: "replace", path: "/availableRequests", value: requests })
-      self.isLoading = false
-    },
-    _updateRequests: (requests: RequestSnapshot[]) => {
+    _replaceRequests: (requests: ChaperoneRequestSnapshot[]) => {
       console.log("[request-store] Updating requests", requests)
-      applyPatch(self, { op: "replace", path: "/requests", value: requests })
-      self.isLoading = false
+      self.requests = cast(requests)
     },
-    _saveRequest: (requestSnapshot: RequestSnapshot) => {
+    _saveRequest: (requestSnapshot: ChaperoneRequestSnapshot) => {
       if (!self.requests.find((request) => request.id === requestSnapshot.id)) {
         self.requests.push(requestSnapshot)
-      }
-    },
-    _saveAvailableRequest: (requestSnapshot: RequestSnapshot) => {
-      if (!self.availableRequests.find((request) => request.id === requestSnapshot.id)) {
-        self.availableRequests.push(requestSnapshot)
       }
     },
     _deleteRequest: (requestId: string) => {
@@ -67,30 +61,19 @@ export const RequestStoreModel = types
       const index = self.requests.findIndex((request) => request.id === requestId)
       self.requests.splice(index, 1)
     },
-    _deleteAvailableRequest: (requestId: string) => {
-      const index = self.requests.findIndex((request) => request.id === requestId)
-      self.availableRequests.splice(index, 1)
-    },
 
-    updateRequest: (requestId: string, request: Partial<RequestSnapshot>) => {
+    _updateRequest: (requestId: string, request: Partial<ChaperoneRequestSnapshot>) => {
       // Modifying the local store
       const index = self.requests.findIndex((request) => request.id === requestId)
-      const original = self.requests[index]
-      applyPatch(self, {
-        op: "replace",
-        path: `/requests/${index}`,
-        value: R.mergeDeepRight<RequestSnapshot, Partial<RequestSnapshot>>(original, request),
-      })
-    },
+      if (index < 0) {
+        throw new Error("Request not found")
+      }
 
-    updateAvailableRequest: (requestId: string, request: Partial<RequestSnapshot>) => {
-      const index = self.requests.findIndex((request) => request.id === requestId)
-      const original = self.requests[index]
-      applyPatch(self, {
-        op: "replace",
-        path: `/availableRequests/${index}`,
-        value: R.mergeDeepRight<RequestSnapshot, Partial<RequestSnapshot>>(original, request),
-      })
+      const merged = R.mergeDeepRight<ChaperoneRequestSnapshot, Partial<ChaperoneRequestSnapshot>>(
+        self.requests[index],
+        request,
+      ) as ChaperoneRequestSnapshot
+      self.requests[index] = cast(merged)
     },
 
     /** Sets the current request that is being viewed in the detail screen */
@@ -106,7 +89,7 @@ export const RequestStoreModel = types
     /**
      * Creates a new request in Firestore and sends a notification to all chaperones
      */
-    createRequest: flow(function* (request: RequestSnapshot) {
+    createRequest: flow(function* (request: ChaperoneRequestSnapshot) {
       const result = yield self.environment.requestApi.createRequest(request, self.authContext)
       if (result.kind === "ok") {
         self._saveRequest(request)
@@ -125,17 +108,16 @@ export const RequestStoreModel = types
      * Get all open requests for the requester
      */
     getRequests: flow(function* () {
-      self.markLoading()
       const {
         kind,
         requests,
       }: {
         kind: string
-        requests: RequestSnapshot[]
+        requests: ChaperoneRequestSnapshot[]
       } = yield self.environment.requestApi.getUserRequests(self.authContext)
 
       if (kind === "ok") {
-        self._updateRequests(requests)
+        self._replaceRequests(requests)
       } else {
         __DEV__ && console.log(kind)
       }
@@ -145,17 +127,16 @@ export const RequestStoreModel = types
      * Get all available requests for the chaperone
      */
     getAvailableRequests: flow(function* () {
-      self.markLoading()
       const {
         kind,
         requests,
       }: {
         kind: string
-        requests: RequestSnapshot[]
+        requests: ChaperoneRequestSnapshot[]
       } = yield self.environment.requestApi.getAvailableRequests()
 
       if (kind === "ok") {
-        self._updateAvailableRequests(requests)
+        self._replaceAvailableRequests(requests)
       } else {
         __DEV__ && console.log(kind)
       }
@@ -164,13 +145,12 @@ export const RequestStoreModel = types
     /**
      * Accept request as a chaperone
      */
-    acceptRequest: flow(function* (requestId: string) {
-      console.log("[request-store] Accepting request", requestId)
-      const request = self.availableRequests.find((r) => r.id === requestId)
+    acceptRequest: flow(function* (request: ChaperoneRequest) {
+      console.log("[request-store] Accepting request", request.id)
       if (!request) {
-        throw new Error("Request cannot be found")
+        throw new Error("Invalid request")
       }
-      const requestModel = RequestModel.create(getSnapshot(request))
+      const requestModel = ChaperoneRequestModel.create(getSnapshot(request))
 
       // Do some light validation; this logic should be extracted to a helper function later:
       // validateRequestBeforeAccept
@@ -188,15 +168,13 @@ export const RequestStoreModel = types
       const mutatedRequest = getSnapshot(requestModel)
       // Update the request record for the requester and in the general request pool
       const result = yield self.environment.requestApi.acceptUserRequest(
-        requestId,
+        request.id,
         mutatedRequest,
         mutatedRequest.requestedBy.email,
         self.authContext,
       )
 
       if (result.kind === "ok") {
-        // self.saveRequest(mutatedRequest)
-        // self.deleteAvailableRequest(mutatedRequest.id)
         // Notify the chaperones
         const notification = NotificationModel.create(
           createRequestAcceptedNotification(self.authContext.profile, request),
@@ -210,14 +188,13 @@ export const RequestStoreModel = types
     /**
      * Release a request as a chaperone
      */
-    releaseRequest: flow(function* (requestId: string) {
-      console.log("[request-store] Releasing request", requestId)
-      const request = self.requests.find((r) => r.id === requestId)
+    releaseRequest: flow(function* (request: ChaperoneRequest) {
+      console.log("[request-store] Releasing request", request.id)
       if (!request) {
-        throw new Error("Request cannot be found")
+        throw new Error("Invalid request")
       }
       // Create a mutable copy of the request
-      const requestModel = RequestModel.create(getSnapshot(request))
+      const requestModel = ChaperoneRequestModel.create(getSnapshot(request))
       // Start mutating our copy to the "released" state
       requestModel.removeChaperone(self.authContext.email)
       requestModel.setStatus(RequestStatusEnum.REQUESTED)
@@ -225,7 +202,7 @@ export const RequestStoreModel = types
       const mutatedRequest = getSnapshot(requestModel)
       // Update the request record for the requester and in the general request pool
       const result = yield self.environment.requestApi.releaseUserRequest(
-        requestId,
+        request.id,
         mutatedRequest,
         mutatedRequest.requestedBy.email,
         self.authContext,
@@ -245,7 +222,7 @@ export const RequestStoreModel = types
     /**
      * Reschedule a request
      */
-    rescheduleRequest: flow(function* (request: RequestSnapshot) {
+    rescheduleRequest: flow(function* (request: ChaperoneRequestSnapshot) {
       console.log("[request-store] Rescheduling", request.id)
       const result = yield self.environment.requestApi.updateRequest(
         request.id,
@@ -254,7 +231,7 @@ export const RequestStoreModel = types
       )
 
       if (result.kind === "ok") {
-        self.updateRequest(request.id, { status: RequestStatusEnum.CANCELED_BY_REQUESTER })
+        self._updateRequest(request.id, { status: RequestStatusEnum.CANCELED_BY_REQUESTER })
 
         const notification = NotificationModel.create(
           createRequestCanceledByRequesterNotification(self.authContext.profile, request),
@@ -284,7 +261,7 @@ export const RequestStoreModel = types
     /**
      * Cancel a request as a requester and notifies any chaperones associated with the request
      */
-    cancelRequestAsRequester: flow(function* (request: RequestSnapshot) {
+    cancelRequestAsRequester: flow(function* (request: ChaperoneRequestSnapshot) {
       console.log("[request-store] Canceling as requester", request.id)
       const result = yield self.environment.requestApi.updateRequest(
         request.id,
@@ -293,7 +270,7 @@ export const RequestStoreModel = types
       )
 
       if (result.kind === "ok") {
-        self.updateRequest(request.id, { status: RequestStatusEnum.CANCELED_BY_REQUESTER })
+        self._updateRequest(request.id, { status: RequestStatusEnum.CANCELED_BY_REQUESTER })
 
         const notification = NotificationModel.create(
           createRequestCanceledByRequesterNotification(self.authContext.profile, request),
@@ -318,7 +295,7 @@ export const RequestStoreModel = types
       )
 
       if (result.kind === "ok") {
-        self.updateRequest(requestId, { status })
+        self._updateRequest(requestId, { status })
       } else {
         __DEV__ && console.tron.log(result.kind)
       }
@@ -358,7 +335,7 @@ export const RequestStoreModel = types
               "[request-store] User's requests from subscription:",
               requests.map((r) => r.id),
             )
-            self._updateRequests(requests)
+            self._replaceRequests(requests)
           },
         )
         unsubscribeHandlers.push(unsubscribeUserRequests)
@@ -377,7 +354,7 @@ export const RequestStoreModel = types
               "[request-store] New requests from subscription:",
               requests.map((r) => r.id),
             )
-            self._updateAvailableRequests(requests)
+            self._replaceAvailableRequests(requests)
           },
         )
         const unsubscribeUserRequests = self.environment.requestApi.subscribeToUserRequests(
@@ -387,7 +364,7 @@ export const RequestStoreModel = types
               "[request-store] User's requests from subscription:",
               requests.map((r) => r.id),
             )
-            self._updateRequests(requests)
+            self._replaceRequests(requests)
           },
         )
 
@@ -411,7 +388,7 @@ export const RequestStoreModel = types
               "[request-store] Subscribing to new all available requests, inc.:",
               requests.map((r) => r.id),
             )
-            self._updateAvailableRequests(requests)
+            self._replaceAvailableRequests(requests)
           },
         )
 
@@ -437,7 +414,7 @@ type RequestStoreSnapshotType = SnapshotOut<typeof RequestStoreModel>
 export interface RequestStoreSnapshot extends RequestStoreSnapshotType {}
 export const createRequestStoreDefaultModel = () => types.optional(RequestStoreModel, {})
 
-function sortByCreatedAt(a: RequestSnapshot, b: RequestSnapshot) {
+function sortByCreatedAt(a: ChaperoneRequestSnapshot, b: ChaperoneRequestSnapshot) {
   const aTime = new Date(a.createdAt).getTime()
   const bTime = new Date(b.createdAt).getTime()
   if (aTime < bTime) {

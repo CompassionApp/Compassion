@@ -185,6 +185,7 @@ export const RequestDetailScreen = observer(function RequestDetailScreen() {
                 preset="ghost"
                 tx="requestDetailScreen.rescheduleButton"
                 style={BUTTON_OVERRIDE}
+                disabled={isRequestCanceled}
                 onPress={handlePressReschedule}
               />
               <Button

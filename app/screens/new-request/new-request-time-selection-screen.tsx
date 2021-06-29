@@ -8,7 +8,7 @@ import { format, parse } from "date-fns"
 import { useStores } from "../../models"
 import styled from "styled-components/native"
 import { Break } from "../../components/break/break"
-import { TIME_RANGE_FORMAT, TITLE_DATE_FORMAT } from "../../constants/date-formats"
+import { CALENDAR_DATE_FORMAT, TITLE_DATE_FORMAT } from "../../constants/date-formats"
 import { isInOperatingHours, TimeAmPmEnum } from "./utils"
 import { NewRequestFooterArea } from "./common"
 
@@ -67,9 +67,8 @@ export const NewRequestTimeSelectionScreen = observer(function NewRequestTimeSel
   const navigation = useNavigation()
   const [selectedTime, setSelectedTime] = useState<string>()
   const [selectedAmPm, setSelectedAmPm] = useState<string>(TimeAmPmEnum.AM)
-
-  const requestDate = newRequestStore?.requestedAt
-    ? new Date(newRequestStore.requestedAt)
+  const requestDate = newRequestStore?.requestedDate
+    ? parse(newRequestStore.requestedDate, CALENDAR_DATE_FORMAT, new Date())
     : new Date()
   const requestDateString = format(requestDate, TITLE_DATE_FORMAT)
 
@@ -80,9 +79,7 @@ export const NewRequestTimeSelectionScreen = observer(function NewRequestTimeSel
     if (!selectedAmPm || !selectedTime) {
       return
     }
-    // Construct a date using the request date from the previous page
-    const parsedTime = parse(`${selectedTime} ${selectedAmPm}`, TIME_RANGE_FORMAT, requestDate)
-    newRequestStore.setRequestedAt(parsedTime.toUTCString())
+    newRequestStore.setRequestedTime(`${selectedTime} ${selectedAmPm}`)
     navigateNext()
   }
 

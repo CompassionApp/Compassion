@@ -9,7 +9,7 @@ import type {
 import type { NotificationSnapshot, UserProfileSnapshot } from "../../models"
 import { typeConverter } from "./utils"
 import { UserRoleEnum, UserStatusEnum } from "../../types"
-import { NotificationsService } from "../notifications"
+import { PushNotificationsService } from "../push-notifications"
 import firebase from "firebase"
 
 /**
@@ -17,11 +17,14 @@ import firebase from "firebase"
  */
 export class NotificationApi {
   private firebase: FirebaseCoreApiAdapter
-  private notificationsService: NotificationsService
+  private pushNotificationsService: PushNotificationsService
 
-  constructor(firebase: FirebaseCoreApiAdapter, notificationsService: NotificationsService) {
+  constructor(
+    firebase: FirebaseCoreApiAdapter,
+    pushNotificationsService: PushNotificationsService,
+  ) {
     this.firebase = firebase
-    this.notificationsService = notificationsService
+    this.pushNotificationsService = pushNotificationsService
   }
 
   /**
@@ -122,7 +125,7 @@ export class NotificationApi {
 
       // 3: Send the push notifications
       availableChaperoneNotificationTokens.forEach((token) => {
-        this.notificationsService.send(token, notification)
+        this.pushNotificationsService.send(token, notification)
       })
       console.log(
         `[notification-api] Sent ${availableChaperoneNotificationTokens.length} push notifications`,
@@ -196,7 +199,7 @@ export class NotificationApi {
             recipientUserDocRef.collection("notifications").doc(notification.id),
             notification,
           )
-          this.notificationsService.send(userProfile.notificationToken, notification)
+          this.pushNotificationsService.send(userProfile.notificationToken, notification)
           console.log(`[notification-api] Sent a push notification to ${recipientUserKey}`)
         })
       })

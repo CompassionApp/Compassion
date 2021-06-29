@@ -95,7 +95,7 @@ export const AuthStoreModel = types
         notificationToken: self.environment.notifications.deviceNotificationToken,
         geoArea,
       })
-      self.user.setUserProfile(getSnapshot(profile))
+      self.user._replaceUserProfile(getSnapshot(profile))
       yield self.user.save()
       console.log(
         "[auth-store] New user profile successfully created in Firestore",

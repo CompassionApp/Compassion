@@ -8,7 +8,7 @@ import { color, globalStyles, spacing, typography } from "../../theme"
 import { RequestCard } from "./request-card"
 import { useStores } from "../../models/root-store/root-store-context"
 import { RequestStatusEnum, RequestTypeEnum } from "../../types"
-import { RequestSnapshot } from "../../models"
+import { ChaperoneRequestSnapshot } from "../../models"
 
 const ROOT: ViewStyle = {
   backgroundColor: color.background,
@@ -78,14 +78,14 @@ export const ChaperoneHomeScreen = observer(function ChaperoneHomeScreen() {
         <ScrollView
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         >
-          <Text preset={["center", "bold"]} tx="chaperoneHomeScreen.yourScheduledRequests" />
+          <Text preset={["center", "bold"]} tx="chaperoneHomeScreen.yourMatchedRequests" />
           <Break />
           {requestStore.requests.length === 0 && (
             <>
               <Text preset={["center"]} tx="chaperoneHomeScreen.noScheduledRequests" />
             </>
           )}
-          {requestStore.requests.map((request: RequestSnapshot) => (
+          {requestStore.requests.map((request: ChaperoneRequestSnapshot) => (
             <RequestCard
               key={request.id}
               status={request.status as RequestStatusEnum}
@@ -104,7 +104,7 @@ export const ChaperoneHomeScreen = observer(function ChaperoneHomeScreen() {
               <Text preset={["center"]} tx="chaperoneHomeScreen.noOpenRequests" />
             </>
           )}
-          {requestStore.sortAvailableRequestsByCreated.map((request: RequestSnapshot) => (
+          {requestStore.sortAvailableRequestsByCreated.map((request: ChaperoneRequestSnapshot) => (
             <RequestCard
               key={request.id}
               status={request.status as RequestStatusEnum}

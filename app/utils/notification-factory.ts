@@ -3,7 +3,7 @@ import { generateUuid } from "./uuid"
 import {
   NotificationSnapshot,
   NotificationTypeEnum,
-  RequestSnapshot,
+  ChaperoneRequestSnapshot,
   UserProfileSnapshot,
 } from "../models"
 import { TIME_RANGE_FORMAT, TITLE_DATE_FORMAT } from "../constants"
@@ -29,7 +29,7 @@ function formatNameInitial(firstName: string, lastName: string) {
  */
 export const createNewRequestNotification = (
   requesterUserProfile: UserProfileSnapshot,
-  request: RequestSnapshot,
+  request: ChaperoneRequestSnapshot,
 ): NotificationSnapshot => {
   return {
     id: generateUuid(),
@@ -53,7 +53,7 @@ export const createNewRequestNotification = (
  */
 export const createRequestAcceptedNotification = (
   chaperoneUserProfile: UserProfileSnapshot,
-  request: RequestSnapshot,
+  request: ChaperoneRequestSnapshot,
 ): NotificationSnapshot => {
   return {
     id: generateUuid(),
@@ -79,7 +79,7 @@ export const createRequestAcceptedNotification = (
  */
 export const createRequestCanceledByRequesterNotification = (
   requesterUserProfile: UserProfileSnapshot,
-  request: RequestSnapshot,
+  request: ChaperoneRequestSnapshot,
 ): NotificationSnapshot => {
   return {
     id: generateUuid(),
@@ -105,7 +105,7 @@ export const createRequestCanceledByRequesterNotification = (
  */
 export const createRequestCanceledByChaperoneNotification = (
   chaperoneUserProfile: UserProfileSnapshot,
-  request: RequestSnapshot,
+  request: ChaperoneRequestSnapshot,
 ): NotificationSnapshot => {
   return {
     id: generateUuid(),

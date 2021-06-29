@@ -7,12 +7,12 @@ import {
 } from "../user-profile-preview/user-profile-preview"
 
 /**
- * A Request represents an individual request by requesters to be fulfilled by chaperones. Created
+ * A ChaperoneRequest represents an individual request by requesters to be fulfilled by chaperones. Created
  * when a request is made by the Requester and updated as the status changes up until it’s fulfilled
  * by a Session.
  */
-export const RequestModel = types
-  .model("Request")
+export const ChaperoneRequestModel = types
+  .model("ChaperoneRequest")
   .props({
     id: types.identifier,
     /** User key of the requester */
@@ -48,9 +48,10 @@ export const RequestModel = types
       }
       self.chaperones.push(previewProfile)
     },
+    /** Removes a chaperone from the request */
     removeChaperone: (email: string) => {
       const index = self.chaperones.findIndex((chaperone) => chaperone.email === email)
-      if (!index) return
+      if (index < 0) return
       self.chaperones.remove(self.chaperones[index])
     },
     setStatus: (status: RequestStatusEnum) => {
@@ -58,8 +59,8 @@ export const RequestModel = types
     },
   }))
 
-type RequestType = Instance<typeof RequestModel>
-export interface Request extends RequestType {}
-type RequestSnapshotType = SnapshotOut<typeof RequestModel>
-export interface RequestSnapshot extends RequestSnapshotType {}
-export const createRequestDefaultModel = () => types.optional(RequestModel, {})
+type ChaperoneRequestType = Instance<typeof ChaperoneRequestModel>
+export interface ChaperoneRequest extends ChaperoneRequestType {}
+type ChaperoneRequestSnapshotType = SnapshotOut<typeof ChaperoneRequestModel>
+export interface ChaperoneRequestSnapshot extends ChaperoneRequestSnapshotType {}
+export const createRequestDefaultModel = () => types.optional(ChaperoneRequestModel, {})
