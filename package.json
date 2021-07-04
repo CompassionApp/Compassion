@@ -210,7 +210,8 @@
       "react/no-unescaped-entities": 0,
       "react/prop-types": "off",
       "space-before-function-paren": 0,
-      "yield-star-spacing": 0
+      "yield-star-spacing": 0,
+      "func-call-spacing": 0
     }
   },
   "main": "node_modules/expo/AppEntry.js"

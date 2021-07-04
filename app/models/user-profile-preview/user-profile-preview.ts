@@ -1,7 +1,8 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
 
 /**
- * Profile preview to embed into requests and notifications. Subset of the `UserProfile` model.
+ * A user profile preview is a subset of a full `UserProfile` model with the express purpose of embedding
+ * the previews into requests and notifications.
  */
 export const UserProfilePreviewModel = types
   .model("UserProfilePreview")

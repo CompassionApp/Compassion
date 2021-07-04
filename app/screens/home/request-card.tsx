@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite"
 import styled from "styled-components/native"
 import { FlexContainer, Text } from "../../components"
 import { color, spacing, typography } from "../../theme"
-import { RequestStatusEnum, RequestTypeEnum } from "../../types"
+import { RequestStatusEnum, RequestActivityEnum } from "../../types"
 import * as datefns from "date-fns"
 import { Break } from "../../components/break/break"
 import { TxKeyPath } from "../../i18n"
@@ -15,7 +15,7 @@ const BORDER_RADIUS = 5
 const Container = styled.TouchableOpacity`
   background-color: ${color.palette.white};
   border-radius: ${BORDER_RADIUS}px;
-  margin-vertical: ${spacing[2]}px;
+  margin-vertical: ${spacing[1]}px;
   border: 1px solid ${color.palette.grey2};
 `
 
@@ -48,7 +48,7 @@ const StatusTextField = styled(Text)`
 
 export interface CardProps {
   requestedAt: string
-  type: RequestTypeEnum
+  activity: RequestActivityEnum
   status: RequestStatusEnum
   requestId: string
   onPress?: () => void
@@ -57,7 +57,7 @@ export interface CardProps {
 export const RequestCard = observer(function Card({
   onPress,
   requestedAt,
-  type,
+  activity,
   status,
 }: CardProps) {
   const titleDate = datefns.format(new Date(requestedAt), TITLE_DATE_FORMAT)
@@ -71,7 +71,7 @@ export const RequestCard = observer(function Card({
     <Container onPress={onPress}>
       <Content column justifyCenter>
         <Title>{titleDate}</Title>
-        <Description tx={`enumRequestType.${type}` as TxKeyPath} />
+        <Description tx={`enumRequestActivity.${activity}` as TxKeyPath} />
         <Description>
           {requestStartTimeFormatted} - {requestEndTimeFormatted}
         </Description>

@@ -49,7 +49,7 @@ export const MenuScreen = observer(function MenuScreen() {
 
   return (
     <View testID="MenuScreen" style={globalStyles.full}>
-      <Screen style={{ ...globalStyles.root, ...ROOT }} preset="fixed">
+      <Screen style={ROOT} preset="fixed">
         <Header
           headerTx="menuScreen.title"
           leftIcon="back"
@@ -61,11 +61,13 @@ export const MenuScreen = observer(function MenuScreen() {
           text={`${profile?.firstName ?? "Unknown"} ${profile?.lastName ?? ""}`}
         />
         <Break />
-        <Button
-          preset="ghost"
-          text="Edit profile"
-          onPress={() => navigation.navigate("editUserProfile")}
-        />
+        <FlexContainer justifyCenter>
+          <Button
+            preset="ghost"
+            text="Edit profile"
+            onPress={() => navigation.navigate("editUserProfile")}
+          />
+        </FlexContainer>
         <MenuList column justifyStart>
           <MenuListItem disabled>
             <FontAwesome name="user-circle" size={ICON_SIZE} color={color.palette.blue} />

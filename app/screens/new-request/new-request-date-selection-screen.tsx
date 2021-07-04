@@ -29,8 +29,10 @@ const CALENDAR_THEME = {
 
 export const NewRequestDateSelectionScreen = observer(function NewRequestDateSelectionScreen() {
   const { newRequestStore } = useStores()
-  const [selectedDate, setSelectedDate] = useState<string>()
-  const [markedDates, setMarkedDates] = useState<Record<string, DotMarking>>({})
+  const [selectedDate, setSelectedDate] = useState<string>(newRequestStore.requestedDate)
+  const [markedDates, setMarkedDates] = useState<Record<string, DotMarking>>(
+    newRequestStore.requestedDate ? { [newRequestStore.requestedDate]: SELECTION_STYLE } : {},
+  )
 
   const navigation = useNavigation()
   const navigateBack = () => navigation.goBack()

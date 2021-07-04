@@ -11,6 +11,7 @@ import {
 import { withAuthContext } from "../extensions/with-auth-context"
 import { withEnvironment } from "../extensions/with-environment"
 import { NotificationModel } from "../notification/notification"
+import { SubscriptionManager, SubscriptionTypeEnum } from "../../utils/subscriptions"
 import {
   ChaperoneRequest,
   ChaperoneRequestModel,
@@ -23,18 +24,44 @@ import {
 export const RequestStoreModel = types
   .model("RequestStore")
   .props({
+    /** Collection of requests for the user in `/user/[email]/requests/*` */
     requests: types.optional(types.array(ChaperoneRequestModel), []),
+    /** Collection of availale requests in the pool in `/requests/*` */
     availableRequests: types.optional(types.array(ChaperoneRequestModel), []),
-    currentRequest: types.maybe(types.safeReference(ChaperoneRequestModel)),
+    /** Reference to the currently selected request; for the detail page */
+    currentRequest: types.maybeNull(types.safeReference(ChaperoneRequestModel)),
+    /** Flag for determining if the user request subscription is active */
+    userRequestSubscriptionActive: types.optional(types.boolean, false),
+    /** Flag for determining if the available request subscription is active */
+    availableRequestSubscriptionActive: types.optional(types.boolean, false),
   })
   .extend(withEnvironment)
   .extend(withAuthContext)
   .views((self) => ({
-    get sortUserRequestsByCreated() {
-      return self.requests.slice().sort(sortByCreatedAt)
+    /** Returns sorted user requests (by request date descending) that have been matched */
+    get sortedUserRequestsMatched() {
+      return self.requests
+        .filter((request) => request.status === RequestStatusEnum.SCHEDULED)
+        .slice()
+        .sort(sortByRequestedAt)
     },
-    get sortAvailableRequestsByCreated() {
-      return self.availableRequests.slice().sort(sortByCreatedAt)
+
+    /** Returns sorted user requests (by request date descending) that have been matched */
+    get sortedUserRequestsPending() {
+      return self.requests
+        .filter((request) => request.status !== RequestStatusEnum.SCHEDULED)
+        .slice()
+        .sort(sortByRequestedAt)
+    },
+
+    /** For Chaperones. Returns sorted user requests (by request date descending) */
+    get sortedUserRequests() {
+      return self.requests.slice().sort(sortByRequestedAt)
+    },
+
+    /** For Chaperones. Returns sorted availale requests (by request date descending) */
+    get sortedAvailableRequests() {
+      return self.availableRequests.slice().sort(sortByRequestedAt)
     },
   }))
   .actions((self) => ({
@@ -77,8 +104,13 @@ export const RequestStoreModel = types
     },
 
     /** Sets the current request that is being viewed in the detail screen */
-    selectCurrentRequest: (requestId: string) => {
+    selectCurrentRequest: (requestId: string | null) => {
       console.log("[request-store] Selecting request", requestId)
+      if (requestId === null) {
+        self.currentRequest = null
+        return
+      }
+
       const fromUserRequests = self.requests.find((r) => r.id === requestId)
       const fromAvailableRequests = self.availableRequests.find((r) => r.id === requestId)
       self.currentRequest = fromUserRequests ?? fromAvailableRequests
@@ -150,36 +182,39 @@ export const RequestStoreModel = types
       if (!request) {
         throw new Error("Invalid request")
       }
-      const requestModel = ChaperoneRequestModel.create(getSnapshot(request))
-
-      // Do some light validation; this logic should be extracted to a helper function later:
-      // validateRequestBeforeAccept
-      if (requestModel.status !== RequestStatusEnum.REQUESTED) {
-        throw new Error("Request is not in the correct state")
-      } else if (requestModel.chaperones.length + 1 > MAX_CHAPERONES_PER_REQUEST) {
-        throw new Error("Too many chaperones")
+      // Validate the request
+      if (!validateRequestBeforeAccept(request)) {
+        return
       }
+      const requestModel = ChaperoneRequestModel.create(getSnapshot(request))
 
       // Start mutating our copy to the "accepted" state
       requestModel.addChaperone(self.authContext.profile.preview)
       requestModel.setStatus(RequestStatusEnum.SCHEDULED)
       requestModel.touchUpdatedDate()
 
-      const mutatedRequest = getSnapshot(requestModel)
+      const mutatedRequestSnapshot = getSnapshot(requestModel)
       // Update the request record for the requester and in the general request pool
       const result = yield self.environment.requestApi.acceptUserRequest(
         request.id,
-        mutatedRequest,
-        mutatedRequest.requestedBy.email,
+        mutatedRequestSnapshot,
+        mutatedRequestSnapshot.requestedBy.email,
         self.authContext,
       )
 
       if (result.kind === "ok") {
+        // FYI: Using mutatedRequestSnapshot in this section because at this point the `request` is
+        // no longer valid since the subscriptions will move the entry between `request` and
+        // `availableRequest`.
+
         // Notify the chaperones
         const notification = NotificationModel.create(
-          createRequestAcceptedNotification(self.authContext.profile, request),
+          createRequestAcceptedNotification(self.authContext.profile, mutatedRequestSnapshot),
         )
-        yield self.environment.notificationApi.notifyUser(request.requestedBy.email, notification)
+        yield self.environment.notificationApi.notifyUser(
+          mutatedRequestSnapshot.requestedBy.email,
+          notification,
+        )
       } else {
         __DEV__ && console.tron.log(result.kind)
       }
@@ -199,21 +234,40 @@ export const RequestStoreModel = types
       requestModel.removeChaperone(self.authContext.email)
       requestModel.setStatus(RequestStatusEnum.REQUESTED)
       requestModel.touchUpdatedDate()
-      const mutatedRequest = getSnapshot(requestModel)
+      const mutatedRequestSnapshot = getSnapshot(requestModel)
       // Update the request record for the requester and in the general request pool
       const result = yield self.environment.requestApi.releaseUserRequest(
         request.id,
-        mutatedRequest,
-        mutatedRequest.requestedBy.email,
+        mutatedRequestSnapshot,
+        mutatedRequestSnapshot.requestedBy.email,
         self.authContext,
       )
 
       if (result.kind === "ok") {
-        // Notify the chaperones
-        const notification = NotificationModel.create(
-          createRequestCanceledByChaperoneNotification(self.authContext.profile, request),
+        // FYI: Using mutatedRequestSnapshot in this section because at this point the `request` is
+        // no longer valid since the subscriptions will move the entry between `request` and
+        // `availableRequest`.
+
+        // Notify the requester
+        const canceledNotification = NotificationModel.create(
+          createRequestCanceledByChaperoneNotification(
+            self.authContext.profile,
+            mutatedRequestSnapshot,
+          ),
         )
-        yield self.environment.notificationApi.notifyUser(request.requestedBy.email, notification)
+        yield self.environment.notificationApi.notifyUser(
+          mutatedRequestSnapshot.requestedBy.email,
+          canceledNotification,
+        )
+
+        // Notify the chaperones
+        const chaperoneNotification = NotificationModel.create(
+          createNewRequestNotification(self.authContext.profile, mutatedRequestSnapshot),
+        )
+        yield self.environment.notificationApi.notifyAllChaperones(chaperoneNotification, {
+          authContext: self.authContext,
+          excludeSelf: true,
+        })
       } else {
         __DEV__ && console.tron.log(result.kind)
       }
@@ -222,8 +276,14 @@ export const RequestStoreModel = types
     /**
      * Reschedule a request
      */
-    rescheduleRequest: flow(function* (request: ChaperoneRequestSnapshot) {
+    rescheduleRequest: flow(function* (request: ChaperoneRequest) {
       console.log("[request-store] Rescheduling", request.id)
+
+      if (request.isCanceled) {
+        console.log("[request-store] Request already canceled. Doing nothing.")
+        return
+      }
+
       const result = yield self.environment.requestApi.updateRequest(
         request.id,
         { status: RequestStatusEnum.CANCELED_BY_REQUESTER },
@@ -307,19 +367,26 @@ export const RequestStoreModel = types
    */
   .actions((self) => {
     /** Collection of unsubscribe handlers from our onSnapshot listeners */
-    const unsubscribeHandlers: (() => void)[] = []
+    const subscriptionManager = new SubscriptionManager()
 
     return {
       /**
        * Unsubscribes from all previously registered subscriptions
        */
       unsubscribeAll: () => {
-        console.log(`[request-store] Unsubscribing to ${unsubscribeHandlers.length} subscriptions`)
+        console.log(`[request-store] Unsubscribing to ${subscriptionManager.size} subscriptions`)
 
-        while (unsubscribeHandlers.length > 0) {
-          const unsubscribe = unsubscribeHandlers.pop()
-          unsubscribe()
-        }
+        subscriptionManager.unsubscribeAll((type) => {
+          console.log(`Unsubscribing to ${type}`)
+          switch (type) {
+            case SubscriptionTypeEnum.AVAILABLE_REQUESTS:
+              self.availableRequestSubscriptionActive = false
+              break
+            case SubscriptionTypeEnum.USER_REQUESTS:
+              self.userRequestSubscriptionActive = false
+              break
+          }
+        })
       },
 
       /**
@@ -338,8 +405,11 @@ export const RequestStoreModel = types
             self._replaceRequests(requests)
           },
         )
-        unsubscribeHandlers.push(unsubscribeUserRequests)
-        return { unsubscribeUserRequests }
+        subscriptionManager.registerSubscription(
+          SubscriptionTypeEnum.USER_REQUESTS,
+          unsubscribeUserRequests,
+        )
+        self.userRequestSubscriptionActive = true
       },
 
       /**
@@ -357,6 +427,12 @@ export const RequestStoreModel = types
             self._replaceAvailableRequests(requests)
           },
         )
+        subscriptionManager.registerSubscription(
+          SubscriptionTypeEnum.AVAILABLE_REQUESTS,
+          unsubscribeAvailableRequests,
+        )
+        self.availableRequestSubscriptionActive = true
+
         const unsubscribeUserRequests = self.environment.requestApi.subscribeToUserRequests(
           self.authContext,
           (requests) => {
@@ -367,13 +443,11 @@ export const RequestStoreModel = types
             self._replaceRequests(requests)
           },
         )
-
-        unsubscribeHandlers.push(unsubscribeAvailableRequests)
-        unsubscribeHandlers.push(unsubscribeUserRequests)
-        return {
-          unsubscribeAvailableRequests,
+        subscriptionManager.registerSubscription(
+          SubscriptionTypeEnum.USER_REQUESTS,
           unsubscribeUserRequests,
-        }
+        )
+        self.userRequestSubscriptionActive = true
       },
 
       /**
@@ -392,10 +466,11 @@ export const RequestStoreModel = types
           },
         )
 
-        unsubscribeHandlers.push(unsubscribeAvailableRequests)
-        return {
+        subscriptionManager.registerSubscription(
+          SubscriptionTypeEnum.AVAILABLE_REQUESTS,
           unsubscribeAvailableRequests,
-        }
+        )
+        self.availableRequestSubscriptionActive = true
       },
     }
   })
@@ -414,14 +489,30 @@ type RequestStoreSnapshotType = SnapshotOut<typeof RequestStoreModel>
 export interface RequestStoreSnapshot extends RequestStoreSnapshotType {}
 export const createRequestStoreDefaultModel = () => types.optional(RequestStoreModel, {})
 
-function sortByCreatedAt(a: ChaperoneRequestSnapshot, b: ChaperoneRequestSnapshot) {
-  const aTime = new Date(a.createdAt).getTime()
-  const bTime = new Date(b.createdAt).getTime()
+/** Sorts by requested at descending */
+function sortByRequestedAt(a: ChaperoneRequest, b: ChaperoneRequest) {
+  const aTime = new Date(a.requestedAt).getTime()
+  const bTime = new Date(b.requestedAt).getTime()
   if (aTime < bTime) {
-    return 1
-  }
-  if (aTime > bTime) {
     return -1
   }
+  if (aTime > bTime) {
+    return 1
+  }
   return 0
+}
+
+/**
+ * Validates a request before accepting
+ *
+ * Returns true if passing; throws an error if not
+ */
+function validateRequestBeforeAccept(request: ChaperoneRequest) {
+  if (request.status !== RequestStatusEnum.REQUESTED) {
+    throw new Error("Request is not in the correct state")
+  } else if (request.chaperones.length + 1 > MAX_CHAPERONES_PER_REQUEST) {
+    throw new Error("Too many chaperones")
+  }
+
+  return true
 }

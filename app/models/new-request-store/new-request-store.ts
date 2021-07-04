@@ -1,7 +1,7 @@
 import { format, parse } from "date-fns"
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
 import { CALENDAR_DATE_FORMAT, TIME_RANGE_FORMAT } from "../../constants"
-import { RequestStatusEnum, RequestTypeEnum } from "../../types"
+import { RequestStatusEnum, RequestActivityEnum } from "../../types"
 import { generateUuid } from "../../utils/uuid"
 import { withAuthContext } from "../extensions/with-auth-context"
 import {
@@ -23,7 +23,9 @@ export const NewRequestStoreModel = types
     meetAddress: types.maybe(types.string),
     destinationAddress: types.maybe(types.string),
     otherComments: types.maybe(types.string),
-    type: types.maybe(types.enumeration<RequestTypeEnum>(Object.values(RequestTypeEnum))),
+    activity: types.maybe(
+      types.enumeration<RequestActivityEnum>(Object.values(RequestActivityEnum)),
+    ),
   })
   .extend(withAuthContext)
   .views((self) => ({
@@ -35,7 +37,7 @@ export const NewRequestStoreModel = types
         self.meetAddress === undefined &&
         self.destinationAddress === undefined &&
         self.otherComments === undefined &&
-        self.type === undefined
+        self.activity === undefined
       )
     },
 
@@ -47,7 +49,7 @@ export const NewRequestStoreModel = types
         self.meetAddress !== undefined &&
         self.destinationAddress !== undefined &&
         self.otherComments !== undefined &&
-        self.type !== undefined
+        self.activity !== undefined
       )
     },
 
@@ -61,6 +63,16 @@ export const NewRequestStoreModel = types
       } catch (e) {
         return undefined
       }
+    },
+
+    /** Returns the saw time portion of the requested time */
+    get rawTime() {
+      return self?.requestedTime?.split(" ")[0]
+    },
+
+    /** Returns the AM/PM portion of the requested time */
+    get amPm() {
+      return self?.requestedTime?.split(" ")[1]
     },
   }))
   .views((self) => ({
@@ -78,7 +90,7 @@ export const NewRequestStoreModel = types
         meetAddress: self.meetAddress,
         destinationAddress: self.destinationAddress,
         otherComments: self.otherComments,
-        type: self.type,
+        activity: self.activity,
       })
     },
   }))
@@ -90,7 +102,7 @@ export const NewRequestStoreModel = types
       self.meetAddress = undefined
       self.destinationAddress = undefined
       self.otherComments = undefined
-      self.type = undefined
+      self.activity = undefined
     },
 
     setRequestedTime: (value: string) => {
@@ -113,19 +125,20 @@ export const NewRequestStoreModel = types
       self.otherComments = value
     },
 
-    setType: (value: RequestTypeEnum) => {
-      self.type = value
+    setType: (value: RequestActivityEnum) => {
+      self.activity = value
     },
 
     /** Overwrites the current new request with a RequestSnapshot as the seed. Useful for
      * rescheduling. */
     replaceFromRequest: (request: ChaperoneRequestSnapshot) => {
+      console.log("[new-request-store] Replacing from request", request.id)
       self.requestedDate = format(new Date(request.requestedAt), CALENDAR_DATE_FORMAT)
       self.requestedTime = format(new Date(request.requestedAt), TIME_RANGE_FORMAT)
       self.meetAddress = request.meetAddress
       self.destinationAddress = request.destinationAddress
       self.otherComments = request.otherComments
-      self.type = request.type
+      self.activity = request.activity
     },
   }))
 

@@ -1,6 +1,8 @@
 import React from "react"
-import { TextStyle } from "react-native"
+import { Alert, Linking, TextStyle } from "react-native"
+import { TouchableOpacity } from "react-native-gesture-handler"
 import styled from "styled-components/native"
+import { MaterialIcons } from "@expo/vector-icons"
 import { FlexContainer, Text } from "../../components"
 import { UserProfilePreview } from "../../models"
 import { color, spacing } from "../../theme"
@@ -23,6 +25,15 @@ const NameContainer = styled(FlexContainer)`
   margin-top: ${spacing[2]}px;
 `
 
+const CallableIndicatorContainer = styled.View`
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  background-color: ${color.palette.darkGreen};
+  border-radius: 100px;
+  padding: ${spacing[1]}px;
+`
+
 const ProfileImage = styled.Image`
   width: ${SIZE * 0.6}px;
   height: ${SIZE * 0.6}px;
@@ -30,25 +41,46 @@ const ProfileImage = styled.Image`
 
 export interface RequestDetailProfilePhotoProps {
   previewProfile?: UserProfilePreview
+  allowCalls?: boolean
   style?: TextStyle
 }
 
 export const RequestDetailProfilePhoto: React.FC<RequestDetailProfilePhotoProps> = ({
   previewProfile,
+  allowCalls = true,
   style,
-}) => (
-  <Container justifyCenter column>
-    <PhotoContainer justifyCenter>
-      <PhotoInnerContainer column justifyCenter>
-        <ProfileImage source={profileImage} />
-      </PhotoInnerContainer>
-    </PhotoContainer>
-    {previewProfile && (
-      <NameContainer justifyCenter>
-        <Text preset="bold" style={style}>
-          {previewProfile.fullName}
-        </Text>
-      </NameContainer>
-    )}
-  </Container>
-)
+}) => {
+  const handlePressPhoto = () => {
+    Alert.alert("Call User", `Call ${previewProfile?.fullName}?`, [
+      { text: "Yes", onPress: () => Linking.openURL(`tel://${previewProfile.phoneNumber}`) },
+      {
+        text: "No",
+        style: "cancel",
+      },
+    ])
+  }
+
+  return (
+    <TouchableOpacity onPress={allowCalls && previewProfile?.phoneNumber ? handlePressPhoto : null}>
+      <Container justifyCenter column>
+        <PhotoContainer justifyCenter>
+          <PhotoInnerContainer column justifyCenter>
+            <ProfileImage source={profileImage} />
+          </PhotoInnerContainer>
+          {allowCalls && previewProfile?.phoneNumber && (
+            <CallableIndicatorContainer>
+              <MaterialIcons name="phone" color={color.palette.offWhite} size={14} />
+            </CallableIndicatorContainer>
+          )}
+        </PhotoContainer>
+        {previewProfile && (
+          <NameContainer justifyCenter>
+            <Text preset="bold" style={style}>
+              {previewProfile?.fullName}
+            </Text>
+          </NameContainer>
+        )}
+      </Container>
+    </TouchableOpacity>
+  )
+}

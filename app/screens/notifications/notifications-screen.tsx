@@ -90,6 +90,7 @@ export const NotificationsScreen = observer(function NotificationsScreen() {
         <ActionContainer justifyCenter width="100%">
           <Button
             tx="notificationsScreen.clearAllNotificationsButton"
+            preset="ghost"
             onPress={handlePressClearAll}
             disabled={notificationStore.notificationCount === 0}
           />

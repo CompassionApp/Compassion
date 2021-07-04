@@ -80,6 +80,7 @@
   "requestDetailScreen": {
     "title": "Request Details",
     "rescheduleButton": "Reschedule",
+    "callButton": "Call",
     "okButton": "Ok",
     "cancelButton": "Cancel Request",
     "uncancelButton": "Uncancel Request",
@@ -111,7 +112,9 @@
     "noticeText3": "You could make a immediate request by calling",
     "noticeTextPhoneNumber": "(510) 200-8682",
     "noticeText4": "or you can schedule a chaparone request.",
-    "requestButton": "REQUEST"
+    "requestButton": "REQUEST",
+    "yourPendingRequests": "Your Pending Requests",
+    "yourMatchedRequests": "Your Matched Requests"
   },
   "chaperoneHomeScreen": {
     "noOpenRequests": "There are currently no open requests. Pull down to refresh.",
@@ -167,7 +170,7 @@
     "title": "Select an Activity",
     "nextButton": "Next: REVIEW",
     "additionalNotesLabel": "Additional Notes",
-    "additionalNotesPlaceholder": "Add anything we should know."
+    "additionalNotesPlaceholder": "Add any other details we should know"
   },
   "chaperoneScheduleScreen": {
     "title": "Volunteer Schedule",
@@ -221,7 +224,7 @@
     "CANCELED_BY_REQUESTER": "Canceled",
     "SCHEDULED": "Matched"
   },
-  "enumRequestType": {
+  "enumRequestActivity": {
     "undefined": "Unknown",
     "UNKNOWN": "Unknown",
     "DOCTOR": "Doctor Visit",

@@ -1,6 +1,6 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
 import { MAX_CHAPERONES_PER_REQUEST } from "../../constants/match"
-import { RequestStatusEnum, RequestTypeEnum } from "../../types"
+import { RequestStatusEnum, RequestActivityEnum } from "../../types"
 import {
   UserProfilePreview,
   UserProfilePreviewModel,
@@ -30,13 +30,33 @@ export const ChaperoneRequestModel = types
     chaperones: types.optional(types.array(UserProfilePreviewModel), []),
     /** Status of the request */
     status: types.maybe(types.enumeration<RequestStatusEnum>(Object.values(RequestStatusEnum))),
-    /** Type of request */
-    type: types.maybe(types.enumeration<RequestTypeEnum>(Object.values(RequestTypeEnum))),
+    /** Activity for request */
+    activity: types.maybe(
+      types.enumeration<RequestActivityEnum>(Object.values(RequestActivityEnum)),
+    ),
   })
   .views((self) => ({
+    /** Returns `true` if the request has been canceled */
+    get isCanceled() {
+      return (
+        self.status === RequestStatusEnum.CANCELED_BY_CHAPERONE ||
+        self.status === RequestStatusEnum.CANCELED_BY_REQUESTER
+      )
+    },
+
+    /** Returns `true` if the request has been scheduled */
+    get isScheduled() {
+      return self.status === RequestStatusEnum.SCHEDULED
+    },
+
     containsUserAsChaperone: (email: string) => {
       return self.chaperones.find((chaperone) => chaperone.email === email)
     },
+
+    /** Returns `true` if the request is assigned to the user, either as a requester or as one of
+     * the chaperone(s). Useful to selectively rendering matched attributes. */
+    isAssignedToUser: (email: string) =>
+      [self.requestedBy.email, ...self.chaperones.map(({ email }) => email)].includes(email),
   }))
   .actions((self) => ({
     touchUpdatedDate: () => {

@@ -39,6 +39,8 @@ Compassion App is a [React Native](https://reactnative.dev/)/[Expo Framework](ht
    $ brew install reactotron
    ```
 
+Also, you might want to check out [Editor Setup](docs/editor-setup.md) if using VS Code for the first time for a Typescript project.
+
 ...aaand you're set!
 
 ## Development

@@ -4,14 +4,29 @@ import { View, ViewStyle, Alert } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 import styled from "styled-components/native"
 import { format } from "date-fns"
-import { Break, Button, FlexContainer, Header, Screen, Text } from "../../components"
+import {
+  Break,
+  Button,
+  FlexContainer,
+  Header,
+  Screen,
+  Text,
+  DebugHeaderText,
+} from "../../components"
 import { useStores } from "../../models"
 import { color, globalStyles, spacing } from "../../theme"
 import { TxKeyPath } from "../../i18n"
 import { TITLE_DATE_FORMAT, TIME_RANGE_FORMAT } from "../../constants/date-formats"
 import { RequestStatusEnum } from "../../types"
 import { RequestDetailProfilePhoto } from "./profile-photo"
-import { MATCHED_TEXT_STYLE, MatchProfilePhotos } from "./request-detail-screen"
+import {
+  MATCHED_TEXT_STYLE,
+  MatchProfilePhotos,
+  DebugText,
+  ButtonRow,
+  LinkButton,
+  OtherCommentsArea,
+} from "./request-detail-screen"
 
 const ROOT: ViewStyle = {
   backgroundColor: color.background,
@@ -22,24 +37,9 @@ const Content = styled.View`
   text-align: center;
 `
 
-const ButtonRow = styled(FlexContainer)`
-  margin: ${spacing[4]}px 0;
-`
-
-const LinkButton = styled(Button)`
-  margin: ${spacing[2]}px auto;
-`
-
-const OtherCommentsArea = styled(FlexContainer)`
-  padding: ${spacing[3]}px ${spacing[2]}px;
-`
-
 const BUTTON_OVERRIDE = {
   marginHorizontal: spacing[1],
   minWidth: 150,
-}
-const LINK_BUTTON_OVERRIDE = {
-  marginHorizontal: "auto",
 }
 
 export const ChaperoneRequestDetailScreen = observer(function ChaperoneRequestDetailScreen() {
@@ -69,9 +69,11 @@ export const ChaperoneRequestDetailScreen = observer(function ChaperoneRequestDe
       },
     ])
   }
+
   const handlePressOk = () => {
     navigateBack()
   }
+
   const handlePressDelete = () => {
     Alert.alert(
       "Delete Request",
@@ -90,14 +92,6 @@ export const ChaperoneRequestDetailScreen = observer(function ChaperoneRequestDe
         },
       ],
     )
-  }
-
-  let requestDate
-  let requestTime
-
-  if (currentRequest) {
-    requestDate = format(new Date(currentRequest.requestedAt), TITLE_DATE_FORMAT)
-    requestTime = format(new Date(currentRequest.requestedAt), TIME_RANGE_FORMAT)
   }
 
   // Bail out of rendering if the currentRequest is falsy
@@ -120,9 +114,17 @@ export const ChaperoneRequestDetailScreen = observer(function ChaperoneRequestDe
     )
   }
 
+  let requestDate
+  let requestTime
+
+  if (currentRequest) {
+    requestDate = format(new Date(currentRequest.requestedAt), TITLE_DATE_FORMAT)
+    requestTime = format(new Date(currentRequest.requestedAt), TIME_RANGE_FORMAT)
+  }
+
   return (
     <View testID="RequestDetailScreen" style={globalStyles.full}>
-      <Screen style={{ ...globalStyles.root, ...ROOT }} preset="fixed">
+      <Screen style={ROOT} preset="fixed">
         <Header
           headerTx="requestDetailScreen.title"
           leftIcon="back"
@@ -140,15 +142,19 @@ export const ChaperoneRequestDetailScreen = observer(function ChaperoneRequestDe
           <Content>
             <Text
               preset={["header", "center"]}
-              tx={`enumRequestType.${currentRequest.type}` as TxKeyPath}
+              tx={`enumRequestActivity.${currentRequest.activity}` as TxKeyPath}
             />
             <Text preset={["header", "bold", "center"]}>{requestDate}</Text>
             <Text preset={["header", "center"]}>{requestTime}</Text>
+            <Break />
 
             {currentRequest.status === RequestStatusEnum.REQUESTED && (
               <MatchProfilePhotos>
                 <FlexContainer justifyCenter>
-                  <RequestDetailProfilePhoto previewProfile={currentRequest.requestedBy} />
+                  <RequestDetailProfilePhoto
+                    allowCalls={currentRequest.isAssignedToUser(authStore.user.email)}
+                    previewProfile={currentRequest.requestedBy}
+                  />
                 </FlexContainer>
               </MatchProfilePhotos>
             )}
@@ -157,6 +163,7 @@ export const ChaperoneRequestDetailScreen = observer(function ChaperoneRequestDe
               <MatchProfilePhotos color={color.palette.blue}>
                 <FlexContainer justifyCenter>
                   <RequestDetailProfilePhoto
+                    allowCalls={currentRequest.isAssignedToUser(authStore.user.email)}
                     previewProfile={currentRequest.requestedBy}
                     style={MATCHED_TEXT_STYLE}
                   />
@@ -178,6 +185,14 @@ export const ChaperoneRequestDetailScreen = observer(function ChaperoneRequestDe
               </Text>
             </OtherCommentsArea>
             <Break />
+            {/* {currentRequest.isScheduled && (
+              <ButtonRow justifyCenter>
+                <CallButton
+                  name={currentRequest.requestedBy.fullName}
+                  number={currentRequest.requestedBy.phoneNumber}
+                />
+              </ButtonRow>
+            )} */}
             <ButtonRow justifyCenter>
               {currentRequest.status === RequestStatusEnum.REQUESTED && (
                 <Button
@@ -203,14 +218,16 @@ export const ChaperoneRequestDetailScreen = observer(function ChaperoneRequestDe
                 />
               )}
             </ButtonRow>
+            <DebugHeaderText preset={["smallHeader", "center"]}>
+              For development only
+            </DebugHeaderText>
             <LinkButton
               preset="link"
               tx="requestDetailScreen.deleteButton"
-              style={LINK_BUTTON_OVERRIDE}
+              faded
               onPress={handlePressDelete}
             />
-            <Break />
-            <Text>{currentRequest.id}</Text>
+            <DebugText preset="code">{currentRequest.id}</DebugText>
           </Content>
         )}
       </Screen>

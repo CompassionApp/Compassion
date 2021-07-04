@@ -8,6 +8,7 @@ import { RequesterHomeStackNavigator } from "./requester-home-stack-navigator"
 import { useStores } from "../../models"
 import { createTabIconForScreen } from "../tab-icon-utilities"
 import { StackActions } from "@react-navigation/native"
+import { Alert } from "react-native"
 
 export type RequesterTabNavigatorParamList = {
   home: undefined
@@ -34,6 +35,28 @@ export const RequesterMainTabNavigator = observer(function RequesterMainTabNavig
     }
   }, [])
 
+  const handleNewRequestBeforeRemove = (e, navigation) => {
+    console.log("beforeRemove called")
+    // Don't do anything if a request hasn't been completed yet
+    if (newRequestStore.isClean) {
+      return
+    }
+
+    e.preventDefault()
+
+    Alert.alert("Request in Progress", `Are you sure you want to cancel this request?`, [
+      {
+        text: "Don't Leave",
+        style: "cancel",
+      },
+      {
+        text: "Discard",
+        style: "destructive",
+        onPress: () => navigation.dispatch(e.data.action),
+      },
+    ])
+  }
+
   /**
    * This function ensures we force the user to the beginning of the new request workflow if they
    * click on the tab button after sending a request.
@@ -51,7 +74,6 @@ export const RequesterMainTabNavigator = observer(function RequesterMainTabNavig
     // If we are leaving a tab that has its own stack navigation, then clear it
     if (
       route.state?.type === "stack" &&
-      route.state.routes?.length > 1 &&
       route.state.routes[route.state.routes.length - 1].name !== defaultRoute
     ) {
       navigation.dispatch(StackActions.replace(defaultRoute))
@@ -82,6 +104,11 @@ export const RequesterMainTabNavigator = observer(function RequesterMainTabNavig
         }}
         listeners={({ navigation }) => ({
           focus: (e) => handleNewRequestOnFocus(e, navigation),
+          tabPress: (e) => {
+            e.preventDefault()
+            navigation.navigate("newRequest", { params: { screen: "new" } })
+          },
+          beforeRemove: (e) => handleNewRequestBeforeRemove(e, navigation),
         })}
       />
       <Tab.Screen

@@ -7,7 +7,7 @@ import { useNavigation } from "@react-navigation/native"
 import { color, globalStyles, typography } from "../../theme"
 import { RequestCard } from "./request-card"
 import { useStores } from "../../models/root-store/root-store-context"
-import { RequestStatusEnum, RequestTypeEnum } from "../../types"
+import { RequestStatusEnum, RequestActivityEnum } from "../../types"
 import { NotificationModel, ChaperoneRequestSnapshot } from "../../models"
 import { createNewRequestNotification } from "../../utils/notification-factory"
 
@@ -67,11 +67,11 @@ export const AdminHomeScreen = observer(function AdminHomeScreen() {
         >
           <Text preset={["center", "bold"]} tx="chaperoneHomeScreen.availableRequests" />
           <Break />
-          {requestStore.sortAvailableRequestsByCreated.map((request: ChaperoneRequestSnapshot) => (
+          {requestStore.sortedAvailableRequests.map((request: ChaperoneRequestSnapshot) => (
             <RequestCard
               key={request.id}
               status={request.status as RequestStatusEnum}
-              type={request.type as RequestTypeEnum}
+              activity={request.activity as RequestActivityEnum}
               requestId={request.id}
               requestedAt={request.requestedAt}
               onPress={handlePressRequestDetail(request.id)}

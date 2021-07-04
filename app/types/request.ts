@@ -19,9 +19,9 @@ export enum RequestStatusEnum {
 }
 
 /**
- * Types for a request
+ * Activity for a request
  */
-export enum RequestTypeEnum {
+export enum RequestActivityEnum {
   /** (Default) Request was submitted by the requester without a type */
   UNKNOWN = "UNKNOWN",
   /** Request for a grocery store */
@@ -105,5 +105,5 @@ export interface Request {
   /**
    * Type of request
    */
-  type: RequestTypeEnum
+  activity: RequestActivityEnum
 }

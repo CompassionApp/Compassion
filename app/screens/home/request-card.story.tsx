@@ -2,7 +2,7 @@ import * as React from "react"
 import { storiesOf } from "@storybook/react-native"
 import { StoryScreen, Story, UseCase } from "../../../storybook/views"
 import { RequestCard } from "./request-card"
-import { RequestStatusEnum, RequestTypeEnum } from "../../types"
+import { RequestStatusEnum, RequestActivityEnum } from "../../types"
 
 declare let module
 
@@ -14,7 +14,7 @@ storiesOf("RequestCard", module)
         <RequestCard
           requestId="test-id"
           requestedAt=""
-          type={RequestTypeEnum.GROCERY}
+          activity={RequestActivityEnum.GROCERY}
           status={RequestStatusEnum.REQUESTED}
         />
       </UseCase>

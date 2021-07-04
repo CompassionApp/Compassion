@@ -14,17 +14,25 @@ describe("RootStoreModel", () => {
           "destinationAddress": undefined,
           "meetAddress": undefined,
           "otherComments": undefined,
-          "requestedAt": undefined,
+          "requestedDate": undefined,
+          "requestedTime": undefined,
           "type": undefined,
         },
         "notificationStore": Object {
           "inbox": Array [],
           "selectedNotification": undefined,
+          "userNotificationSubscriptionActive": false,
         },
         "requestStore": Object {
+          "availableRequestSubscriptionActive": false,
           "availableRequests": Array [],
           "currentRequest": undefined,
           "requests": Array [],
+          "userRequestSubscriptionActive": false,
+        },
+        "usersStore": Object {
+          "selectedUser": undefined,
+          "users": Array [],
         },
       }
     `)

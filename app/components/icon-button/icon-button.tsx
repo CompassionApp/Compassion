@@ -57,11 +57,18 @@ export interface IconButtonProps extends TouchableOpacityProps {
  * Button with an icon
  */
 export const IconButton = observer(function IconButton(props: IconButtonProps) {
-  const { name, color, text, tx, style: styleOverrides, ...rest } = props
+  const {
+    name,
+    color: iconColor = color.palette.white,
+    text,
+    tx,
+    style: styleOverrides,
+    ...rest
+  } = props
 
   return (
     <BaseButton {...rest} style={{ ...HUGE_BUTTON_STYLE, ...styleOverrides }}>
-      <MaterialIcons name={name} color={color} size={120} />
+      <MaterialIcons name={name} color={iconColor} size={120} />
       <Break size={1} />
       <ButtonText preset={["header", "bold"]} text={text} tx={tx} />
     </BaseButton>

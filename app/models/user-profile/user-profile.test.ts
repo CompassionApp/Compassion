@@ -28,6 +28,7 @@ test("can be created", () => {
       "firstName": "Test",
       "geoArea": "OAK1",
       "id": "profile-id",
+      "lastLoginAt": null,
       "lastName": "Test",
       "latestCovidTestVerifiedAt": "Tue, 08 Jun 2021 08:58:04 GMT",
       "notificationToken": null,
