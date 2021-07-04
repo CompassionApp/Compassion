@@ -65,8 +65,8 @@ const OPERATING_HOURS: [string, string] = ["7:00 AM", "8:00 PM"]
 export const NewRequestTimeSelectionScreen = observer(function NewRequestTimeSelectionScreen() {
   const { newRequestStore } = useStores()
   const navigation = useNavigation()
-  const [selectedTime, setSelectedTime] = useState<string>()
-  const [selectedAmPm, setSelectedAmPm] = useState<string>(TimeAmPmEnum.AM)
+  const [selectedTime, setSelectedTime] = useState<string>(newRequestStore.rawTime)
+  const [selectedAmPm, setSelectedAmPm] = useState<string>(newRequestStore.amPm ?? TimeAmPmEnum.AM)
   const requestDate = newRequestStore?.requestedDate
     ? parse(newRequestStore.requestedDate, CALENDAR_DATE_FORMAT, new Date())
     : new Date()

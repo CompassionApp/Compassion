@@ -1,12 +1,20 @@
 import React from "react"
 import { observer } from "mobx-react-lite"
 import { Alert, View, ViewStyle } from "react-native"
-import { Break, Button, FlexContainer, Header, Screen, Text } from "../../components"
 import { useNavigation } from "@react-navigation/native"
-import { useStores } from "../../models"
-import { color, globalStyles, spacing } from "../../theme"
 import styled from "styled-components/native"
 import { format } from "date-fns"
+import {
+  Break,
+  Button,
+  FlexContainer,
+  Header,
+  Screen,
+  Text,
+  DebugHeaderText,
+} from "../../components"
+import { useStores } from "../../models"
+import { color, globalStyles, spacing } from "../../theme"
 import { TxKeyPath } from "../../i18n"
 import { TITLE_DATE_FORMAT, TIME_RANGE_FORMAT } from "../../constants/date-formats"
 import { RequestStatusEnum } from "../../types"
@@ -27,6 +35,10 @@ export const MatchProfilePhotos = styled.View<{ color?: string }>`
   margin: ${spacing[2]}px 0;
 `
 
+export const DebugText = styled(Text)`
+  color: ${color.dim};
+`
+
 export const UNMATCHED_TEXT_STYLE = {
   color: color.palette.red,
 }
@@ -34,12 +46,18 @@ export const MATCHED_TEXT_STYLE = {
   color: color.palette.white,
 }
 
-const ButtonRow = styled(FlexContainer)`
-  margin: ${spacing[4]}px 0;
+export const ButtonRow = styled(FlexContainer)`
+  margin: ${spacing[2]}px auto;
 `
 
-const LinkButton = styled(Button)`
+export const LinkButton = styled(Button)<{ faded?: boolean }>`
   margin: ${spacing[2]}px auto;
+  ${({ faded }) => (faded ? `opacity: .3;` : "")}
+  margin-horizontal: auto;
+`
+
+export const OtherCommentsArea = styled(FlexContainer)`
+  padding: ${spacing[3]}px ${spacing[2]}px;
 `
 
 const BUTTON_OVERRIDE = {
@@ -47,26 +65,40 @@ const BUTTON_OVERRIDE = {
   minWidth: 150,
 }
 
-const LINK_BUTTON_OVERRIDE = {
-  marginHorizontal: "auto",
-}
-
 export const RequestDetailScreen = observer(function RequestDetailScreen() {
   const { requestStore, newRequestStore } = useStores()
   const { currentRequest } = requestStore
-
-  const isRequestCanceled =
-    currentRequest?.status === RequestStatusEnum.CANCELED_BY_CHAPERONE ||
-    currentRequest?.status === RequestStatusEnum.CANCELED_BY_REQUESTER
 
   const navigation = useNavigation()
   const navigateBack = () => navigation.goBack()
 
   const handlePressReschedule = () => {
-    console.log("Rescheduling...")
-    requestStore.rescheduleRequest(currentRequest)
-    newRequestStore.replaceFromRequest(currentRequest)
-    navigation.navigate("newRequest", { params: { screen: "dateSelect" } })
+    function reschedule() {
+      requestStore.rescheduleRequest(currentRequest)
+      newRequestStore.replaceFromRequest(currentRequest)
+      navigation.navigate("home")
+      navigation.navigate("newRequest", { params: { screen: "dateSelect" } })
+    }
+    if (!newRequestStore.isClean) {
+      Alert.alert(
+        "Request in Progress",
+        `You were already creating a request. Do you want to start over and reschedule instead?`,
+        [
+          {
+            text: "Yes",
+            onPress: () => {
+              reschedule()
+            },
+          },
+          {
+            text: "No",
+            style: "cancel",
+          },
+        ],
+      )
+    } else {
+      reschedule()
+    }
   }
 
   const handlePressOk = () => {
@@ -75,7 +107,7 @@ export const RequestDetailScreen = observer(function RequestDetailScreen() {
 
   // Toggles the canceled status
   const handlePressCancel = () => {
-    if (!isRequestCanceled) {
+    if (!currentRequest.isCanceled) {
       requestStore.cancelRequestAsRequester(currentRequest)
     } else {
       requestStore.changeRequestStatus(currentRequest.id, RequestStatusEnum.REQUESTED)
@@ -112,7 +144,7 @@ export const RequestDetailScreen = observer(function RequestDetailScreen() {
 
   return (
     <View testID="RequestDetailScreen" style={globalStyles.full}>
-      <Screen style={{ ...globalStyles.root, ...ROOT }} preset="fixed">
+      <Screen style={ROOT} preset="fixed">
         <Header
           headerTx="requestDetailScreen.title"
           leftIcon="back"
@@ -130,7 +162,7 @@ export const RequestDetailScreen = observer(function RequestDetailScreen() {
           <Content>
             <Text
               preset={["header", "center"]}
-              tx={`enumRequestType.${currentRequest.type}` as TxKeyPath}
+              tx={`enumRequestActivity.${currentRequest.activity}` as TxKeyPath}
             />
             <Text preset={["header", "bold", "center"]}>{requestDate}</Text>
             <Text preset={["header", "center"]}>{requestTime}</Text>
@@ -180,12 +212,27 @@ export const RequestDetailScreen = observer(function RequestDetailScreen() {
             <Text preset={["bold", "center"]}>{currentRequest.destinationAddress}</Text>
             <Text preset="center">to</Text>
             <Text preset={["bold", "center"]}>{currentRequest.meetAddress}</Text>
+            {/* {currentRequest.isScheduled && (
+              <ButtonRow justifyCenter>
+                {currentRequest.chaperones.map((chaperone) => (
+                  <CallButton
+                    key={chaperone.id}
+                    name={chaperone.fullName}
+                    number={chaperone.phoneNumber}
+                  />
+                ))}
+              </ButtonRow>
+            )} */}
+            <OtherCommentsArea column>
+              <Text preset={["center"]}>
+                {currentRequest.otherComments ? currentRequest.otherComments : "None"}
+              </Text>
+            </OtherCommentsArea>
             <ButtonRow justifyCenter>
               <Button
                 preset="ghost"
                 tx="requestDetailScreen.rescheduleButton"
                 style={BUTTON_OVERRIDE}
-                disabled={isRequestCanceled}
                 onPress={handlePressReschedule}
               />
               <Button
@@ -195,33 +242,35 @@ export const RequestDetailScreen = observer(function RequestDetailScreen() {
               />
             </ButtonRow>
 
-            {!isRequestCanceled && (
+            {!currentRequest.isCanceled && (
               <LinkButton
                 preset="link"
                 tx="requestDetailScreen.cancelButton"
-                style={LINK_BUTTON_OVERRIDE}
                 onPress={handlePressCancel}
               />
             )}
-            {isRequestCanceled && (
+            <DebugHeaderText preset={["smallHeader", "center"]}>
+              For development only
+            </DebugHeaderText>
+
+            {currentRequest.isCanceled && (
               <LinkButton
                 preset="link"
                 tx="requestDetailScreen.uncancelButton"
-                style={LINK_BUTTON_OVERRIDE}
+                faded
                 onPress={handlePressCancel}
               />
             )}
             <LinkButton
               preset="link"
               tx="requestDetailScreen.deleteButton"
-              style={LINK_BUTTON_OVERRIDE}
+              faded
               onPress={handlePressDelete}
             />
-            <Break />
-            <Text>ID: {currentRequest.id}</Text>
-            <Text>
-              Status: <Text tx={`enumRequestStatus.${currentRequest.status}` as TxKeyPath} />
-            </Text>
+            <DebugText preset="code">ID: {currentRequest.id}</DebugText>
+            <DebugText preset="code">
+              Status: <DebugText tx={`enumRequestStatus.${currentRequest.status}` as TxKeyPath} />
+            </DebugText>
           </Content>
         )}
       </Screen>

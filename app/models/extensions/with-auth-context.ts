@@ -8,7 +8,7 @@ import { User } from "../user/user"
 export const withAuthContext = (self: IStateTreeNode) => ({
   views: {
     /**
-     * Returns the context of the currently authenticated user
+     * Returns the context of the currently authenticated user at path `/user`
      */
     get authContext(): User | undefined {
       const store = getEnv<Environment>(self).getStore()

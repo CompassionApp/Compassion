@@ -7,7 +7,7 @@ import { useNavigation } from "@react-navigation/native"
 import { color, globalStyles, typography } from "../../theme"
 import { RequestCard } from "./request-card"
 import { useStores } from "../../models/root-store/root-store-context"
-import { RequestStatusEnum, RequestTypeEnum } from "../../types"
+import { RequestStatusEnum, RequestActivityEnum } from "../../types"
 import { NoRequestsNotice } from "./no-requests-notice"
 import { NotificationModel, ChaperoneRequestSnapshot } from "../../models"
 import { createNewRequestNotification } from "../../utils/notification-factory"
@@ -60,22 +60,47 @@ export const RequesterHomeScreen = observer(function RequesterHomeScreen() {
         </FlexContainer>
         <Break />
         {DEBUG && <Button text="Notify chaperones" onPress={handlePressNotify} />}
-        <ScrollView
-          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-        >
-          <Text preset={["center", "bold"]} text="Your pending requests" />
 
-          {requestStore.sortUserRequestsByCreated.length === 0 && (
+        {requestStore.sortedUserRequestsPending.length === 0 &&
+          requestStore.sortedUserRequestsMatched.length === 0 && (
             <>
               <Text preset={["bold", "center"]} tx="homeScreen.noneScheduledNoticeBold" />
               <NoRequestsNotice />
             </>
           )}
-          {requestStore.sortUserRequestsByCreated.map((request: ChaperoneRequestSnapshot) => (
+        <ScrollView
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+        >
+          {requestStore.sortedUserRequestsMatched.length !== 0 && (
+            <>
+              <Text preset={["center", "bold"]} tx="homeScreen.yourMatchedRequests" />
+              <Break />
+            </>
+          )}
+          {requestStore.sortedUserRequestsMatched.map((request: ChaperoneRequestSnapshot) => (
             <RequestCard
               key={request.id}
               status={request.status as RequestStatusEnum}
-              type={request.type as RequestTypeEnum}
+              activity={request.activity as RequestActivityEnum}
+              requestId={request.id}
+              requestedAt={request.requestedAt}
+              onPress={handlePressRequestDetail(request.id)}
+            />
+          ))}
+          <Break />
+          <Break />
+          {requestStore.sortedUserRequestsPending.length !== 0 && (
+            <>
+              <Text preset={["center", "bold"]} tx="homeScreen.yourPendingRequests" />
+              <Break />
+            </>
+          )}
+
+          {requestStore.sortedUserRequestsPending.map((request: ChaperoneRequestSnapshot) => (
+            <RequestCard
+              key={request.id}
+              status={request.status as RequestStatusEnum}
+              activity={request.activity as RequestActivityEnum}
               requestId={request.id}
               requestedAt={request.requestedAt}
               onPress={handlePressRequestDetail(request.id)}

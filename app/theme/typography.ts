@@ -30,7 +30,7 @@ export const typography = {
   tertiary: Platform.select({ ios: "Quicksand-Bold", android: "Quicksand-Bold" }),
 
   /**
-   * Lets get fancy with a monospace font!
+   * Monospaced font
    */
   code: Platform.select({ ios: "Courier", android: "monospace" }),
 }

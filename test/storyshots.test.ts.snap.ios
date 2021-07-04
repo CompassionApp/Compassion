@@ -116,7 +116,11 @@ exports[`Storyshots Button Style Presets 1`] = `
                 Object {
                   "alignItems": "center",
                   "backgroundColor": "#1B70A4",
+                  "borderBottomLeftRadius": 25,
+                  "borderBottomRightRadius": 25,
                   "borderRadius": 4,
+                  "borderTopLeftRadius": 25,
+                  "borderTopRightRadius": 25,
                   "justifyContent": "center",
                   "marginVertical": 8,
                   "opacity": 1,
@@ -234,7 +238,11 @@ exports[`Storyshots Button Style Presets 1`] = `
                 Object {
                   "alignItems": "center",
                   "backgroundColor": "#1B70A4",
+                  "borderBottomLeftRadius": 25,
+                  "borderBottomRightRadius": 25,
                   "borderRadius": 4,
+                  "borderTopLeftRadius": 25,
+                  "borderTopRightRadius": 25,
                   "justifyContent": "center",
                   "marginVertical": 8,
                   "opacity": 0.4,
@@ -353,7 +361,11 @@ exports[`Storyshots Button Style Presets 1`] = `
                 Object {
                   "alignItems": "center",
                   "backgroundColor": "#1B70A4",
+                  "borderBottomLeftRadius": 25,
+                  "borderBottomRightRadius": 25,
                   "borderRadius": 0,
+                  "borderTopLeftRadius": 25,
+                  "borderTopRightRadius": 25,
                   "justifyContent": "center",
                   "marginVertical": 8,
                   "opacity": 1,
@@ -2905,7 +2917,11 @@ exports[`Storyshots Header Behavior 1`] = `
                   style={
                     Object {
                       "alignItems": "flex-start",
+                      "borderBottomLeftRadius": 25,
+                      "borderBottomRightRadius": 25,
                       "borderRadius": 4,
+                      "borderTopLeftRadius": 25,
+                      "borderTopRightRadius": 25,
                       "justifyContent": "center",
                       "marginVertical": 8,
                       "opacity": 1,
@@ -3102,7 +3118,11 @@ exports[`Storyshots Header Behavior 1`] = `
                   style={
                     Object {
                       "alignItems": "flex-start",
+                      "borderBottomLeftRadius": 25,
+                      "borderBottomRightRadius": 25,
                       "borderRadius": 4,
+                      "borderTopLeftRadius": 25,
+                      "borderTopRightRadius": 25,
                       "justifyContent": "center",
                       "marginVertical": 8,
                       "opacity": 1,

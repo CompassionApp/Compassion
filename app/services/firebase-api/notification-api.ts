@@ -1,3 +1,4 @@
+import firebase from "firebase"
 import { FirebaseCoreApiAdapter } from "./firebase-core-api"
 import type {
   AuthContext,
@@ -10,7 +11,6 @@ import type { NotificationSnapshot, UserProfileSnapshot } from "../../models"
 import { typeConverter } from "./utils"
 import { UserRoleEnum, UserStatusEnum } from "../../types"
 import { PushNotificationsService } from "../push-notifications"
-import firebase from "firebase"
 
 /**
  * Handles CRUD operations for notification documents in Firestore and sending the push notifications
@@ -85,16 +85,37 @@ export class NotificationApi {
    */
   async notifyAllChaperones(
     notification: NotificationSnapshot,
+    options?: {
+      /** Auth context of the currently logged in user. Use in tandem with `excludeSelf` */
+      authContext?: AuthContext
+      /** Excludes the current user in the notification broadcast. Must provide `authContext` */
+      excludeSelf: boolean
+    },
   ): Promise<NotifyAllChaperonesResult> {
     console.log("[notification-api] Notifying all chaperones...")
     try {
       // 1: Get a list of all the available chaperones
-      const availableChaperonesQuery = await this.firebase.firestore
+      const availableChaperonesQueryFragments = this.firebase.firestore
         .collection("users")
         .where("enableNotifications", "==", true)
         .where("role", "==", UserRoleEnum.CHAPERONE)
         .where("status", "==", UserStatusEnum.ACTIVE)
-        .get()
+      if (options.excludeSelf) {
+        if (!options.authContext) {
+          __DEV__ && console.tron.log("Trying to exclude self without providing authContext")
+        } else {
+          // Append the where cause to exclude the current user
+          availableChaperonesQueryFragments.where(
+            "id",
+            "!=" as firebase.firestore.WhereFilterOp,
+            options.authContext.id,
+          )
+          // NOTE: The above is casted to firebase.firestore.WhereFilterOp because the typedefs
+          // don't recognize not equals (`!=`) operations even though Firestore does.
+          // https://firebase.google.com/docs/firestore/query-data/queries#not_equal_
+        }
+      }
+      const availableChaperonesQuery = await availableChaperonesQueryFragments.get()
       const availableChaperones: UserProfileSnapshot[] = []
       availableChaperonesQuery.forEach((doc) => {
         availableChaperones.push(doc.data() as UserProfileSnapshot)

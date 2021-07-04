@@ -63,7 +63,7 @@ export const createRequestAcceptedNotification = (
       chaperoneUserProfile.firstName,
       chaperoneUserProfile.lastName,
     )} has accepted your request for ${translate(
-      `enumRequestType.${request.type}` as TxKeyPath,
+      `enumRequestActivity.${request.activity}` as TxKeyPath,
     )}${formatRequestedAt(request.requestedAt)}`,
     type: NotificationTypeEnum.REQUEST_MATCHED,
     data: {
@@ -89,7 +89,7 @@ export const createRequestCanceledByRequesterNotification = (
       requesterUserProfile.firstName,
       requesterUserProfile.lastName,
     )} has canceled their request for ${translate(
-      `enumRequestType.${request.type}` as TxKeyPath,
+      `enumRequestActivity.${request.activity}` as TxKeyPath,
     )}${formatRequestedAt(request.requestedAt)}`,
     type: NotificationTypeEnum.REQUEST_CANCELED_BY_REQUESTER,
     data: {
@@ -110,7 +110,7 @@ export const createRequestCanceledByChaperoneNotification = (
   return {
     id: generateUuid(),
     title: `Your request for ${translate(
-      `enumRequestType.${request.type}` as TxKeyPath,
+      `enumRequestActivity.${request.activity}` as TxKeyPath,
     )} was canceled`,
     subtitle: "",
     body: `Your chaperone ${formatNameInitial(

@@ -5,7 +5,7 @@ import { Picker } from "@react-native-picker/picker"
 import { useNavigation } from "@react-navigation/native"
 import { Button, Header, Screen, TextField } from "../../components"
 import { color, globalStyles } from "../../theme"
-import { RequestTypeEnum } from "../../types"
+import { RequestActivityEnum } from "../../types"
 import { translate, TxKeyPath } from "../../i18n"
 import { useStores } from "../../models"
 import { NewRequestFooterArea } from "./common"
@@ -23,8 +23,8 @@ export const NewRequestActivitySelectionScreen = observer(
   function NewRequestActivitySelectionScreen() {
     const { newRequestStore } = useStores()
 
-    const [selectedActivity, setSelectedActivity] = useState<RequestTypeEnum>(
-      (newRequestStore.type as RequestTypeEnum) || RequestTypeEnum.GROCERY,
+    const [selectedActivity, setSelectedActivity] = useState<RequestActivityEnum>(
+      (newRequestStore.activity as RequestActivityEnum) || RequestActivityEnum.GROCERY,
     )
     const [requestNotes, setRequestNotes] = useState<string>(newRequestStore.otherComments ?? "")
 
@@ -38,7 +38,7 @@ export const NewRequestActivitySelectionScreen = observer(
       navigateNext()
     }
     // Request types to _not_ show
-    const filterRequestTypes: RequestTypeEnum[] = [RequestTypeEnum.UNKNOWN]
+    const filterRequestTypes: RequestActivityEnum[] = [RequestActivityEnum.UNKNOWN]
 
     return (
       <View testID="NewRequestActivitySelectionScreen" style={globalStyles.full}>
@@ -54,13 +54,16 @@ export const NewRequestActivitySelectionScreen = observer(
             selectedValue={selectedActivity}
             onValueChange={(itemValue) => setSelectedActivity(itemValue)}
           >
-            {Object.keys(RequestTypeEnum)
-              .filter((requestType) => !filterRequestTypes.includes(requestType as RequestTypeEnum))
-              .map((requestType) => (
+            {Object.keys(RequestActivityEnum)
+              .filter(
+                (requestActivity) =>
+                  !filterRequestTypes.includes(requestActivity as RequestActivityEnum),
+              )
+              .map((requestActivity) => (
                 <Picker.Item
-                  key={requestType}
-                  label={translate(`enumRequestType.${requestType}` as TxKeyPath)}
-                  value={requestType}
+                  key={requestActivity}
+                  label={translate(`enumRequestActivity.${requestActivity}` as TxKeyPath)}
+                  value={requestActivity}
                 />
               ))}
           </Picker>

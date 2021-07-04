@@ -35,10 +35,10 @@ export const presets = {
    * Small all-caps headers
    */
   smallHeader: {
-    fontSize: 15,
+    fontSize: 14,
     fontFamily: typography.secondary,
     textTransform: "uppercase",
-    letterSpacing: 0.1,
+    letterSpacing: 1.5,
   } as TextStyle,
 
   /**
@@ -71,6 +71,11 @@ export const presets = {
    * A smaller piece of secondary information.
    */
   secondary: { fontSize: 9, color: color.dim } as TextStyle,
+
+  /**
+   * Code/Monospaced font
+   */
+  code: { fontFamily: typography.code } as TextStyle,
 }
 
 /**

@@ -126,14 +126,21 @@ export const WelcomeScreen = observer(function WelcomeScreen() {
               <Button
                 text="Requester"
                 preset="ghost"
+                disabled={loginInProgress}
                 onPress={handleDevLoginAs(UserRoleEnum.REQUESTER)}
               />
               <Button
                 text="Chaperone"
                 preset="ghost"
+                disabled={loginInProgress}
                 onPress={handleDevLoginAs(UserRoleEnum.CHAPERONE)}
               />
-              <Button text="Admin" preset="ghost" onPress={handleDevLoginAs(UserRoleEnum.ADMIN)} />
+              <Button
+                text="Admin"
+                preset="ghost"
+                disabled={loginInProgress}
+                onPress={handleDevLoginAs(UserRoleEnum.ADMIN)}
+              />
             </FlexContainer>
           )}
           <TextField

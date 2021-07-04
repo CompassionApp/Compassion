@@ -1,4 +1,5 @@
 import { flow, Instance, SnapshotOut, types } from "mobx-state-tree"
+import { SubscriptionManager, SubscriptionTypeEnum } from "../../utils/subscriptions"
 import { withAuthContext } from "../extensions/with-auth-context"
 import { withEnvironment } from "../extensions/with-environment"
 import { NotificationModel, NotificationSnapshot } from "../notification/notification"
@@ -13,6 +14,8 @@ export const NotificationStoreModel = types
     inbox: types.optional(types.array(NotificationModel), []),
     /** Notification selected for viewing */
     selectedNotification: types.maybe(types.safeReference(NotificationModel)),
+    /** Flag for determining if the user notification subscription is active */
+    userNotificationSubscriptionActive: types.optional(types.boolean, false),
   })
   .extend(withEnvironment)
   .extend(withAuthContext)
@@ -125,7 +128,7 @@ export const NotificationStoreModel = types
    */
   .actions((self) => {
     /** Collection of unsubscribe handlers from our onSnapshot listeners */
-    const unsubscribeHandlers: (() => void)[] = []
+    const subscriptionManager = new SubscriptionManager()
 
     return {
       /**
@@ -133,13 +136,17 @@ export const NotificationStoreModel = types
        */
       unsubscribeAll: () => {
         console.log(
-          `[notification-store] Unsubscribing to ${unsubscribeHandlers.length} subscriptions`,
+          `[notification-store] Unsubscribing to ${subscriptionManager.size} subscriptions`,
         )
 
-        while (unsubscribeHandlers.length > 0) {
-          const unsubscribe = unsubscribeHandlers.pop()
-          unsubscribe()
-        }
+        subscriptionManager.unsubscribeAll((type) => {
+          console.log(`Unsubscribing to ${type}`)
+          switch (type) {
+            case SubscriptionTypeEnum.USER_NOTIFICATIONS:
+              self.userNotificationSubscriptionActive = false
+              break
+          }
+        })
       },
 
       /** Subscribes to notifications for a user */
@@ -155,7 +162,11 @@ export const NotificationStoreModel = types
             self._updateNotifications(notifications)
           },
         )
-        unsubscribeHandlers.push(unsubscribe)
+        subscriptionManager.registerSubscription(
+          SubscriptionTypeEnum.USER_NOTIFICATIONS,
+          unsubscribe,
+        )
+        self.userNotificationSubscriptionActive = true
       },
     }
   })

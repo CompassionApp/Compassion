@@ -38,6 +38,7 @@ describe("notification-store", () => {
           },
         ],
         "selectedNotification": undefined,
+        "userNotificationSubscriptionActive": false,
       }
     `)
   })

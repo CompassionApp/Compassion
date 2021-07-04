@@ -53,7 +53,7 @@ export const NewRequestReviewScreen = observer(function NewRequestReviewScreen()
         />
         <Text
           preset={["header", "center"]}
-          tx={`enumRequestType.${newRequestStore.type}` as TxKeyPath}
+          tx={`enumRequestActivity.${newRequestStore.activity}` as TxKeyPath}
         />
         <Break size={3} />
         <Text preset={["header", "center", "bold"]} text={requestDate} />
@@ -67,7 +67,7 @@ export const NewRequestReviewScreen = observer(function NewRequestReviewScreen()
           {newRequestStore.destinationAddress}
         </Text>
         <Break size={2} />
-        <Text>{newRequestStore.otherComments}</Text>
+        <Text preset={["center"]}>{newRequestStore.otherComments}</Text>
 
         {/* <Text>{newRequestStore.id}</Text> */}
       </Screen>

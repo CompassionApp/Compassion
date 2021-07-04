@@ -1,6 +1,6 @@
 import { getSnapshot } from "mobx-state-tree"
 import { ChaperoneRequestModel } from ".."
-import { RequestTypeEnum } from "../../types"
+import { RequestActivityEnum } from "../../types"
 import { createTestEnvironment } from "../../utils/mock"
 import { NewRequestStoreModel } from "./new-request-store"
 
@@ -19,7 +19,7 @@ describe("new request store", () => {
         meetAddress: "111 Main St",
         destinationAddress: "22 Telegraph Ave",
         otherComments: "In a blue coat",
-        type: RequestTypeEnum.GROCERY,
+        activity: RequestActivityEnum.GROCERY,
       },
       createTestEnvironment(),
     )
@@ -56,7 +56,7 @@ describe("new request store", () => {
       meetAddress: "111 Main St",
       destinationAddress: "22 Telegraph Ave",
       otherComments: "In a blue coat",
-      type: RequestTypeEnum.GROCERY,
+      activity: RequestActivityEnum.GROCERY,
     })
     instance.reset()
     const result = getSnapshot(instance)
@@ -81,7 +81,7 @@ describe("new request store", () => {
       meetAddress: "111 Main St",
       destinationAddress: "22 Telegraph Ave",
       otherComments: "In a blue coat",
-      type: RequestTypeEnum.GROCERY,
+      activity: RequestActivityEnum.GROCERY,
       requestedBy: {
         email: "test@user.org",
         firstName: "Test",

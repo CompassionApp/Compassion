@@ -1,5 +1,5 @@
 import { getSnapshot } from "mobx-state-tree"
-import { RequestStatusEnum, RequestTypeEnum } from "../../types"
+import { RequestStatusEnum, RequestActivityEnum } from "../../types"
 import { RequestStoreModel } from "./request-store"
 
 describe("RequestStoreModel", () => {
@@ -8,9 +8,11 @@ describe("RequestStoreModel", () => {
     expect(instance).toBeTruthy()
     expect(getSnapshot(instance)).toMatchInlineSnapshot(`
       Object {
+        "availableRequestSubscriptionActive": false,
         "availableRequests": Array [],
         "currentRequest": undefined,
         "requests": Array [],
+        "userRequestSubscriptionActive": false,
       }
     `)
   })
@@ -35,7 +37,7 @@ describe("RequestStoreModel", () => {
           phoneNumber: "1115553331",
         },
         status: RequestStatusEnum.SCHEDULED,
-        type: RequestTypeEnum.GROCERY,
+        activity: RequestActivityEnum.GROCERY,
         updatedAt: "Sat, 26 Jun 2021 08:10:51 GMT",
       },
     ]
@@ -87,7 +89,7 @@ describe("RequestStoreModel", () => {
           phoneNumber: "1115553331",
         },
         status: RequestStatusEnum.SCHEDULED,
-        type: RequestTypeEnum.GROCERY,
+        activity: RequestActivityEnum.GROCERY,
         updatedAt: "Sat, 26 Jun 2021 08:10:51 GMT",
       },
     ]
@@ -139,7 +141,7 @@ describe("RequestStoreModel", () => {
             phoneNumber: "1115553331",
           },
           status: RequestStatusEnum.SCHEDULED,
-          type: RequestTypeEnum.GROCERY,
+          activity: RequestActivityEnum.GROCERY,
           updatedAt: "Sat, 26 Jun 2021 08:10:51 GMT",
         },
       ],
@@ -171,7 +173,7 @@ describe("RequestStoreModel", () => {
             phoneNumber: "1115553331",
           },
           status: RequestStatusEnum.SCHEDULED,
-          type: RequestTypeEnum.GROCERY,
+          activity: RequestActivityEnum.GROCERY,
           updatedAt: "Sat, 26 Jun 2021 08:10:51 GMT",
         },
         {
@@ -191,7 +193,7 @@ describe("RequestStoreModel", () => {
             phoneNumber: "1115553331",
           },
           status: RequestStatusEnum.SCHEDULED,
-          type: RequestTypeEnum.GROCERY,
+          activity: RequestActivityEnum.GROCERY,
           updatedAt: "Sat, 26 Jun 2021 08:10:51 GMT",
         },
       ],
@@ -221,7 +223,7 @@ describe("RequestStoreModel", () => {
             phoneNumber: "1115553331",
           },
           status: RequestStatusEnum.SCHEDULED,
-          type: RequestTypeEnum.GROCERY,
+          activity: RequestActivityEnum.GROCERY,
           updatedAt: "Sat, 26 Jun 2021 08:10:51 GMT",
         },
       ],
@@ -243,7 +245,7 @@ describe("RequestStoreModel", () => {
             phoneNumber: "1115553331",
           },
           status: RequestStatusEnum.SCHEDULED,
-          type: RequestTypeEnum.GROCERY,
+          activity: RequestActivityEnum.GROCERY,
           updatedAt: "Sat, 26 Jun 2021 08:10:51 GMT",
         },
       ],
