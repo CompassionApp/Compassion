@@ -29,9 +29,6 @@ lint:
 
 tests:unit:
   stage: test
-  only:
-    refs:
-      - merge_requests
   except:
     changes:
       - "*.md"
