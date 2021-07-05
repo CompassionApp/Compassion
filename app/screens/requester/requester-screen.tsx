@@ -106,7 +106,8 @@ export const RequesterScreen = observer(function RequesterScreen() {
   }
 
   useEffect(() => {
-    (async () => {
+    // eslint-disable-next-line @typescript-eslint/no-extra-semi
+    ;(async () => {
       const { status } = await Location.requestPermissionsAsync()
       if (status !== "granted") {
         console.tron.log("Permission to access location was denied")

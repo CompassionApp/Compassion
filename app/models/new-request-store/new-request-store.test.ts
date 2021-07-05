@@ -62,12 +62,12 @@ describe("new request store", () => {
     const result = getSnapshot(instance)
     expect(result).toMatchInlineSnapshot(`
       Object {
+        "activity": undefined,
         "destinationAddress": undefined,
         "meetAddress": undefined,
         "otherComments": undefined,
         "requestedDate": undefined,
         "requestedTime": undefined,
-        "type": undefined,
       }
     `)
   })
@@ -96,12 +96,12 @@ describe("new request store", () => {
     const result = getSnapshot(instance)
     expect(result).toMatchInlineSnapshot(`
       Object {
+        "activity": "GROCERY",
         "destinationAddress": "22 Telegraph Ave",
         "meetAddress": "111 Main St",
         "otherComments": "In a blue coat",
         "requestedDate": "2021-01-01",
         "requestedTime": "10:00 AM",
-        "type": "GROCERY",
       }
     `)
   })

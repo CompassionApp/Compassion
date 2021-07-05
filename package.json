@@ -4,7 +4,7 @@
     "start": "expo start",
     "test:e2e": "./bin/downloadExpoApp.sh && detox test --configuration ios.sim.expo",
     "build:e2e": "detox build -c ios.sim.expo",
-    "ci:test:coverage": "jest --coverage",
+    "ci:test:coverage": "jest --ci --coverage",
     "ci:test:e2e": "detox test -c ios.sim.release -l verbose --cleanup",
     "ci:build:e2e": "detox build -c ios.sim.release",
     "compile": "tsc --noEmit -p . --pretty",
