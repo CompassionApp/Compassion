@@ -101,7 +101,7 @@ describe("new request store", () => {
         "meetAddress": "111 Main St",
         "otherComments": "In a blue coat",
         "requestedDate": "2021-01-01",
-        "requestedTime": "10:00 AM",
+        "requestedTime": "8:00 PM",
       }
     `)
   })

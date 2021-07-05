@@ -1,5 +1,5 @@
 import styled from "styled-components/native"
-import { Text } from ".."
+import { Text } from "../text/text"
 import { color, spacing } from "../../theme"
 
 export const DebugHeaderText = styled(Text)`
