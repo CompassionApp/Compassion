@@ -19,6 +19,15 @@ import { TxKeyPath } from "../../i18n"
 import { TITLE_DATE_FORMAT, TIME_RANGE_FORMAT } from "../../constants/date-formats"
 import { RequestStatusEnum } from "../../types"
 import { RequestDetailProfilePhoto } from "./profile-photo"
+import {
+  MatchProfilePhotos,
+  UNMATCHED_TEXT_STYLE,
+  MATCHED_TEXT_STYLE,
+  OtherCommentsArea,
+  ButtonRow,
+  LinkButton,
+  DebugText,
+} from "./common"
 
 const ROOT: ViewStyle = {
   backgroundColor: color.background,
@@ -27,37 +36,6 @@ const ROOT: ViewStyle = {
 
 const Content = styled.View`
   text-align: center;
-`
-
-export const MatchProfilePhotos = styled.View<{ color?: string }>`
-  background-color: ${({ color: _color }) => _color ?? color.palette.grey};
-  padding: ${spacing[4]}px;
-  margin: ${spacing[2]}px 0;
-`
-
-export const DebugText = styled(Text)`
-  color: ${color.dim};
-`
-
-export const UNMATCHED_TEXT_STYLE = {
-  color: color.palette.red,
-}
-export const MATCHED_TEXT_STYLE = {
-  color: color.palette.white,
-}
-
-export const ButtonRow = styled(FlexContainer)`
-  margin: ${spacing[2]}px auto;
-`
-
-export const LinkButton = styled(Button)<{ faded?: boolean }>`
-  margin: ${spacing[2]}px auto;
-  ${({ faded }) => (faded ? `opacity: .3;` : "")}
-  margin-horizontal: auto;
-`
-
-export const OtherCommentsArea = styled(FlexContainer)`
-  padding: ${spacing[3]}px ${spacing[2]}px;
 `
 
 const BUTTON_OVERRIDE = {

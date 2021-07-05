@@ -26,7 +26,7 @@ import {
   ButtonRow,
   LinkButton,
   OtherCommentsArea,
-} from "./request-detail-screen"
+} from "./common"
 
 const ROOT: ViewStyle = {
   backgroundColor: color.background,
