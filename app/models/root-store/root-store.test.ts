@@ -11,12 +11,12 @@ describe("RootStoreModel", () => {
           "user": undefined,
         },
         "newRequestStore": Object {
+          "activity": undefined,
           "destinationAddress": undefined,
           "meetAddress": undefined,
           "otherComments": undefined,
           "requestedDate": undefined,
           "requestedTime": undefined,
-          "type": undefined,
         },
         "notificationStore": Object {
           "inbox": Array [],

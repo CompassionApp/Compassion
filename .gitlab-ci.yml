@@ -1,75 +1,48 @@
 image: node:14.16.0
 
 stages:
-  - pre
   - test
 
 cache:
   key: ${CI_COMMIT_REF_SLUG}
   paths:
     - node_modules/
+    - .jest
+    - .yarn
 
 variables:
   DOCKER_DRIVER: overlay2
 
 before_script:
-  - yarn
-
-create:merge-request:
-  image: registry.gitlab.com/gitlab-automation-toolkit/gitlab-auto-mr
-  stage: pre
-  before_script: []
-  except:
-    - production
-    - master
-    - tags
-  script:
-    - gitlab_auto_mr -t master -c WIP -d .gitlab/merge_request_templates/merge_request.md -r -s --use-issue-name
+  - yarn install --cache-folder .yarn
 
 lint:
   stage: test
   only:
-    - merge_requests
+    refs:
+      - merge_requests
   except:
     changes:
-      - "README.md"
+      - "*.md"
   script:
     - yarn lint
-
-compile:
-  stage: test
-  only:
-    - merge_requests
-  except:
-    refs:
-      - master
-    changes:
-      - "README.md"
-  script:
-    - yarn compile
 
 tests:unit:
   stage: test
   only:
-    - merge_requests
-  except:
     refs:
-      - master
+      - merge_requests
+  except:
     changes:
-      - "README.md"
+      - "*.md"
   script:
-    - yarn test
-# tests:coverage:
-#   stage: test
-#   only:
-#     - master
-#   script:
-#     - yarn ci:test:coverage
-#   coverage: /All\sfiles.*?\s+(\d+.\d+)/
+    - yarn ci:test:coverage
+  after_script:
+    - bash <(curl -s https://codecov.io/bash) -t $CODECOV_TOKEN
+#
 # tests:e2e:
 #   stage: test
 #   only:
 #     - master
 #   script:
 #     - yarn ci:test:e2e
-#   coverage: /All\sfiles.*?\s+(\d+.\d+)/

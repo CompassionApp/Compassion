@@ -4,7 +4,7 @@ import { Ionicons } from "@expo/vector-icons"
 import { View, ViewStyle } from "react-native"
 import { Button, FormRow, Header, Screen, TextField, Text, FlexContainer } from "../../components"
 import { useNavigation } from "@react-navigation/native"
-import { useStores } from "../../models"
+// import { useStores } from "../../models"
 import { color, globalStyles, spacing } from "../../theme"
 
 const ROOT: ViewStyle = {
@@ -12,7 +12,7 @@ const ROOT: ViewStyle = {
 }
 
 export const ResetPasswordScreen = observer(function ResetPasswordScreen() {
-  const { authStore } = useStores()
+  // const { authStore } = useStores()
 
   const [saved, setSaved] = useState<boolean>(false)
 

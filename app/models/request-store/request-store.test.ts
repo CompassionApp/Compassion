@@ -46,6 +46,7 @@ describe("RequestStoreModel", () => {
     expect(instance.availableRequests).toMatchInlineSnapshot(`
       Array [
         Object {
+          "activity": "GROCERY",
           "chaperones": Array [],
           "createdAt": "Sat, 26 Jun 2021 08:10:37 GMT",
           "destinationAddress": "123 Test St",
@@ -62,7 +63,6 @@ describe("RequestStoreModel", () => {
             "phoneNumber": "1115553331",
           },
           "status": "SCHEDULED",
-          "type": "GROCERY",
           "updatedAt": "Sat, 26 Jun 2021 08:10:51 GMT",
         },
       ]
@@ -98,6 +98,7 @@ describe("RequestStoreModel", () => {
     expect(instance.requests).toMatchInlineSnapshot(`
       Array [
         Object {
+          "activity": "GROCERY",
           "chaperones": Array [],
           "createdAt": "Sat, 26 Jun 2021 08:10:37 GMT",
           "destinationAddress": "123 Test St",
@@ -114,7 +115,6 @@ describe("RequestStoreModel", () => {
             "phoneNumber": "1115553331",
           },
           "status": "SCHEDULED",
-          "type": "GROCERY",
           "updatedAt": "Sat, 26 Jun 2021 08:10:51 GMT",
         },
       ]
