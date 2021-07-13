@@ -10,6 +10,8 @@ Compassion App is a [React Native](https://reactnative.dev/)/[Expo Framework](ht
 
 ## Setup
 
+1. If using Windows, first enable the Windows Subsystem for Linux (WSL) [by following the guide here](https://docs.microsoft.com/en-us/windows/wsl/install-win10).
+
 1. Install [nvm](https://github.com/nvm-sh/nvm) to manage Node versions. We'll use Node `v16.0.0` for this project.
 
    ```bash
@@ -25,10 +27,17 @@ Compassion App is a [React Native](https://reactnative.dev/)/[Expo Framework](ht
    $ npm install -g yarn
    ```
 
+1. Pull the repository
+
+   ```bash
+   $ git clone git@gitlab.com:compassion-in-oakland/compassionapp.git
+   $ cd compassion app
+   ```
+
 1. Install project dependencies
 
    ```bash
-   $ yarn
+   $ yarn install
    ```
 
 1. Install [Expo CLI](https://docs.expo.io/workflow/expo-cli/) and [Reactotron](https://github.com/infinitered/reactotron)
@@ -37,7 +46,7 @@ Compassion App is a [React Native](https://reactnative.dev/)/[Expo Framework](ht
    # Install expo-cli
    $ npm install -g expo-cli
 
-   # Install reactotron
+   # Install reactotron (macOS)
    $ brew install reactotron
    ```
 
