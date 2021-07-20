@@ -144,6 +144,10 @@
   "demoListScreen": {
     "title": "Demo List"
   },
+  "aboutUsScreen": {
+    "title": "About Us",
+    "paragraph": "Compassion in Oakland was formed..."
+  },
   "storybook": {
     "placeholder": "Placeholder",
     "field": "Field"

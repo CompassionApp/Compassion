@@ -7,7 +7,12 @@
 
 import React from "react"
 import { createStackNavigator } from "@react-navigation/stack"
-import { RoleSelectScreen, UserAgreementScreen, ResetPasswordScreen } from "../screens"
+import {
+  RoleSelectScreen,
+  UserAgreementScreen,
+  ResetPasswordScreen,
+  AboutUsScreen,
+} from "../screens"
 import { RequesterMainTabNavigator } from "./requester/requester-root-tab-navigator"
 import { ChaperoneMainTabNavigator } from "./chaperone/chaperone-root-tab-navigator"
 import { AdminRootTabNavigator } from "./admin/admin-root-tab-navigator"
@@ -75,6 +80,7 @@ export const MainNavigator = observer(function MainNavigator() {
       <Stack.Screen name="userAgreement" component={UserAgreementScreen} />
       <Stack.Screen name="resetPassword" component={ResetPasswordScreen} />
       <Stack.Screen name="editUserProfile" component={EditUserProfileScreen} />
+      <Stack.Screen name="aboutUs" component={AboutUsScreen} />
     </Stack.Navigator>
   )
 })

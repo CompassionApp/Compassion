@@ -80,7 +80,7 @@ export const MenuScreen = observer(function MenuScreen() {
               }
             />
           </MenuListItem>
-          <MenuListItem disabled>
+          <MenuListItem onPress={() => navigation.navigate("aboutUs")}>
             <MaterialIcons name="location-city" size={ICON_SIZE} color={color.palette.blue} />
             <MenuItemText preset={[]} tx="menuScreen.menuButtonAboutUs" />
           </MenuListItem>
