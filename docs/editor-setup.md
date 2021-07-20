@@ -9,16 +9,21 @@ For this project and most modern TS/JS projects, we use `prettier` as our format
 To enable this, follow the steps below:
 
 - [Install this extension `esbenp.prettier-vscode`](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
-- Add the following to your configuration JSON (via command pallete: <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd> -> `Preferences: Open Settings (JSON)`):
-  ```
-  "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.formatOnPaste": false,
-    "editor.formatOnSave": true
-  },
-  "[typescriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.formatOnPaste": false,
-    "editor.formatOnSave": true
-  },
+- Open the Command Pallette with <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd> and type `Preferences: Open Settings (JSON)` (select it as it auto-completes)
+- In `settings.json`, add the following to your existing configuration:
+  ```json
+  {
+    // Other settings...
+
+    "[typescript]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode",
+      "editor.formatOnPaste": false,
+      "editor.formatOnSave": true
+    },
+    "[typescriptreact]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode",
+      "editor.formatOnPaste": false,
+      "editor.formatOnSave": true
+    }
+  }
   ```
