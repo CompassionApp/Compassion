@@ -4,7 +4,7 @@
 
 # Compassion App
 
-[![codecov](https://codecov.io/gl/compassion-in-oakland/compassionapp/branch/\x6d6173746572/graph/badge.svg?token=FAM6KCQFV8)](https://codecov.io/gl/compassion-in-oakland/compassionapp)
+[![codecov](https://codecov.io/gl/compassion-in-oakland/compassionapp/branch/master/graph/badge.svg?token=FAM6KCQFV8)](https://codecov.io/gl/compassion-in-oakland/compassionapp)
 
 Compassion App is a [React Native](https://reactnative.dev/)/[Expo Framework](https://docs.expo.io/) application built with the [Ignite](https://github.com/infinitered/ignite) boilerplate. Please take a look at the documentation for Ignite to get familiar with its library choices, architecture, and development style.
 
