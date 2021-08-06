@@ -1,5 +1,5 @@
 import { FirebaseCoreApiAdapter } from "./firebase-core-api"
-import firebase, { FirebaseError } from "firebase"
+import firebase from "firebase"
 import type {
   AuthContext,
   CreateRequestResult,
@@ -84,7 +84,7 @@ export class RequestApi {
       )
       return { kind: "ok" }
     } catch (e) {
-      const error = <FirebaseError>e
+      const error = <firebase.FirebaseError>e
       const { message } = error
       __DEV__ && console.tron.log(message)
       return { kind: "bad-data" }
@@ -110,7 +110,7 @@ export class RequestApi {
       console.log(`[request-api] Found ${requests.length}`)
       return { kind: "ok", requests }
     } catch (e) {
-      const error = <FirebaseError>e
+      const error = <firebase.FirebaseError>e
       const { message } = error
       __DEV__ && console.tron.log(message)
       return { kind: "bad-data" }
@@ -135,7 +135,7 @@ export class RequestApi {
       console.log(`[request-api] Getting available requests: found ${requests.length}`)
       return { kind: "ok", requests }
     } catch (e) {
-      const error = <FirebaseError>e
+      const error = <firebase.FirebaseError>e
       const { message } = error
       __DEV__ && console.tron.log(message)
       return { kind: "bad-data" }
@@ -189,7 +189,7 @@ export class RequestApi {
 
       return { kind: "ok" }
     } catch (e) {
-      const error = <FirebaseError>e
+      const error = <firebase.FirebaseError>e
       const { message } = error
       __DEV__ && console.tron.log(message)
       return { kind: "bad-data" }
@@ -225,7 +225,7 @@ export class RequestApi {
 
       return { kind: "ok" }
     } catch (e) {
-      const error = <FirebaseError>e
+      const error = <firebase.FirebaseError>e
       const { message } = error
       __DEV__ && console.tron.log(message)
       return { kind: "bad-data" }
@@ -261,7 +261,7 @@ export class RequestApi {
 
       return { kind: "ok" }
     } catch (e) {
-      const error = <FirebaseError>e
+      const error = <firebase.FirebaseError>e
       const { message } = error
       __DEV__ && console.tron.log(message)
       return { kind: "bad-data" }
@@ -324,7 +324,7 @@ export class RequestApi {
 
       return { kind: "ok" }
     } catch (e) {
-      const error = <FirebaseError>e
+      const error = <firebase.FirebaseError>e
       const { message } = error
       __DEV__ && console.tron.log(message)
       return { kind: "bad-data" }

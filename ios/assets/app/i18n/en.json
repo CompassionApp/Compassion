@@ -1,0 +1,245 @@
+{
+  "common": {
+    "ok": "OK!",
+    "cancel": "Cancel",
+    "back": "BACK"
+  },
+  "header": {
+    "text": "COMPASSION IN OAKLAND"
+  },
+  "errors": {
+    "invalidEmail": "Invalid email address."
+  },
+  "permissionsScreen": {
+    "title": "Permissions",
+    "heading": "Allow Access",
+    "permissionsBody": "This app will send you notifications and use your location to provide the best experience. Please press the button below and grant access."
+  },
+  "welcomeScreen": {
+    "poweredBy": "POWERED BY IGNITE",
+    "readyForLaunch": "Ready for launch.",
+    "continue": "CONTINUE",
+    "signUpVolunteer": "REGISTER",
+    "login": "LOG IN",
+    "loginEmail": "Email",
+    "loginPassword": "Password",
+    "missionStatement": "We strive to provide the Oakland Chinatown Community with a resource for promoting safety and community. We aim to embrace the often forgotten, underserved, and vulnerable. We promote compassion not indifference, unity as opposed to divisiveness. Fostering a more caring and safer Oakland for all."
+  },
+  "signUpScreen": {
+    "title": "Sign up",
+    "description": "Thank you for signing up!",
+    "firstName": "First Name",
+    "firstNamePlaceholder": "Jane",
+    "lastName": "Last Name",
+    "lastNamePlaceholder": "Chen",
+    "phone": "Phone",
+    "dateOfBirth": "Date of Birth (must be 18+)",
+    "emergencyContact": "Emergency Contact (Name, Phone number, and Relationship)",
+    "email": "Email",
+    "emailPlaceholder": "your@email.com",
+    "username": "Username",
+    "usernamePlaceholder": "Your username",
+    "password": "Password",
+    "passwordPlaceholder": "",
+    "geoArea": "Geographic Area",
+    "signUpAs": "Register as a...",
+    "signUpRequesterOption": "Requester - I would like to request help from chaperones",
+    "signUpChaperoneOption": "Chaperone - I want to help my community as a chaperone",
+    "submit": "SUBMIT"
+  },
+  "roleSelectScreen": {
+    "title": "Role Select",
+    "chaperone": "CHAPERONE",
+    "chaperoneDescription": "I would like to be a chaperone",
+    "requester": "REQUESTER",
+    "requesterDescription": "I would like to request a chaperone."
+  },
+  "chaperoneScreen": {
+    "title": "Chaperone",
+    "scheduleShift": "Schedule a shift",
+    "pickupPlaceholder": "Where to?",
+    "dropoffPlaceholder": "Dropoff location"
+  },
+  "newRequestScreen": {
+    "title": "New Request"
+  },
+  "editUserProfileScreen": {
+    "title": "User Profile",
+    "phoneNumberLabel": "Phone Number",
+    "phoneNumberPlaceholder": "510 555 5555",
+    "firstNameLabel": "First Name",
+    "lastNameLabel": "Last Name",
+    "saveButton": "Save",
+    "savedNotice": "Your profile has been saved!"
+  },
+  "chaperoneRequestDetailScreen": {
+    "acceptRequestButton": "Accept Request",
+    "releaseRequestButton": "Cancel match",
+    "commentsFromRequester": "Additional details"
+  },
+  "requestDetailScreen": {
+    "title": "Request Details",
+    "rescheduleButton": "Reschedule",
+    "callButton": "Call",
+    "okButton": "Ok",
+    "cancelButton": "Cancel Request",
+    "uncancelButton": "Uncancel Request",
+    "deleteButton": "Delete Request",
+    "requestPending": "Your scheduled request is pending",
+    "requestPending2": "We’ll let you know when you have been matched.",
+    "youAreMatched": "You’re all set! You have been matched."
+  },
+  "notificationsScreen": {
+    "title": "Notifications",
+    "clearAllNotificationsButton": "Clear all notifications"
+  },
+  "menuScreen": {
+    "title": "Menu",
+    "menuButtonRequesterInfo": "Requester Info",
+    "menuButtonChaperoneInfo": "Chaperone Info",
+    "menuButtonAboutUs": "About Us",
+    "menuButtonUserAgreement": "User Agreement",
+    "menuButtonResetPassword": "Reset Password",
+    "menuButtonAskQuestion": "Ask a Question",
+    "menuButtonSignOut": "Sign Out"
+  },
+  "homeScreen": {
+    "title": "Home",
+    "welcome": "Welcome",
+    "noneScheduledNoticeBold": "You currently don’t have anything scheduled.",
+    "noticeText1": "Make a new chaperone request.",
+    "noticeText2": "Chaperones cannot be requested within 48H of desired day.",
+    "noticeText3": "You could make a immediate request by calling",
+    "noticeTextPhoneNumber": "(510) 200-8682",
+    "noticeText4": "or you can schedule a chaparone request.",
+    "requestButton": "REQUEST",
+    "yourPendingRequests": "Your Pending Requests",
+    "yourMatchedRequests": "Your Matched Requests"
+  },
+  "chaperoneHomeScreen": {
+    "noOpenRequests": "There are currently no open requests. Pull down to refresh.",
+    "noScheduledRequests": "You currently have no scheduled requests",
+    "yourMatchedRequests": "Your Matched Requests",
+    "availableRequests": "Available Requests",
+    "acceptRequests": "Accept Requests?",
+    "acceptRequestsDescription": "Allow notifications to be sent to you when new requests arrive"
+  },
+  "requesterScreen": {
+    "title": "Request a Chaperone",
+    "requestChaperone": "Request",
+    "confirmLocation": "Confirm Location"
+  },
+  "demoScreen": {
+    "howTo": "HOW TO",
+    "title": "What’s In This Stack?",
+    "tagLine": "Congratulations, you’ve got a very advanced React Native app template here.  Take advantage of this boilerplate!",
+    "reactotron": "Demo Reactotron",
+    "demoList": "Demo List",
+    "androidReactotronHint": "If this doesn't work, ensure the Reactotron desktop app is running, run adb reverse tcp:9090 tcp:9090 from your terminal, and reload the app.",
+    "iosReactotronHint": "If this doesn't work, ensure the Reactotron desktop app is running and reload app.",
+    "macosReactotronHint": "If this doesn't work, ensure the Reactotron desktop app is running and reload app.",
+    "webReactotronHint": "If this doesn't work, ensure the Reactotron desktop app is running and reload app.",
+    "windowsReactotronHint": "If this doesn't work, ensure the Reactotron desktop app is running and reload app."
+  },
+  "demoListScreen": {
+    "title": "Demo List"
+  },
+  "aboutUsScreen": {
+    "title": "About Us",
+    "paragraph": "Compassion in Oakland was formed..."
+  },
+  "storybook": {
+    "placeholder": "Placeholder",
+    "field": "Field"
+  },
+  "card": {
+    "delete": "Delete",
+    "cancel": "Cancel"
+  },
+  "newRequestDateSelectionScreen": {
+    "title": "Select a Date",
+    "nextButton": "Next: TIME"
+  },
+  "newRequestTimeSelectionScreen": {
+    "title": "Select a Time",
+    "nextButton": "Next: LOCATION"
+  },
+  "newRequestLocationSelectionScreen": {
+    "title": "Select a Location",
+    "nextButton": "Next: ACTIVITY",
+    "pickupPlaceholder": "Your pickup location",
+    "destinationPlaceholder": "Your destination"
+  },
+  "newRequestActivitySelectionScreen": {
+    "title": "Select an Activity",
+    "nextButton": "Next: REVIEW",
+    "additionalNotesLabel": "Additional Notes",
+    "additionalNotesPlaceholder": "Add any other details we should know"
+  },
+  "chaperoneScheduleScreen": {
+    "title": "Volunteer Schedule",
+    "submitButton": "Submit",
+    "scheduleSlotTitle": "Volunteer Slots Available"
+  },
+  "userAgreementScreen": {
+    "title": "User Agreement",
+    "userAgreement": "This user agreement is a contract between you and Compassion. governing your use of your Compassion account and the Compassion services. It applies to U.S. Compassion accounts only. If you are an individual, you must be a resident of the United States or one of its territories and at least 18 years old, or the age of majority in your state of residence to open a U.S. Compassion account and use the Compassion services. If you are a business, the business must be organized in, operating in, or a resident of, the United States or one of its territories to open a U.S. Compassion account and use the Compassion services. By opening and using a Compassion account, you agree to comply with all of the terms and conditions in this user agreement. The terms include an agreement to resolve disputes by arbitration on an individual basis. You also agree to comply with each of the other agreements on the Legal Agreements page that apply to you and the following additional policies.",
+    "userAgreementAcceptButton": "Accept",
+    "acceptedOn": "Accepted on"
+  },
+  "resetPasswordScreen": {
+    "title": "Reset Password",
+    "submitButton": "Submit",
+    "oldPassword": "Old Password",
+    "newPassword": "New Password",
+    "verifyNewPassword": "Verify New Password",
+    "savedNotice": "Your new password has been saved!"
+  },
+  "newRequestReviewScreen": {
+    "title": "Review Your Request",
+    "nextButton": "SEND REQUEST"
+  },
+  "usersScreen": {
+    "title": "Users"
+  },
+  "userDetailScreen": {
+    "title": "User Details",
+    "firstNameLabel": "First Name",
+    "lastNameLabel": "Last Name",
+    "emailLabel": "Email",
+    "phoneNumberLabel": "Phone Number",
+    "saveButton": "Save changes"
+  },
+  "enumUserRole": {
+    "undefined": "Unknown",
+    "CHAPERONE": "Chaperone",
+    "REQUESTER": "Requester",
+    "ADMIN": "Administrator"
+  },
+  "enumUserStatus": {
+    "undefined": "Unknown",
+    "ACTIVE": "Active",
+    "INACTIVE": "Inactive",
+    "DISALLOW": "Disallowed"
+  },
+  "enumRequestStatus": {
+    "undefined": "Unknown",
+    "REQUESTED": "Requested",
+    "CANCELED_BY_REQUESTER": "Canceled",
+    "SCHEDULED": "Matched"
+  },
+  "enumRequestActivity": {
+    "undefined": "Unknown",
+    "UNKNOWN": "Unknown",
+    "DOCTOR": "Doctor Visit",
+    "GROCERY": "Grocery Shopping",
+    "OTHER": "Other",
+    "WALK": "Walk"
+  },
+  "enumGeoArea": {
+    "undefined": "Unknown",
+    "OAK1": "Oakland - Chinatown",
+    "SFO1": "San Francisco - Sunset District",
+    "SGV1": "San Gabriel Valley"
+  }
+}

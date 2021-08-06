@@ -1,7 +1,7 @@
 stages:
   - test
 
-image: node:14.16.0
+image: node:14.16.1
 
 cache:
   key: ${CI_COMMIT_REF_SLUG}

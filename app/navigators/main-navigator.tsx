@@ -43,6 +43,7 @@ export type MainNavigatorParamList = {
   resetPassword: undefined
   passwordUpdated: undefined
   welcome: undefined
+  aboutUs: undefined
 }
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/

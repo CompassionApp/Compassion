@@ -1,4 +1,4 @@
-import firebase, { FirebaseError } from "firebase"
+import firebase from "firebase"
 import { FirebaseCoreApiAdapter } from "./firebase-core-api"
 import { CreateUserResult, SignInResult, SignOutResult, UpdateUserResult } from "./api.types"
 import { getFirebaseAuthApiProblem } from "./api-problem"
@@ -32,7 +32,7 @@ export class AuthApi {
       )
       return { kind: "ok", userCredential }
     } catch (e) {
-      const error = <FirebaseError>e
+      const error = <firebase.FirebaseError>e
       const problem = getFirebaseAuthApiProblem(error)
 
       __DEV__ && console.tron.log(problem)
@@ -48,7 +48,7 @@ export class AuthApi {
       await this.firebase.authentication.signOut()
       return { kind: "ok" }
     } catch (e) {
-      const error = <FirebaseError>e
+      const error = <firebase.FirebaseError>e
       const problem = getFirebaseAuthApiProblem(error)
 
       __DEV__ && console.tron.log(problem)
@@ -67,7 +67,7 @@ export class AuthApi {
       )
       return { kind: "ok", userCredential }
     } catch (e) {
-      const error = <FirebaseError>e
+      const error = <firebase.FirebaseError>e
       const problem = getFirebaseAuthApiProblem(error)
 
       __DEV__ && console.tron.log(problem)
@@ -85,7 +85,7 @@ export class AuthApi {
       console.log("[auth-api] Success updating", this.firebase.authentication.currentUser)
       return { kind: "ok" }
     } catch (e) {
-      const error = <FirebaseError>e
+      const error = <firebase.FirebaseError>e
       const problem = getFirebaseAuthApiProblem(error)
 
       __DEV__ && console.tron.log(problem)

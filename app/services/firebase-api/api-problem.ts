@@ -1,5 +1,5 @@
 import { ApiResponse } from "apisauce"
-import { FirebaseError } from "firebase"
+import firebase from "firebase"
 
 /**
  * TODO: These are examples from the original ./app/services/api directory. Remove when ready
@@ -93,7 +93,7 @@ export function getGeneralApiProblem(response: ApiResponse<any>): GeneralApiProb
   return null
 }
 
-export function getFirebaseAuthApiProblem(error: FirebaseError): FirebaseAuthApiProblem {
+export function getFirebaseAuthApiProblem(error: firebase.FirebaseError): FirebaseAuthApiProblem {
   switch (error.code) {
     case "auth/invalid-email":
       return { kind: FirebaseAuthApiProblemType.INVALID_EMAIL }

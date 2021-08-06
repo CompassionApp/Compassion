@@ -1,7 +1,10 @@
 {
   "expo": {
     "name": "Compassion App",
-    "slug": "Compassion",
+    "description": "The Compassion App is a matching service for volunteers and vulnerable members of the community to get together",
+    "currentFullName": "compassion-eng@compassion-app",
+    "owner": "compassion-eng",
+    "slug": "compassion",
     "scheme": "compassion",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -14,13 +17,16 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
-    "android": { "softwareKeyboardLayoutMode": "pan" },
+    "assetBundlePatterns": ["assets/*"],
     "ios": {
+      "bundleIdentifier": "org.compassioninoakland.compassionapp",
+      "buildNumber": "0.1.0",
       "supportsTablet": false
     },
-    "web": {
-      "favicon": "./assets/favicon.png"
+    "android": {
+      "package": "org.compassioninoakland.compassionapp",
+      "versionCode": 1,
+      "softwareKeyboardLayoutMode": "pan"
     }
   }
 }

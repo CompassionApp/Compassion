@@ -4,6 +4,8 @@ For the best experience, I recommend using [VS Code](https://code.visualstudio.c
 
 ### Extensions
 
+#### Formatting
+
 For this project and most modern TS/JS projects, we use `prettier` as our formatter. I find that enabling Format on Save helps fix formatting problems effortlessly than manually running a process on the terminal.
 
 To enable this, follow the steps below:
@@ -11,6 +13,7 @@ To enable this, follow the steps below:
 - [Install this extension `esbenp.prettier-vscode`](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
 - Open the Command Pallette with <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd> and type `Preferences: Open Settings (JSON)` (select it as it auto-completes)
 - In `settings.json`, add the following to your existing configuration:
+
   ```json
   {
     // Other settings...
@@ -27,3 +30,7 @@ To enable this, follow the steps below:
     }
   }
   ```
+
+#### Expo Tools
+
+- [Expo Tools `bycedric.vscode-expo`](https://marketplace.visualstudio.com/items?itemName=bycedric.vscode-expo)

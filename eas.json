@@ -1,0 +1,11 @@
+{
+  "build": {
+    "release": {},
+    "development": {
+      "ios": {
+        "distribution": "internal",
+        "buildConfiguration": "Debug"
+      }
+    }
+  }
+}
