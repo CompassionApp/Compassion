@@ -2,7 +2,6 @@
   "expo": {
     "name": "Compassion App",
     "slug": "Compassion",
-    "owner": "compassion-eng",
     "scheme": "compassion",
     "version": "1.0.0",
     "orientation": "portrait",
