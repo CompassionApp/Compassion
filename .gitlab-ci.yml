@@ -1,5 +1,6 @@
 stages:
   - test
+  - deploy
 
 image: node:14.16.1
 
@@ -14,6 +15,7 @@ variables:
   DOCKER_DRIVER: overlay2
 
 before_script:
+  - yarn add global expo-cli
   - yarn install --cache-folder .yarn
 
 lint:
@@ -40,3 +42,13 @@ tests:unit:
 #     - master
 #   script:
 #     - yarn ci:test:e2e
+
+deploy:
+  stage: deploy
+  only:
+    - master
+  script:
+    - yarn add expo-cli
+    - expo login --non-interactive -u $EXPO_USERNAME
+    - expo whoami
+    - expo publish --non-interactive --target managed --release-channel development
