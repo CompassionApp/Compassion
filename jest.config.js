@@ -4,6 +4,7 @@ const transformIgnorePatterns = [
 
 module.exports = {
   preset: "jest-expo",
+  cacheDirectory: ".jest-cache",
   setupFiles: ["<rootDir>/node_modules/react-native/jest/setup.js", "<rootDir>/test/setup.ts"],
   testPathIgnorePatterns: ["/node_modules/", "/e2e"],
   transformIgnorePatterns: [

@@ -82,3 +82,7 @@ web-build/
 app/config/env.*.js
 !env.js
 coverage
+
+
+# Jest
+.jest-cache
