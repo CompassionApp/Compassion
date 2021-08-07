@@ -52,7 +52,6 @@ expo-deployments:
   only:
     - master
   script:
-    - apk add --no-cache bash
     - npm install --save-dev expo-cli
     - expo login --non-interactive -u $EXPO_USERNAME
     - expo whoami
