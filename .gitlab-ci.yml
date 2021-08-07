@@ -1,25 +1,29 @@
 stages:
+  - lint
   - test
   - deploy
 
 image: node:14.16.1
 
 cache:
-  key: ${CI_COMMIT_REF_SLUG}
-  paths:
-    - node_modules/
-    - .jest
-    - .yarn
+  - key:
+      files:
+        - yarn.lock
+    paths:
+      - .yarn-cache/
+  - key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - node_modules/
+      - .jest-cache
 
 variables:
   DOCKER_DRIVER: overlay2
 
 before_script:
-  - yarn add global expo-cli
-  - yarn install --cache-folder .yarn
+  - yarn install --cache-folder .yarn-cache
 
 lint:
-  stage: test
+  stage: lint
   except:
     changes:
       - "*.md"
@@ -43,12 +47,13 @@ tests:unit:
 #   script:
 #     - yarn ci:test:e2e
 
-deploy:
+expo-deployments:
   stage: deploy
   only:
     - master
   script:
-    - yarn add expo-cli
+    - apk add --no-cache bash
+    - npm install --save-dev expo-cli
     - expo login --non-interactive -u $EXPO_USERNAME
     - expo whoami
     - expo publish --non-interactive --target managed --release-channel development
