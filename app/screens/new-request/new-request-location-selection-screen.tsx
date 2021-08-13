@@ -11,6 +11,8 @@ import { START_REGION } from "../../constants/map"
 import { useStores } from "../../models"
 import PickupDropoff from "../../components/pickup-dropoff/pickup-dropoff"
 import { NewRequestFooterArea } from "./common"
+import { debounce } from "lodash"
+import { tylerAPI } from "../../config/env.js"
 
 const ROOT: ViewStyle = {
   backgroundColor: color.background,
@@ -40,9 +42,12 @@ export const NewRequestLocationSelectionScreen = observer(
     const mapViewRef = useRef<MapView>(null)
     const pickupMarkerRef = useRef<Marker>(null)
     const dropoffMarkerRef = useRef<Marker>(null)
-    const [, setCurrentLocation] = useState<LatLng>(null)
+    const [currentLocation, setCurrentLocation] = useState<LatLng>(null)
     const [pickupLocation, setPickupLocation] = useState<LatLng>(null)
     const [dropoffLocation, setDropoffLocation] = useState<LatLng>(null)
+    const [pickupAddress, setPickupAddress] = useState<string | null>(null)
+    const [dropoffAddress, setDropoffAddress] = useState<string | null>(null)
+    const [predictions, setPredictions] = useState([])
 
     const { newRequestStore } = useStores()
 
@@ -51,8 +56,8 @@ export const NewRequestLocationSelectionScreen = observer(
     const navigateNext = () => navigation.navigate("newRequest", { screen: "notesSelect" })
 
     const handlePressNext = () => {
-      newRequestStore.setDestinationAddress("123 Test St")
-      newRequestStore.setMeetAddress("234 Main Blvd")
+      newRequestStore.setDestinationAddress(dropoffAddress)
+      newRequestStore.setMeetAddress(pickupAddress)
       navigateNext()
     }
 
@@ -64,6 +69,7 @@ export const NewRequestLocationSelectionScreen = observer(
     useEffect(() => {
       // eslint-disable-next-line
       ;(async () => {
+        console.log("started map effect")
         const { status } = await Location.requestPermissionsAsync()
         if (status !== "granted") {
           console.tron.log("Permission to access location was denied")
@@ -72,6 +78,7 @@ export const NewRequestLocationSelectionScreen = observer(
 
         const location = await Location.getCurrentPositionAsync({})
         console.tron.log("Location: ", location)
+        console.log(location.coords)
         setCurrentLocation(location.coords)
 
         setPickupLocation(location.coords)
@@ -82,6 +89,67 @@ export const NewRequestLocationSelectionScreen = observer(
         // })
       })()
     }, [])
+
+    const dragPickupMarker = (e) => {
+      e.preventDefault()
+
+      const coords = e.nativeEvent.coordinate
+      console.log(coords)
+
+      Location.reverseGeocodeAsync(coords)
+        .then((res) => {
+          setPickupLocation(coords)
+          const { name, city, region, postalCode } = res[0]
+          setPickupAddress(`${name} ${city},${region} ${postalCode}`)
+        })
+        .catch((err) => console.log("err", err))
+    }
+
+    const dragDropOffMarker = (e) => {
+      e.preventDefault()
+      const coords = e.nativeEvent.coordinate
+
+      Location.reverseGeocodeAsync(coords)
+        .then((res) => {
+          setDropoffLocation(coords)
+          setDropoffAddress(`${res[0].name} ${res[0].city},${res[0].region} ${res[0].postalCode}`)
+        })
+        .catch((err) => console.log("err", err))
+    }
+
+    const getPredictions = debounce((address) => {
+      const apiUrl = `https://maps.googleapis.com/maps/api/place/autocomplete/json?key=${tylerAPI}&language=en&input=${address}oak&radius=2000&location=${currentLocation.latitude},${currentLocation.longitude}`
+
+      const getData = async (url) => {
+        const result = await fetch(url)
+        return result.json()
+      }
+      getData(apiUrl)
+        .then((data) => {
+          setPredictions(data.predictions)
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    }, 500)
+
+    const setMarker = async (placeId, focusedTextbox) => {
+      const apiUrl = `https://maps.googleapis.com/maps/api/place/details/json?&key=${tylerAPI}&place_id=${placeId}&fields=formatted_address,geometry/location,name`
+
+      const result = await fetch(apiUrl)
+      const data = await result.json().then((res) => res.result)
+      const latitude = data.geometry.location.lat
+      const longitude = data.geometry.location.lng
+      // slice removes country from address
+      if (focusedTextbox === "pickup") {
+        setPickupAddress(`${data.formatted_address.slice(0, -5)}`)
+        setPickupLocation({ latitude, longitude })
+      } else if (focusedTextbox === "destination") {
+        setDropoffAddress(`${data.formatted_address.slice(0, -5)}`)
+        setDropoffLocation({ latitude, longitude })
+      }
+      setPredictions([])
+    }
 
     return (
       <View testID="NewRequestLocationSelectionScreen" style={globalStyles.full}>
@@ -96,7 +164,14 @@ export const NewRequestLocationSelectionScreen = observer(
           <FlexView column height="100%">
             <FlexItem>
               <View style={PICKUP_DROPOFF_WRAPPER}>
-                <PickupDropoff totalSteps={2} />
+                <PickupDropoff
+                  totalSteps={2}
+                  setMarker={setMarker}
+                  pickupAddress={pickupAddress}
+                  dropoffAddress={dropoffAddress}
+                  predictions={predictions}
+                  getPredictions={getPredictions}
+                />
               </View>
             </FlexItem>
             <FlexItem grow={1}>
@@ -107,6 +182,8 @@ export const NewRequestLocationSelectionScreen = observer(
                     coordinate={pickupLocation}
                     title="Pickup"
                     description="Meet my chaperone from here"
+                    onDragEnd={(e) => dragPickupMarker(e)}
+                    draggable
                   />
                 )}
                 {dropoffLocation && (
@@ -115,6 +192,8 @@ export const NewRequestLocationSelectionScreen = observer(
                     title="Dropoff"
                     coordinate={dropoffLocation}
                     description="Part ways with my chaperone here"
+                    onDragEnd={(e) => dragDropOffMarker(e)}
+                    draggable
                   />
                 )}
               </MapView>

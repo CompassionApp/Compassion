@@ -1,7 +1,9 @@
 import React, { useState } from "react"
-import { View, ViewStyle, TextStyle } from "react-native"
-import { color } from "../../theme"
+import { View, ViewStyle, TextStyle, TouchableHighlight } from "react-native"
+import { Colors } from "react-native/Libraries/NewAppScreen"
+import { color, typography } from "../../theme"
 import { TextField } from "../text-field/text-field"
+import { Text } from "../text/text"
 import { PickupDropoffProps, PickupDropoffItemViewProps } from "./pickup-dropoff.props"
 
 const LOCATION_AREA_WRAPPER: ViewStyle = { marginTop: 30 }
@@ -24,6 +26,15 @@ const ON_TEXT_INPUT_BORDER: TextStyle = {
   borderWidth: 3,
   borderRadius: 8,
 }
+const PREDICTIONS_STYLE: ViewStyle = {
+  borderStyle: "solid",
+  borderColor: color.line,
+  borderBottomWidth: 1,
+  borderRadius: 4,
+}
+const USER_SEARCH_STYLE: TextStyle = {
+  fontFamily: typography.secondary,
+}
 
 const PickupDropoffItemView = ({ isFirstItem }: PickupDropoffItemViewProps) => {
   return (
@@ -34,8 +45,41 @@ const PickupDropoffItemView = ({ isFirstItem }: PickupDropoffItemViewProps) => {
   )
 }
 
-const PickupDropoff = ({ totalSteps }: PickupDropoffProps): JSX.Element | null => {
+const PickupDropoff = ({
+  totalSteps,
+  setMarker,
+  pickupAddress,
+  dropoffAddress,
+  predictions,
+  getPredictions,
+}: PickupDropoffProps): JSX.Element | null => {
   const [focusedTextbox, setFocusedTextbox] = useState<string>("")
+  const [displayPredictions, setDisplayPredictions] = useState<boolean>(true)
+
+  const handleInputSelect = (input) => {
+    setDisplayPredictions(true)
+    setFocusedTextbox(input)
+  }
+
+  const handlePredictionPress = (prediction) => {
+    setMarker(prediction.place_id, focusedTextbox)
+    setDisplayPredictions(false)
+  }
+
+  const renderGooglePredictions = predictions.map((prediction) => (
+    <TouchableHighlight
+      key={prediction.place_id}
+      onPress={() => handlePredictionPress(prediction)}
+      underlayColor={color.dim}
+      activeOpacity={0.6}
+    >
+      <View style={PREDICTIONS_STYLE}>
+        <Text style={USER_SEARCH_STYLE}>{prediction.structured_formatting.main_text}</Text>
+        <Text>{prediction.structured_formatting.secondary_text.slice(0, -5)}</Text>
+      </View>
+    </TouchableHighlight>
+  ))
+
   return (
     <View style={LOCATION_STYLE}>
       <View style={LOCATION_AREA_WRAPPER}>
@@ -46,17 +90,21 @@ const PickupDropoff = ({ totalSteps }: PickupDropoffProps): JSX.Element | null =
       <View style={TEXT_BOX_STYLE}>
         <TextField
           placeholderTx="newRequestLocationSelectionScreen.pickupPlaceholder"
+          defaultValue={pickupAddress}
           inputStyle={focusedTextbox === "pickup" && ON_TEXT_INPUT_BORDER}
-          onFocus={() => setFocusedTextbox("pickup")}
+          onFocus={() => handleInputSelect("pickup")}
+          onChangeText={(text) => getPredictions(text)}
         />
         <TextField
           placeholderTx="newRequestLocationSelectionScreen.destinationPlaceholder"
+          defaultValue={dropoffAddress}
           inputStyle={focusedTextbox === "destination" && ON_TEXT_INPUT_BORDER}
-          onFocus={() => setFocusedTextbox("destination")}
+          onFocus={() => handleInputSelect("destination")}
+          onChangeText={(text) => getPredictions(text)}
         />
+        {displayPredictions && renderGooglePredictions}
       </View>
     </View>
   )
 }
-
 export default PickupDropoff
