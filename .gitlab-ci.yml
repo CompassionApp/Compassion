@@ -36,9 +36,14 @@ tests:unit:
     changes:
       - "*.md"
   script:
-    - yarn ci:test:coverage
+    - yarn ci:test:coverage --reporters=default --reporters=jest-junit
   after_script:
     - bash <(curl -s https://codecov.io/bash) -t $CODECOV_TOKEN
+  artifacts:
+    when: always
+    reports:
+      junit:
+        - junit.xml
 #
 # tests:e2e:
 #   stage: test

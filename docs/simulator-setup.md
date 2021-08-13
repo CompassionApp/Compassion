@@ -32,6 +32,8 @@ $ emulator -avd Pixel_4_API_29
 # An emulator should be started
 ```
 
+You may have to run `expo client:install:android` to update the Expo Go client on the simualtor.
+
 ### iOS
 
 1. Follow the docs to install the [xcode CLI tools](https://docs.expo.io/workflow/ios-simulator/)
@@ -57,3 +59,5 @@ Below are the steps to enable this.
    - Or, pull down on the list of projects and it should discover your machine. Of course, make sure you're on the same network (phone is using wifi) and make sure Metro/`yarn start` is running.
 1. Done! You should be able to use your phone as a test device.
    - **Tip:** To open the dev menu, you need to shake your phone physically to get it to appear.
+
+You may have to run `expo client:install:ios` to update the Expo Go client on the simualtor.
