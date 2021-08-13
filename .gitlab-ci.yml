@@ -53,6 +53,6 @@ expo-deployments:
     - master
   script:
     - yarn global add expo-cli
-    - yarn exec expo login --non-interactive -u $EXPO_USERNAME
+    - yarn exec expo login --non-interactive -u $EXPO_USERNAME -p $EXPO_CLI_PASSWORD
     - yarn exec expo whoami
     - yarn exec expo publish --non-interactive --target managed --release-channel development
