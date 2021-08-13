@@ -52,7 +52,7 @@ expo-deployments:
   only:
     - master
   script:
-    - npm install --save-dev expo-cli
-    - npx expo login --non-interactive -u $EXPO_USERNAME
-    - npx expo whoami
-    - npx expo publish --non-interactive --target managed --release-channel development
+    - yarn global add expo-cli
+    - yarn exec expo login --non-interactive -u $EXPO_USERNAME
+    - yarn exec expo whoami
+    - yarn exec expo publish --non-interactive --target managed --release-channel development
