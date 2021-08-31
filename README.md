@@ -133,6 +133,7 @@ When you reload your app, your simulator will render the story and will respond 
 - [Deployments and Distribution](docs/deployments-distribution.md)
 - [Firestore Structure](docs/firebase-schema.md)
 - [Types and Schemas](docs/types-schemas.md)
+- [Continuous Integration](docs/gitlab-ci.md)
 - [Ignite's original README](docs/ignite-readme.md)
 
 ## Resources

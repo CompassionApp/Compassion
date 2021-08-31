@@ -22,6 +22,5 @@
   },
   "types": ["jest", "styled-components-react-native"],
   "exclude": ["node_modules"],
-  "include": ["App.js", "app", "test", "storybook", "firebase.ts", "typedefs"],
-  "extends": "expo/tsconfig.base"
+  "include": ["App.js", "app", "test", "storybook", "firebase.ts", "typedefs"]
 }

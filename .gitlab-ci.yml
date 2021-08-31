@@ -24,9 +24,6 @@ before_script:
 
 lint:
   stage: lint
-  except:
-    changes:
-      - "*.md"
   script:
     - yarn lint
 

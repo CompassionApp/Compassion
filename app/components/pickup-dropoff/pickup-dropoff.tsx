@@ -1,6 +1,5 @@
 import React, { useState } from "react"
 import { View, ViewStyle, TextStyle, TouchableHighlight } from "react-native"
-import { Colors } from "react-native/Libraries/NewAppScreen"
 import { color, typography } from "../../theme"
 import { TextField } from "../text-field/text-field"
 import { Text } from "../text/text"
