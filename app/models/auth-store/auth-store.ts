@@ -95,6 +95,7 @@ export const AuthStoreModel = types
         // Register a notification token upon sign-up
         notificationToken: self.environment.notifications.deviceNotificationToken,
         geoArea,
+        isCodeOfConductSigned: false,
       })
       self.user._replaceUserProfile(getSnapshot(profile))
       yield self.user.save()

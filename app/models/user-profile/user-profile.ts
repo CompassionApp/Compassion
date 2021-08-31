@@ -28,6 +28,7 @@ export const UserProfileModel = types
     acceptedUserAgreementAt: types.maybeNull(types.string),
     notificationToken: types.maybeNull(types.string),
     enableNotifications: types.maybeNull(types.boolean),
+    isCodeOfConductSigned: types.maybeNull(types.boolean),
   })
   .extend(withEnvironment)
   .views((self) => ({
@@ -83,6 +84,9 @@ export const UserProfileModel = types
     },
     setEnableNotifications: (value: boolean | null) => {
       self.enableNotifications = value
+    },
+    setCodeOfConductSignedStatus: (value: boolean | null) => {
+      self.isCodeOfConductSigned = value
     },
 
     fetch: flow(function* () {
