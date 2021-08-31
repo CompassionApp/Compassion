@@ -12,6 +12,7 @@ import {
   UserAgreementScreen,
   ResetPasswordScreen,
   AboutUsScreen,
+  CodeOfConductScreen,
 } from "../screens"
 import { RequesterMainTabNavigator } from "./requester/requester-root-tab-navigator"
 import { ChaperoneMainTabNavigator } from "./chaperone/chaperone-root-tab-navigator"
@@ -44,6 +45,7 @@ export type MainNavigatorParamList = {
   passwordUpdated: undefined
   welcome: undefined
   aboutUs: undefined
+  codeOfConduct: undefined
 }
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
@@ -82,6 +84,7 @@ export const MainNavigator = observer(function MainNavigator() {
       <Stack.Screen name="resetPassword" component={ResetPasswordScreen} />
       <Stack.Screen name="editUserProfile" component={EditUserProfileScreen} />
       <Stack.Screen name="aboutUs" component={AboutUsScreen} />
+      <Stack.Screen name="codeOfConduct" component={CodeOfConductScreen} />
     </Stack.Navigator>
   )
 })

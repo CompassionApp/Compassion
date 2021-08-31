@@ -101,7 +101,8 @@
     "menuButtonUserAgreement": "User Agreement",
     "menuButtonResetPassword": "Reset Password",
     "menuButtonAskQuestion": "Ask a Question",
-    "menuButtonSignOut": "Sign Out"
+    "menuButtonSignOut": "Sign Out",
+    "menuButtonCodeOfConduct": "Code Of Conduct"
   },
   "homeScreen": {
     "title": "Home",
@@ -241,5 +242,15 @@
     "OAK1": "Oakland - Chinatown",
     "SFO1": "San Francisco - Sunset District",
     "SGV1": "San Gabriel Valley"
+  },
+  "codeOfConductScreen": {
+    "title": "CODE OF CONDUCT",
+    "paragraph1": "All Volunteers MUST have proof of recent NEGATIVE Covid-19 test and/or proof of Covid-19 vaccination and submit it to your shift coordinator BEFORE hitting the streets. When on chaperone duty, you must comply with COVID-19 social distancing guidelines and wear a mask at all times.",
+    "paragraph2": "This is a voluntary group. Although, we will od our best to coordinate and help, your SAFETY is your responsibility. Compassion in Oakland and its organizers take no liability assumed or implied by organizing this movement. You assume ALL risks (including loss of property, injury or death) by your voluntary and willing participation.",
+    "paragraph3": "This is a voluntary and unpaid project and you should not expect to be compensated for your time. Despite this, professional, respectful and lawful behavior is expected of ALL volunteers when performing their duties.",
+    "acceptCodeOfConduct": "I have read, understood and agree to abide by the above.",
+    "signText": "To complete, type your FULL name to indicate all information above is correct and true.",
+    "submitButton": "Submit",
+    "placeHolder":"Your Name Here"
   }
 }

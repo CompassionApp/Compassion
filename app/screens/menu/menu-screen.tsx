@@ -1,7 +1,7 @@
 import React from "react"
 import { observer } from "mobx-react-lite"
 import { Alert, View, ViewStyle } from "react-native"
-import { FontAwesome, Ionicons, MaterialIcons } from "@expo/vector-icons"
+import { FontAwesome, Ionicons, MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons"
 import { useNavigation } from "@react-navigation/native"
 import styled from "styled-components/native"
 import { Break, Button, FlexContainer, Header, Screen, Text } from "../../components"
@@ -95,6 +95,14 @@ export const MenuScreen = observer(function MenuScreen() {
           <MenuListItem disabled>
             <MaterialIcons name="question-answer" size={ICON_SIZE} color={color.palette.blue} />
             <MenuItemText preset={[]} tx="menuScreen.menuButtonAskQuestion" />
+          </MenuListItem>
+          <MenuListItem onPress={() => navigation.navigate("codeOfConduct")}>
+            <MaterialCommunityIcons
+              name="book-variant"
+              size={ICON_SIZE}
+              color={color.palette.blue}
+            />
+            <MenuItemText preset={[]} tx="menuScreen.menuButtonCodeOfConduct" />
           </MenuListItem>
           <MenuListItem onPress={handlePressSignOut}>
             <Ionicons name="md-log-out-outline" size={ICON_SIZE} color={color.palette.blue} />

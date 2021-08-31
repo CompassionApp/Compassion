@@ -1,4 +1,5 @@
 export * from "./about/about-us-screen"
+export * from "./code-of-conduct/code-of-conduct-screen"
 export * from "./chaperone-schedule/chaperone-schedule-screen"
 export * from "./chaperone/chaperone-screen"
 export * from "./home/chaperone-home-screen"
