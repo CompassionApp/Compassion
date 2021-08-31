@@ -4,6 +4,7 @@ import { withEnvironment } from "../extensions/with-environment"
 import { UserModel } from "../user/user"
 import { GeoAreaEnum, UserRoleEnum, UserStatusEnum } from "../../types"
 import { UserProfileModel } from "../user-profile/user-profile"
+import { FirebaseAuthApiProblem, FirebaseAuthApiProblemType } from "../../services/firebase-api/api-problem"
 
 /**
  * Authentication store - use this store for any actions related to authentication, e.g.
@@ -157,6 +158,24 @@ export const AuthStoreModel = types
         yield self.updateLocalUserDetailsFromFirebase(user)
       } else {
         throw new Error(kind)
+      }
+    }),
+
+    /**
+     * Updates a user's password
+     */
+    updatePassword: flow(function* (oldPassword: string, newPassword: string) {
+      console.log("[auth-store] Updating password for user", self.user?.email)
+      const user = self.environment.authApi.currentUser
+
+      const res = yield self.environment.authApi.updateFirebaseUserPassword(
+        oldPassword,
+        newPassword,
+      )
+      if (res.kind === "ok") {
+        yield self.updateLocalUserDetailsFromFirebase(user)
+      } else {
+        throw new Error(res.kind)
       }
     }),
   }))
