@@ -193,7 +193,12 @@
     "oldPassword": "Old Password",
     "newPassword": "New Password",
     "verifyNewPassword": "Verify New Password",
-    "savedNotice": "Your new password has been saved!"
+    "savedNotice": "Your new password has been saved!",
+    "errorNotice": "There was an error saving your password",
+    "verifyErrorNotice": "Please make sure your new passwords match",
+    "passwordIncorrectErrorNotice": "Your current password is incorrect",
+    "weakPasswordErrorNotice": "Your password needs to be at least 6 characters long",
+    "tooManyAttemptsErrorNotice": "You have attempted to login too many times. Please wait and try again later"
   },
   "newRequestReviewScreen": {
     "title": "Review Your Request",

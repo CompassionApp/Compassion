@@ -33,3 +33,4 @@ export type CreateUserResult =
   | { kind: "ok"; userCredential: firebase.auth.UserCredential }
   | FirebaseAuthApiProblem
 export type UpdateUserResult = { kind: "ok" } | FirebaseAuthApiProblem
+export type UpdatePasswordResult = { kind: "ok" } | { kind: firebase.FirebaseError }
