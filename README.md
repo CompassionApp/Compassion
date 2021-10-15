@@ -17,6 +17,9 @@ Compassion App is a [React Native](https://reactnative.dev/)/[Expo Framework](ht
    ```bash
    # After install:
    $ nvm install 14.16.1 && nvm alias default 14.16.1
+   # Verify you're on the right version of Node
+   $ node -v
+   v14.16.1
    ```
 
 1. Install simulators by [following the instructions here.](docs/simulator-setup.md)
@@ -38,6 +41,13 @@ Compassion App is a [React Native](https://reactnative.dev/)/[Expo Framework](ht
 
    ```bash
    $ yarn install
+   ```
+
+1. Install `firebase-tools` and log in
+
+   ```bash
+   $ npm install -g firebase-tools
+   $ firebase login
    ```
 
 1. Install [Expo CLI](https://docs.expo.io/workflow/expo-cli/) and log in
@@ -66,14 +76,29 @@ Also, you might want to check out [Editor Setup](docs/editor-setup.md) if using 
 
 ## Development
 
-The development process is usually: open Metro --> launch the simulator of your choice --> start development.
+Bare-bones development requires three simultaneous processes:
+
+1. Metro (Webpack-like bundler for Expo)
+1. Firebase Emulator
+1. iOS/Android Simulator
 
 ```bash
-# Opens the Metro bundler
+# Start the Firebase emulators
+$ fbe:start
+
+# In another window, open the Metro bundler
 $ yarn start
 # Either on the command line or on the web interface, select a simulator (iOS or Android) to connect to.
 # Wait for Expo to be installed on your simulator image and then for Expo to build and publish the bundle to the virtual device
+```
 
+For a better debugging experience, it's recommended you also run these processes along with the above:
+
+1. Jest in watch mode to check for breaking unit tests
+1. `tsc` in watch mode to check for type errors
+1. Reactotron to issue commands and view detailed structured logs from the simulator
+
+```bash
 # (Optionally) Open Reactotron to inspect the app, similar to Redux Dev Tools
 
 # In another terminal instance, run the following to get live feedback about Typescript errors
@@ -123,6 +148,15 @@ saveString("devStorybook", "on")
 ```
 
 When you reload your app, your simulator will render the story and will respond to changes as you select different stories on the browser.
+
+### Firebase Emulator
+
+Run the following:
+
+```bash
+$ firebase emulators:start
+# Navigate to http://localhost:4000 to see the emulator interface
+```
 
 ### End-to-end Testing with Detox
 
