@@ -56,6 +56,12 @@ export class FirebaseCoreApiAdapter {
     // For reCAPTCHA/SMS verification:
     this.authentication.languageCode = "en"
     this.authentication.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+
+    if (this.config.useEmulator) {
+      this.firestore.useEmulator("localhost", 8080)
+      this.authentication.useEmulator("http://localhost:9099")
+    }
+
     firebase.auth().onAuthStateChanged((user: firebase.User) => {
       // if (!user) alert("User has been logged out")
       console.log(

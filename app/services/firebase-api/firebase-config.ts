@@ -6,6 +6,7 @@ const {
   messagingSenderId,
   appId,
   measurementId,
+  useEmulator,
 } = require("../../config/env")
 
 /**
@@ -19,6 +20,7 @@ export interface FirebaseConfig {
   messagingSenderId: string
   appId: string
   measurementId: string
+  useEmulator: boolean
 }
 
 /**
@@ -32,4 +34,5 @@ export const DEFAULT_FIREBASE_CONFIG: FirebaseConfig = {
   messagingSenderId,
   appId,
   measurementId,
+  useEmulator,
 }
