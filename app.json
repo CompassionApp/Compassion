@@ -2,7 +2,6 @@
   "expo": {
     "name": "Compassion App",
     "description": "The Compassion App is a matching service for volunteers and vulnerable members of the community to get together",
-    "currentFullName": "compassion-eng@compassion-app",
     "owner": "compassion-eng",
     "slug": "compassion",
     "scheme": "compassion",
