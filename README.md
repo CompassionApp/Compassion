@@ -1,3 +1,5 @@
+#### **NOTE:** This repository has been open-sourced to the development community in November 2021 as development ceased within our private volunteer group. We hope that others will find the source educational and (potentially) applicable for similar efforts.
+
 <div style="text-align:center">
   <img src="assets/logo.png" />
 </div>
