@@ -1,5 +1,5 @@
 <div style="text-align:center">
-  ![Compassion](assets/logo.png)
+  <img src="assets/logo.png" />
 </div>
 
 # Compassion App
